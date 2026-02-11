@@ -21,22 +21,26 @@ const Timer = () => {
     };
   }, []);
   return (
-    <section className="relative flex w-full flex-col items-center justify-center py-14 2xl:min-h-[30vh]">
-      <img
-        src="./beyondthehorizon.jpg"
-        className="absolute left-0 top-0 -z-10 h-full w-[100vw] opacity-20"
-        alt="Beyond the Horizon Background"
-      />
-      <h1 className="title mb-0 2xl:mb-10">BEYOND THE HORIZON</h1>
-      <div className="relative z-0 grid max-w-[750px] scale-75 grid-cols-2 grid-rows-2 items-end justify-items-center gap-x-6 md:grid-cols-4 md:grid-rows-none md:gap-16 lg:scale-90 2xl:scale-100">
-        <div className="absolute top-0 h-1 w-full bg-primary-450"></div>
+    <section className="relative flex w-full flex-col items-center justify-center py-20 2xl:min-h-[40vh] overflow-hidden">
+      {/* Background with image */}
+      <div className="absolute inset-0 -z-20">
+        <img
+          src="/Background.png"
+          className="w-full h-full object-cover"
+          alt="Technobit Background"
+        />
+        {/* Overlay gradient for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-650/50 to-primary-650" />
+      </div>
+      
+      <h1 className="title mb-0 2xl:mb-10 relative z-10">BEYOND THE HORIZON</h1>
+      <div className="relative z-10 grid max-w-[750px] scale-75 grid-cols-2 grid-rows-2 items-end justify-items-center gap-x-6 md:grid-cols-4 md:grid-rows-none md:gap-16 lg:scale-90 2xl:scale-100">
+        <div className="absolute top-0 h-1 w-full bg-primary-200"></div>
         <Tags text="Months" rotate={2} val={countdown.months} />
         <Tags text="Days" rotate={-1} val={countdown.days} />
         <Tags text="Hours" rotate={1} val={countdown.hours} />
         <Tags text="Minutes" rotate={-2} val={countdown.minutes} />
       </div>
-
-      {/* <div className="h-1 w-[90%] rounded-full bg-[#4E4383] md:w-[46%]"></div> */}
     </section>
   );
 };

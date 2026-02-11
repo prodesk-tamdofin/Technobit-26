@@ -104,9 +104,9 @@ function AnimatedLines() {
         ))}
         <defs>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8B5CF6" />
-            <stop offset="50%" stopColor="#EC4899" />
-            <stop offset="100%" stopColor="#8B5CF6" />
+            <stop offset="0%" stopColor="#FF1744" />
+            <stop offset="50%" stopColor="#FF006E" />
+            <stop offset="100%" stopColor="#FF1744" />
           </linearGradient>
         </defs>
       </svg>

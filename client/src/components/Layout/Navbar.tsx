@@ -8,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { BsSun, BsMoonStarsFill } from "react-icons/bs";
 import { FiPower, FiUser } from "react-icons/fi";
 import { LuLogIn } from "react-icons/lu";
+import { IoHomeOutline, IoCalendarOutline, IoImagesOutline } from "react-icons/io5";
+import { MdOutlineCategory } from "react-icons/md";
 import ExtendedColors from "../../../color.config";
 import useUser from "@/hooks/useUser";
 import { RxCross1, RxHamburgerMenu } from "react-icons/rx";
@@ -18,6 +20,56 @@ import { toast } from "react-toastify";
 import useSettings from "@/hooks/useSettings";
 
 let scrollTop = 0;
+
+// Glass-themed Nav Link button
+const IconNavLink = ({
+  href,
+  icon,
+  label,
+  isImage,
+  imageSrc,
+}: {
+  href: string;
+  icon?: React.ReactNode;
+  label: string;
+  isImage?: boolean;
+  imageSrc?: string;
+}) => {
+  const path = usePathname();
+  const isActive = path === href;
+  
+  return (
+    <li>
+      <Link
+        href={href}
+        className={`relative flex flex-row items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-300 group overflow-hidden backdrop-blur-md
+          ${isActive 
+            ? "bg-gradient-to-br from-primary-350/40 to-primary-150/20 border border-primary-350/60 text-white shadow-lg shadow-primary-350/20" 
+            : "bg-white/[0.08] border border-white/[0.15] text-white/80 hover:bg-white/[0.12] hover:border-white/25 hover:text-white hover:shadow-lg hover:shadow-primary-350/10"
+          }`}
+        style={{
+          boxShadow: isActive ? '0 0 20px rgba(139, 92, 246, 0.3), inset 0 1px 1px rgba(255,255,255,0.1)' : 'inset 0 1px 1px rgba(255,255,255,0.05)',
+        }}
+      >
+        {/* Glass highlight overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+        
+        {isImage && imageSrc ? (
+          <img 
+            src={imageSrc} 
+            alt={label} 
+            className="relative z-10 w-4 h-4 object-contain grayscale brightness-200 group-hover:grayscale-0 transition-all duration-300"
+          />
+        ) : (
+          <span className="relative z-10 text-sm group-hover:scale-110 transition-transform duration-300">
+            {icon}
+          </span>
+        )}
+        <span className="relative z-10 text-xs font-medium tracking-wide">{label}</span>
+      </Link>
+    </li>
+  );
+};
 
 const NavLink = ({
   href,
@@ -98,26 +150,17 @@ const Navbar = () => {
     const scrollHandler = () => {
       if (navRef.current && navItem.current) {
         if (window.scrollY < 15) {
+          // At top - completely transparent, no glass effect
           navRef.current.style.backgroundColor = "transparent";
+          navRef.current.style.backdropFilter = "none";
           navRef.current.style.border = "1px solid transparent";
-          navRef.current.style.paddingInline = "0";
+          navRef.current.style.boxShadow = "none";
         } else if (scrollTop - window.scrollY > 0 || window.scrollY > 15) {
-          // navRef.current.style.translate = "0 0";
-
-          navRef.current.style.backgroundColor = ExtendedColors.secondary[700];
-          navRef.current.style.border = "1px solid #ffffff09";
-          navRef.current.style.paddingInline = "2rem";
-
-          // navRef.current.style.backdropFilter = "blur(18px)";
-          // navRef.current.style.boxShadow =
-          //   "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)";
-          // navItem.current.style.backgroundColor = "transparent";
-          // navRef.current.style.translate = "0 -100%";
-        } else {
-          // navRef.current.style.boxShadow = "none";
-          // navRef.current.style.backdropFilter = "blur(0px)";
-          // navItem.current.style.backgroundColor = ExtendedColors.secondary[600];
-          // navRef.current.style.translate = "0 0";
+          // Scrolled down - glass effect with more transparency
+          navRef.current.style.backgroundColor = "rgba(11, 13, 18, 0.4)";
+          navRef.current.style.backdropFilter = "blur(20px)";
+          navRef.current.style.border = "1px solid rgba(255, 255, 255, 0.06)";
+          navRef.current.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.2)";
         }
         scrollTop = window.scrollY;
       }
@@ -149,43 +192,16 @@ const Navbar = () => {
     <>
       {path !== "/download-admit" ? (
         <nav className="container-c fixed left-1/2 top-0 z-[100] -translate-x-1/2 transition-all">
-          {showLoader && (
-            <div className="flex h-screen w-screen">
-              <motion.div
-                animate={mounted ? { y: "-200vh" } : {}}
-                transition={{ duration: animationDuration }}
-                className={`h-full w-[20%] bg-slate-950`}
-              />
-
-              <motion.div
-                animate={mounted ? { y: "-200vh" } : {}}
-                transition={{ delay: 0.2, duration: animationDuration }}
-                className={`h-full w-[20%] bg-slate-950`}
-              />
-
-              <motion.div
-                animate={mounted ? { y: "-200vh" } : {}}
-                transition={{ delay: 0.3, duration: animationDuration }}
-                className={`h-full w-[20%] bg-slate-950`}
-              />
-
-              <motion.div
-                animate={mounted ? { y: "-200vh" } : {}}
-                transition={{ delay: 0.4, duration: animationDuration }}
-                className={`h-full w-[20%] bg-slate-950`}
-              />
-
-              <motion.div
-                animate={mounted ? { y: "-200vh" } : {}}
-                transition={{ delay: 0.5, duration: animationDuration }}
-                className={`h-full w-[20%] bg-slate-950`}
-                onAnimationComplete={() => setLoader(false)}
-              />
-            </div>
-          )}
           <div
             ref={navRef}
-            className={`${!showLoader ? "opacity-100" : "opacity-0"} border-1 mt-2 flex max-h-24 w-full flex-wrap items-center justify-between rounded-xl border-transparent py-3 transition-all duration-200`}
+            className={`mt-2 flex max-h-24 w-full flex-wrap items-center justify-between rounded-2xl py-3 px-4 transition-all duration-300`}
+            style={{
+              backgroundColor: "transparent",
+              backdropFilter: "none",
+              WebkitBackdropFilter: "none",
+              border: "1px solid transparent",
+              boxShadow: "none",
+            }}
           >
             <Link
               href="/"
@@ -241,9 +257,14 @@ const Navbar = () => {
               {user && (
                 <div
                   className={
-                    "absolute right-0 top-7 z-50 my-4 origin-top-right list-none divide-y divide-gray-100 divide-primary-250/20 rounded-lg bg-secondary-600 text-base shadow transition " +
+                    "absolute right-0 top-7 z-50 my-4 origin-top-right list-none divide-y divide-white/10 rounded-xl text-base shadow-2xl transition backdrop-blur-xl " +
                     (userExpanded ? "scale-100" : "pointer-events-none scale-0")
                   }
+                  style={{
+                    backgroundColor: "rgba(11, 13, 18, 0.8)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+                  }}
                   id="user-dropdown"
                 >
                   <div className="px-4 py-3">
@@ -304,7 +325,7 @@ const Navbar = () => {
             <div
               ref={navItem}
               style={{ transformOrigin: "top" }}
-              className={`absolute right-0 top-[104%] max-w-[450px] origin-top-right items-center justify-between rounded-xl bg-secondary-600 px-14 text-white shadow-lg transition xl:static xl:max-w-none xl:rounded-full xl:py-3 xl:shadow-none ${
+              className={`absolute right-0 top-[104%] max-w-[450px] origin-top-right items-center justify-between rounded-xl backdrop-blur-xl bg-black/40 border border-white/10 px-14 text-white shadow-2xl transition xl:static xl:max-w-none xl:rounded-2xl xl:py-2 xl:px-3 xl:bg-white/[0.05] xl:backdrop-blur-lg xl:border-white/[0.1] xl:shadow-lg ${
                 expanded
                   ? "scale-100"
                   : "pointer-events-none scale-0 xl:pointer-events-auto"
@@ -316,14 +337,35 @@ const Navbar = () => {
                   setUserExpanded(false);
                   setExpanded(false);
                 }}
-                className="flex flex-col space-y-2 rounded-lg p-4 text-center font-medium xl:flex-row xl:space-x-8 xl:space-y-0 xl:p-0 rtl:space-x-reverse"
+                className="flex flex-col space-y-2 rounded-lg p-4 text-center font-medium xl:flex-row xl:space-x-3 xl:space-y-0 xl:p-0 rtl:space-x-reverse"
               >
-                <NavLink href="/">Home</NavLink>
-                <NavLink href="/itc">ITC</NavLink>
-                <NavLink href="/events">Segments</NavLink>
-                <NavLink href="/gallery">Gallery</NavLink>
+                <IconNavLink 
+                  href="/" 
+                  icon={<IoHomeOutline />} 
+                  label="Home" 
+                />
+                <IconNavLink 
+                  href="/itc" 
+                  isImage={true}
+                  imageSrc="/ITC_LOGO.png"
+                  label="ITC" 
+                />
+                <IconNavLink 
+                  href="/events" 
+                  icon={<MdOutlineCategory />} 
+                  label="Segments" 
+                />
+                <IconNavLink 
+                  href="/gallery" 
+                  icon={<IoImagesOutline />} 
+                  label="Gallery" 
+                />
                 {config?.showSchedule ? (
-                  <NavLink href="/schedule">Schedule</NavLink>
+                  <IconNavLink 
+                    href="/schedule" 
+                    icon={<IoCalendarOutline />} 
+                    label="Schedule" 
+                  />
                 ) : null}
                 <NavLink
                   className="flex items-center justify-center bg-primary-350 hover:bg-primary-450"

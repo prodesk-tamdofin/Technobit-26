@@ -673,12 +673,12 @@ export const AdmitHTMLGenerator = async (obj: any, qrSvg: string) => {
 
   const ret = `<div class="aspect-[1/1.414]  p-16 relative border">
     <div class="w-fit m-auto text-center mb-12">
-    <p class="text-xl font-semibold mb-4 font-audiowide">BNMPC IT CLUB PRESENTS</p>
-    <p class="text-3xl font-semibold mb-3 font-audiowide">Technobit'26</p>
+    <p class="text-xl font-semibold mb-4 font-audiowide">UNITED INTERNATIONAL UNIVERSITY PRESENTS</p>
+    <p class="text-3xl font-semibold mb-3 font-audiowide">INIT 5.0</p>
     <div class="mb-4">
-    <p>Hosted by: BNMPC IT Club</p>
-    <p>Location: BNMPC Campus</p>
-    <p>February 2026</p>
+    <p>Hosted by: Notre Dame Information Technology Club</p>
+    <p>Location: Notre Dame College, Dhaka</p>
+    <p>May 08-10, 2025</p>
     </div>
     <p class="font-bold text-xl">REGISTRATION CARD</p>
     </div>
@@ -719,10 +719,10 @@ export const AdmitHTMLGenerator = async (obj: any, qrSvg: string) => {
             </div>
         </div>
         <div class="w-[120px] absolute top-[12%] right-[5%]">
-        <img src="/Logo.png" alt="BNMPC ITC logo">
+        <img src="/Logo.png" alt="NDITC logo">
         </div>
         <div class="w-[80px] absolute top-[10%] left-[7%]">
-            <img src="/Logo.png" alt="BNMPC ITC logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/2/26/Notre_Dame_College%2C_Dhaka_Monogram.svg/1200px-Notre_Dame_College%2C_Dhaka_Monogram.svg.png" alt="NDITC logo">
             </div>
             </div>`;
 
