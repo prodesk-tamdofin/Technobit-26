@@ -13,9 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    fb: {
+    roll: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    college: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    fb: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
     institute: {
       type: DataTypes.STRING,
