@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { FaExternalLinkAlt } from "react-icons/fa";
+
 const ITCPage = () => {
   return (
     <div>
@@ -10,8 +13,11 @@ const ITCPage = () => {
             src="/itcbgbg.jpg"
             className="absolute left-0 top-0 -z-10 h-screen w-full opacity-30 blur-sm object-cover"
           />
-          <h1 className="Inter GradText text-center text-6xl font-bold md:text-7xl 2xl:text-8xl">
-            BNMPC IT CLUB
+          <h1 
+            className="GradText text-center text-6xl font-black md:text-7xl 2xl:text-9xl tracking-wider"
+            style={{ fontFamily: 'Cinzel Decorative, Orbitron, serif', letterSpacing: '0.08em' }}
+          >
+            BNMPC ITC
           </h1>
         </div>
         <div className="tech-bg-neo pt-10">
@@ -88,6 +94,20 @@ const ITCPage = () => {
                   competition, and growth.
                 </div>
               </div>
+            </div>
+
+            {/* Go To ITC Button */}
+            <div className="flex justify-center mt-16 mb-6">
+              <Link
+                href="https://bnmpc-itc.web.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 px-10 py-4 rounded-full border-2 border-primary-200/40 bg-gradient-to-r from-primary-200/15 to-primary-150/15 text-primary-200 text-lg font-bold tracking-wider hover:bg-primary-200/25 hover:border-primary-200/70 hover:shadow-lg hover:shadow-primary-200/20 transition-all duration-300"
+                style={{ fontFamily: 'Orbitron, sans-serif' }}
+              >
+                Go To ITC
+                <FaExternalLinkAlt className="text-sm opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+              </Link>
             </div>
           </div>
         </div>

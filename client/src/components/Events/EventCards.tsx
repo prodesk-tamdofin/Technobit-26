@@ -105,6 +105,7 @@ const EventCards = ({ className, icon, data, type }: props) => {
         src={data.image?.startsWith('/') ? data.image : (reqImgWrapper(data.image) || "")}
         className="absolute -bottom-[90px] -right-[100px] -z-10 h-full w-3/4 rotate-[16deg] rounded-xl opacity-15"
         alt=""
+        loading="lazy"
       />
       {/* Inside  */}
       <div

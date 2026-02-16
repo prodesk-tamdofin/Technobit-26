@@ -19,7 +19,7 @@ const page = () => {
         subtitle={eventInfo.tagline}
         buttonText="Explore Events"
         buttonHref="#events"
-        logoSrc="/TechnobitLogo.png"
+        logoSrc="/Logo(Red NO BG).png"
       />
       
       {/* Event Info Banner */}

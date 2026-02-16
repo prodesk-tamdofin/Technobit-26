@@ -22,16 +22,11 @@ const Timer = () => {
   }, []);
   return (
     <section className="relative flex w-full flex-col items-center justify-center py-20 2xl:min-h-[40vh] overflow-hidden">
-      {/* Background with image */}
-      <div className="absolute inset-0 -z-20">
-        <img
-          src="/Background.png"
-          className="w-full h-full object-cover"
-          alt="Technobit Background"
-        />
-        {/* Overlay gradient for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-650/50 to-primary-650" />
-      </div>
+      <img
+        src="./beyondthehorizon.jpg"
+        className="absolute left-0 top-0 -z-10 h-full w-[100vw] opacity-20"
+        alt="Beyond the Horizon Background"
+      />
       
       <h1 className="title mb-0 2xl:mb-10 relative z-10">BEYOND THE HORIZON</h1>
       <div className="relative z-10 grid max-w-[750px] scale-75 grid-cols-2 grid-rows-2 items-end justify-items-center gap-x-6 md:grid-cols-4 md:grid-rows-none md:gap-16 lg:scale-90 2xl:scale-100">

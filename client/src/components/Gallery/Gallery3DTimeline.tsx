@@ -259,8 +259,9 @@ export default function Gallery3DTimeline() {
                 <div 
                   className="hidden md:block relative rounded-2xl overflow-hidden"
                   style={{
+                    position: "relative",
                     width: offset === 0 ? "600px" : "480px",
-                    maxHeight: offset === 0 ? "450px" : "360px",
+                    height: offset === 0 ? "450px" : "360px",
                     boxShadow: offset === 0 
                       ? "0 0 60px rgba(139, 92, 246, 0.4), 0 0 100px rgba(236, 72, 153, 0.2)"
                       : "0 25px 50px rgba(0, 0, 0, 0.5)",
@@ -272,6 +273,7 @@ export default function Gallery3DTimeline() {
                     className="w-full h-full object-contain bg-black/80"
                     onLoad={() => handleImageLoad(index)}
                     draggable={false}
+                    loading={offset === 0 ? "eager" : "lazy"}
                   />
                   
                   {/* Glowing border for center */}
@@ -307,7 +309,7 @@ export default function Gallery3DTimeline() {
                   className="md:hidden relative rounded-xl overflow-hidden"
                   style={{
                     width: offset === 0 ? "320px" : "240px",
-                    maxHeight: offset === 0 ? "260px" : "180px",
+                    height: offset === 0 ? "260px" : "180px",
                     ...getCardTransform(offset, true),
                     boxShadow: offset === 0 
                       ? "0 0 40px rgba(139, 92, 246, 0.4)"
@@ -319,6 +321,7 @@ export default function Gallery3DTimeline() {
                     alt={`Gallery ${index + 1}`}
                     className="w-full h-full object-contain bg-black/80"
                     draggable={false}
+                    loading={offset === 0 ? "eager" : "lazy"}
                   />
                   {offset === 0 && (
                     <div 
@@ -393,7 +396,7 @@ export default function Gallery3DTimeline() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: "spring", damping: 25 }}
-              className="w-full h-full flex items-center justify-center p-4 md:p-12"
+              className="w-full h-full flex items-center justify-center p-4 md:p-12 relative"
               onClick={(e) => e.stopPropagation()}
             >
               <img

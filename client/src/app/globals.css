@@ -1,7 +1,9 @@
-@import url("https://fonts.googleapis.com/css?family=Nunito:200,300,regular,500,600,700,800,900,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic");
-@import url("https://fonts.googleapis.com/css?family=Bebas+Neue:regular");
-@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
-@import url(https://fonts.googleapis.com/css?family=Share+Tech:regular);
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -13,7 +15,7 @@ html {
 }
 
 body {
-  font-family: Inter !important;
+  font-family: Inter, sans-serif !important;
   background-color: var(--primary-650);
   background-image:
     radial-gradient(900px 600px at 10% -10%, rgba(139, 92, 246, 0.25), transparent 60%),
@@ -40,10 +42,23 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: Bebas Neue;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
 }
+
+h1 {
+  font-family: Poppins, sans-serif;
+  font-weight: 800;
+}
+
+h5,
+h6 {
+  font-family: Space Grotesk, sans-serif;
+  font-weight: 600;
+}
+
 p {
-  font-family: Inter;
+  font-family: Inter, sans-serif;
 }
 
 img {

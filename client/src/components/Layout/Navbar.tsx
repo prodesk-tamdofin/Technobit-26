@@ -208,8 +208,8 @@ const Navbar = () => {
               className="flex grow basis-0 items-center space-x-3 rtl:space-x-reverse"
             >
               <img
-                src="/TechnobitLogo.png"
-                className="w-28 md:w-32 rounded pt-1"
+                src="/Logo(Plain).png"
+                className="w-48 md:w-60 rounded pt-1"
                 alt="Technobit'26 Logo"
               />
             </Link>
