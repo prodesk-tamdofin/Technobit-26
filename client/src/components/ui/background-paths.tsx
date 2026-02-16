@@ -88,7 +88,7 @@ export function BackgroundPaths({
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1, ease: "easeOut" }}
-                            className="mx-auto max-h-[35vh] w-auto max-w-[60%] md:max-w-[50%] object-contain mb-8"
+                            className="mx-auto max-h-[50vh] w-auto max-w-[80%] md:max-w-[70%] object-contain mb-8"
                         />
                     ) : (
                         <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-8 tracking-tighter">

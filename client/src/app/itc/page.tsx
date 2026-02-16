@@ -15,9 +15,9 @@ const ITCPage = () => {
           />
           <h1 
             className="GradText text-center text-6xl font-black md:text-7xl 2xl:text-9xl tracking-wider"
-            style={{ fontFamily: 'Cinzel Decorative, Orbitron, serif', letterSpacing: '0.08em' }}
+            style={{ fontFamily: '"Times New Roman", Times, serif', letterSpacing: '0.08em' }}
           >
-            BNMPC ITC
+            BNMPC IT CLUB
           </h1>
         </div>
         <div className="tech-bg-neo pt-10">
