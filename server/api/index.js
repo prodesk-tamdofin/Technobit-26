@@ -32,8 +32,12 @@ app.use(cookieParser('secret'));
 
 // Routers
 const clientRouter = require('../routers/clientsSimple');
+const adminRouter = require('../routers/adminSimple');
+const adActionRouter = require('../routers/adActionSimple');
 
 app.use('/api/client', clientRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/adAction', adActionRouter);
 
 // Health check for Vercel
 app.get('/', (req, res) => {

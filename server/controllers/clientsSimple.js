@@ -145,9 +145,72 @@ const getUser = async (req, res) => {
   }
 };
 
+const getAllParticipants = async (req, res) => {
+  try {
+    const { skip = 0, rowNum = 50, searchKey = '' } = req.body || {};
+    const query = {};
+
+    if (searchKey && String(searchKey).trim().length > 0) {
+      const regex = new RegExp(searchKey, 'i');
+      query.$or = [
+        { fullName: regex },
+        { email: regex },
+        { phone: regex },
+        { userName: regex },
+        { roll: regex },
+        { college: regex },
+      ];
+    }
+
+    const participants = await Participant.find(query)
+      .sort({ createdAt: -1 })
+      .skip(Number(skip))
+      .limit(Number(rowNum))
+      .lean();
+
+    return res.json(participants);
+  } catch (error) {
+    console.error('Get participants error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to load participants.',
+    });
+  }
+};
+
+const getParticipantsCount = async (req, res) => {
+  try {
+    const { searchKey = '' } = req.query || {};
+    const query = {};
+
+    if (searchKey && String(searchKey).trim().length > 0) {
+      const regex = new RegExp(searchKey, 'i');
+      query.$or = [
+        { fullName: regex },
+        { email: regex },
+        { phone: regex },
+        { userName: regex },
+        { roll: regex },
+        { college: regex },
+      ];
+    }
+
+    const total = await Participant.countDocuments(query);
+    return res.json(total);
+  } catch (error) {
+    console.error('Count participants error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to count participants.',
+    });
+  }
+};
+
 module.exports = {
   registration,
   login,
   logout,
   getUser,
+  getAllParticipants,
+  getParticipantsCount,
 };
