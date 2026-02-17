@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Spotlight } from "@/components/ui/Spotlight/Spotlight";
 import ExtendedColors from "@/../color.config";
 import Sidebar from "@/components/Admin/Sidebar/Sidebar";
