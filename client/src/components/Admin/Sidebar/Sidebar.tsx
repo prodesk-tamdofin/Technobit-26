@@ -51,41 +51,41 @@ const Sidebar = () => {
   return (
     <aside className="mt-[100px] min-h-[80vh] w-[50px] shrink-0 basis-[50px] rounded-full bg-gradient-to-b from-primary-550 to-secondary-600 py-1">
       <ul className="flex flex-col items-center gap-2">
-        <SideLink href="/admin/" label={"Profile"}>
+        <SideLink href="/safiq/" label={"Profile"}>
           <IoIosStats />
         </SideLink>
-        <SideLink href="/admin/events" label={"Events"}>
+        <SideLink href="/safiq/events" label={"Events"}>
           <RiDashboardFill />
         </SideLink>
-        <SideLink href="/admin/ca" label={"CA Applicants"}>
+        <SideLink href="/safiq/ca" label={"CA Applicants"}>
           <LiaChalkboardTeacherSolid />
         </SideLink>
-        <SideLink href="/admin/participants" label={"Participants"}>
+        <SideLink href="/safiq/participants" label={"Participants"}>
           <BsPeople />
         </SideLink>
 
-        <SideLink href="/admin/gallery" label={"Gallery"}>
+        <SideLink href="/safiq/gallery" label={"Gallery"}>
           <BiPhotoAlbum />
         </SideLink>
-        <SideLink href="/admin/faq" label={"FAQ"}>
+        <SideLink href="/safiq/faq" label={"FAQ"}>
           <BsQuestionCircle />
         </SideLink>
-        <SideLink href="/admin/sponsors" label={"Sponsors"}>
+        <SideLink href="/safiq/sponsors" label={"Sponsors"}>
           <GoSponsorTiers />
         </SideLink>
-        <SideLink href="/admin/message" label={"Messages"}>
+        <SideLink href="/safiq/message" label={"Messages"}>
           <MdOutlineChat />
         </SideLink>
-        <SideLink href="/admin/settings" label={"Settings"}>
+        <SideLink href="/safiq/settings" label={"Settings"}>
           <BsGear />
         </SideLink>
-        <SideLink href="/admin/create-user/solo" label={"Add Par"}>
+        <SideLink href="/safiq/create-user/solo" label={"Add Par"}>
           <FaPlusCircle />
         </SideLink>
-        <SideLink href="/admin/schedule" label={"Schedule"}>
+        <SideLink href="/safiq/schedule" label={"Schedule"}>
           <FaCalendar />
         </SideLink>
-        <SideLink href="/admin/result" label={"result"}>
+        <SideLink href="/safiq/result" label={"result"}>
           <FaCertificate />
         </SideLink>
       </ul>

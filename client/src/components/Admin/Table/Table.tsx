@@ -105,6 +105,16 @@ const TableRow = ({
           </div>
         </td>
       )}
+      {showThisField("roll") && (
+        <td className="max-w-[150px] px-4 py-2 font-semibold text-primary-250">{rowData.roll || "N/A"}</td>
+      )}
+      {showThisField("college") && (
+        <td className="max-w-[150px] px-4 py-2">
+          <span className={`px-2 py-1 rounded-full text-xs font-bold ${rowData.college === 'BNMPC' ? 'bg-primary-350/20 text-primary-350' : 'bg-secondary-400/20 text-secondary-300'}`}>
+            {rowData.college || "N/A"}
+          </span>
+        </td>
+      )}
       {showThisField("class") && (
         <td className="max-w-[150px] px-4 py-2">{rowData.className}</td>
       )}
@@ -119,12 +129,18 @@ const TableRow = ({
         </td>
       )}
       {showThisField("phone") && (
-        <td className="min-w-[150px] max-w-[250px] shrink-0 px-4 py-2">
-          <div className="inline-flex items-center gap-6">
-            <span>{rowData.phone}</span>
-            <Link href={rowData.fb} target="_blank">
-              <FaFacebook className="h-6 w-6" />
-            </Link>
+        <td className="min-w-[200px] max-w-[300px] shrink-0 px-4 py-2">
+          <div className="flex flex-col gap-1">
+            <div className="inline-flex items-center gap-2">
+              <Link href={`https://wa.me/88${rowData.phone?.replace(/\D/g, '')}`} target="_blank" className="text-green-400 hover:text-green-300">
+                📱 {rowData.phone}
+              </Link>
+            </div>
+            {rowData.fb && (
+              <Link href={rowData.fb} target="_blank" className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 text-sm">
+                <FaFacebook className="h-4 w-4" /> Facebook
+              </Link>
+            )}
           </div>
         </td>
       )}

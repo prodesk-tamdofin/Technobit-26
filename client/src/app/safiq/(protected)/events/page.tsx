@@ -24,7 +24,7 @@ export default async function Page() {
 
               {/* Homepage Button */}
               <Link
-                href="/admin/events/new"
+                href="/safiq/events/new"
                 className="mx-auto flex w-auto items-center gap-2 rounded-full bg-primary-400 px-6 py-2 text-sm font-bold text-white transition-all hover:bg-primary-300 md:mx-0 md:px-8 md:py-3 md:text-base"
               >
                 Add

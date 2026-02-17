@@ -38,7 +38,7 @@ export default function RootLayout({
       <ErrorC
         code={403}
         msg="Unauthorized"
-        href="/admin/login"
+        href="/safiq/login"
         handleText="Login"
       />
     );

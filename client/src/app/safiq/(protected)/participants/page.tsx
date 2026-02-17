@@ -17,7 +17,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 
-const fieldsDefault = ["name", "class", "institute", "actions"];
+const fieldsDefault = ["name", "roll", "college", "class", "phone", "actions"];
 
 const perPage = 50;
 
