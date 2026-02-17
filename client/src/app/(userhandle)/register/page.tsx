@@ -10,10 +10,8 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import Select from "@/components/ui/form/Select";
 import Checkbox from "@/components/ui/form/Checkbox";
 import Loading from "@/components/ui/LoadingWhite";
-import { useState } from "react";
 import { mailRegex, passRegEx } from "@/utils/validations";
 import { useRouter } from "next/navigation";
-import PhotoUpload from "@/components/ui/PhotoUpload";
 import { CLASSES } from "@/data/classes";
 import useSettings from "@/hooks/useSettings";
 import PageLoading from "@/components/PageLoading";
@@ -26,12 +24,8 @@ const COLLEGES = [
 
 const Register = () => {
   const Router = useRouter();
-  const [currentPhoto, setCurrentPhoto] = useState<string | null>(null);
   const [form, loading] = useForm({
-    handler: async (data, formData) => {
-      const file = formData
-        ? (formData?.get("participants") as File)
-        : undefined;
+    handler: async (data) => {
       if (!mailRegex.test(data?.email.trim())) {
         throw new Error(
           "Please use a popular email provider like Gmail, Outlook, Yahoo, or iCloud.",
@@ -45,8 +39,6 @@ const Register = () => {
         );
       } else if (data?.password.trim() !== data?.cpassword.trim()) {
         throw new Error("Password and Confirm Password Aren't same.");
-      } else if (!file?.name) {
-        throw new Error("Profile picture has not been selected.");
       } else if (!data?.agreed) {
         throw new Error("You haven't agreed to terms and conditions.");
       } else {
@@ -61,15 +53,15 @@ const Register = () => {
         if (!data.address) {
           data.address = 'N/A';
         }
+        // Set default image
+        data.image = '';
         
-        const response = await register(formData);
+        const response = await register(data);
         return response;
       }
     },
-    formData: true,
     successMsg: "You successfully registered! Redirecting to events...",
     onSuccess: () => {
-      setCurrentPhoto(null);
       Router.push("/events");
     },
   });
@@ -110,14 +102,6 @@ const Register = () => {
           </p>
 
           <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-4">
-            {/* Profile Picture */}
-            <PhotoUpload
-              name="participants"
-              type="PFP"
-              currentPhoto={currentPhoto}
-              setCurrentPhoto={setCurrentPhoto}
-            />
-
             {/* Full Name */}
             <Input
               label="Full Name"
@@ -125,7 +109,7 @@ const Register = () => {
               id="name"
               placeholder="Your Full Name"
               type="text"
-              divClass="md:col-span-3"
+              divClass="md:col-span-4"
               required
             />
 

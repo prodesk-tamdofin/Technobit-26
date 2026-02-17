@@ -65,7 +65,7 @@ export const register = async (data: any) => {
       method: "POST",
     },
     data,
-    true,
+    false,
   );
 
   return response;
