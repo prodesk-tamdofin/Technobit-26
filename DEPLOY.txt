@@ -1,0 +1,92 @@
+======================================
+ TECHNOBIT 26 - FREE VERCEL DEPLOYMENT
+======================================
+
+✅ COMPLETELY FREE: GitHub + Vercel + MongoDB Atlas
+
+------------------------------
+STEP 1: MongoDB Atlas Setup (FREE)
+------------------------------
+
+1. Go to: https://www.mongodb.com/cloud/atlas/register
+2. Sign up for FREE account
+3. Create a FREE cluster (512MB storage)
+4. Click "Connect" → "Drivers" → Copy connection string
+5. Replace <password> in the string with your database password
+6. Save this connection string for later
+
+Example: mongodb+srv://bnmpcitc:YourPassword@cluster0.xxxxx.mongodb.net/technobit26
+
+------------------------------
+STEP 2: Deploy Backend to Vercel (FREE)
+------------------------------
+
+1. Go to: https://vercel.com
+2. Sign in with GitHub
+3. Click "Add New" → "Project"
+4. Select: prodesk-tamdofin/Technobit-26
+5. Set Root Directory: server
+6. Add Environment Variables:
+   
+   MONGODB_URI = mongodb+srv://bnmpcitc:YourPassword@cluster0.xxxxx.mongodb.net/technobit26
+   CLIENT_SECRET = Technobit26_BNMPC_ITC_SecretKey2026_Client
+   ADMIN_SECRET = Technobit26_BNMPC_ITC_SecretKey2026_Admin
+   REMOTE_CLIENT_APP = https://your-frontend-url.vercel.app
+   
+7. Click "Deploy"
+8. Copy your backend URL (e.g., https://technobit-26-server.vercel.app)
+
+------------------------------
+STEP 3: Deploy Frontend to Vercel (FREE)
+------------------------------
+
+1. In Vercel, click "Add New" → "Project" again
+2. Select: prodesk-tamdofin/Technobit-26
+3. Set Root Directory: client
+4. Add Environment Variable:
+   
+   NEXT_PUBLIC_API = https://your-backend-url.vercel.app
+   
+5. Click "Deploy"
+6. Your site is live!
+
+------------------------------
+STEP 4: Update Backend CORS
+------------------------------
+
+1. Go to your backend project in Vercel
+2. Settings → Environment Variables
+3. Update REMOTE_CLIENT_APP to your frontend URL:
+   REMOTE_CLIENT_APP = https://your-frontend-url.vercel.app
+4. Redeploy backend
+
+------------------------------
+🎉 DONE! Your site is live and FREE!
+------------------------------
+
+Frontend: https://technobit-26.vercel.app
+Backend: https://technobit-26-server.vercel.app
+Database: MongoDB Atlas (FREE 512MB)
+
+------------------------------
+ADMIN ACCESS
+------------------------------
+
+Admin Panel: https://your-site.vercel.app/safiq/login
+
+To create admin user, use MongoDB Atlas web interface:
+1. Go to Atlas → Browse Collections
+2. Add document to "participants" collection
+3. Add your admin credentials
+
+------------------------------
+NOTES
+------------------------------
+
+- Everything is FREE (no credit card needed)
+- MongoDB Atlas gives 512MB storage free
+- Vercel gives unlimited deployments
+- Auto-deploys on every git push to main branch
+- HTTPS included automatically
+
+Need help? Check Vercel logs for any errors.
