@@ -11,7 +11,6 @@ import { separateLastWord } from "@/utils/xstring";
 import { capitalCase } from "change-case";
 import Link from "next/link";
 import { FiGlobe } from "react-icons/fi";
-import { reqImgWrapper } from "@/api/requests";
 import { useRouter } from "next/navigation";
 
 const DummyData = {
@@ -100,13 +99,6 @@ const EventCards = ({ className, icon, data, type }: props) => {
         ref={clickDivRef}
         className="pointer-events-none absolute -left-[1000] -top-[1000] z-50 h-32 w-32 scale-0 rounded-full bg-gradient-radial from-primary-150/15 to-[transparent] transition"
       ></div>
-      {/* Backdrop Image */}
-      <img
-        src={data.image?.startsWith('/') ? data.image : (reqImgWrapper(data.image) || "")}
-        className="absolute -bottom-[90px] -right-[100px] -z-10 h-full w-3/4 rotate-[16deg] rounded-xl opacity-15"
-        alt=""
-        loading="lazy"
-      />
       {/* Inside  */}
       <div
         ref={contDivRef}

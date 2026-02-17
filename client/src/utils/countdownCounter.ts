@@ -21,22 +21,19 @@ export const Z = (num: number) => {
 
 const CountdownCounter = (targetDate: Date) => {
   const currentDate = new Date();
-  const rpMonths =
-    (targetDate.valueOf() - currentDate.valueOf()) / (60 * 60 * 24 * 30 * 1000);
+  const diffMs = targetDate.valueOf() - currentDate.valueOf();
+  const totalSeconds = Math.max(0, Math.floor(diffMs / 1000));
 
-  const months = Math.floor(rpMonths);
-  const rpDays = (rpMonths - months) * 30; //Remaining Day with Decimals
-  const days = Math.floor(rpDays);
-  const rpHours = (rpDays - days) * 24; //Remaining Hours with Decimals
-  const hours = Math.floor(rpHours);
-  const rpMinutes = (rpHours - hours) * 60; //Remaining Minutes with Decimals
-  const minutes = Math.floor(rpMinutes);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
   return {
-    months: Z(months),
     days: Z(days),
     hours: Z(hours),
     minutes: Z(minutes),
+    seconds: Z(seconds),
   };
 };
 
