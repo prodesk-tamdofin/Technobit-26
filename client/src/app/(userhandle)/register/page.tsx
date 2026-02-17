@@ -15,8 +15,8 @@ import { useRouter } from "next/navigation";
 import { CLASSES } from "@/data/classes";
 
 const COLLEGES = [
-  { value: "BNMPC", label: "BN Model Public College" },
-  { value: "BMARPC", label: "BMAR Public College" },
+  { value: "BNMPC", label: "Birshreshtha Noor Mohammad Public College" },
+  { value: "BMARPC", label: "Birshreshtha Munshi Abdur Rouf Public College" },
 ];
 
 const Register = () => {

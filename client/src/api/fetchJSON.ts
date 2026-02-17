@@ -46,25 +46,31 @@ const fetchJSON = async (
     modifiedURL = url + "?" + new URLSearchParams(data);
   }
 
-  // // cmnt
-
-  // cmnt
-  const response = await fetch(modifiedURL, modifiedOptions);
-  const json = await response.json();
-console.log(json.succeed)
-if (response.ok && json.succeed !== false) {
-    return json;
-  } else {
-    if (error) {
-      error(json);
-    }
-
-    if (response.status >= 500) {
-      throw new Error();
+  try {
+    const response = await fetch(modifiedURL, modifiedOptions);
+    const json = await response.json();
+    
+    if (response.ok && json.succeed !== false) {
+      return json;
     } else {
-      console.error({ msg: json.msg || json.message, status: response.status });
-      throw new Error(json.msg || json.message);
+      if (error) {
+        error(json);
+      }
+
+      if (response.status >= 500) {
+        throw new Error("Server error. Please try again later.");
+      } else {
+        console.error({ msg: json.msg || json.message, status: response.status });
+        throw new Error(json.msg || json.message);
+      }
     }
+  } catch (err: any) {
+    // Network error - server not reachable
+    if (err.name === "TypeError" && err.message === "Failed to fetch") {
+      console.error("Network error: Backend server not reachable");
+      throw new Error("Unable to connect to server. Please check if the backend is running or your internet connection.");
+    }
+    throw err;
   }
 };
 

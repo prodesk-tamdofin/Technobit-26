@@ -46,7 +46,7 @@ const EventGrid = () => {
   return (
     <>
       <div className="text-center mb-14">
-        <p className="text-primary-200/60 text-sm tracking-[0.35em] uppercase mb-3" style={{ fontFamily: 'Orbitron, sans-serif' }}>What We Offer</p>
+        <p className="text-primary-200/60 text-sm tracking-[0.35em] uppercase mb-3" style={{ fontFamily: 'Orbitron, sans-serif' }}>Stay Tuned</p>
         <h2 className="title title-top mb-3" style={{ fontFamily: 'Orbitron, sans-serif' }}>OUR SEGMENTS</h2>
         <div className="mx-auto w-24 h-[2px] bg-gradient-to-r from-transparent via-primary-200 to-transparent" />
       </div>

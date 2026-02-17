@@ -1,4 +1,4 @@
-import { getEventBySlug, eventInfo } from "@/data/eventSegments";
+import { getEventBySlug, eventInfo, eventCategories } from "@/data/eventSegments";
 import DetailCard from "@/components/Events/DetailCard";
 import MdSection from "@/components/ui/MdSection";
 import { capitalCase } from "change-case";
@@ -6,8 +6,45 @@ import Link from "next/link";
 import React from "react";
 import { FiGlobe } from "react-icons/fi";
 import { IoPerson } from "react-icons/io5";
-import { MdEventAvailable } from "react-icons/md";
+import { MdEventAvailable, MdQuiz, MdGamepad, MdCode, MdBrush, MdEmojiEvents } from "react-icons/md";
 import { notFound } from "next/navigation";
+
+// Get event icon based on event value
+const getEventIcon = (value: string) => {
+  const iconMap: { [key: string]: React.ReactNode } = {
+    "it-olympiad": <MdQuiz className="text-7xl text-primary-350" />,
+    "gaming-quiz": <MdGamepad className="text-7xl text-purple-400" />,
+    "robothon-olympiad": <MdCode className="text-7xl text-blue-400" />,
+    "marvel-dc-quiz": <MdEmojiEvents className="text-7xl text-red-400" />,
+    "animelogia": <MdEmojiEvents className="text-7xl text-pink-400" />,
+    "google-it": <MdQuiz className="text-7xl text-green-400" />,
+    "crack-the-code": <MdCode className="text-7xl text-cyan-400" />,
+    "sci-fi-story": <MdBrush className="text-7xl text-orange-400" />,
+    "tech-meme-war": <MdBrush className="text-7xl text-yellow-400" />,
+    "ai-art": <MdBrush className="text-7xl text-fuchsia-400" />,
+    "poster-designing": <MdBrush className="text-7xl text-rose-400" />,
+    "efootball": <MdGamepad className="text-7xl text-emerald-400" />,
+    "pubg-mobile": <MdGamepad className="text-7xl text-amber-400" />,
+    "free-fire": <MdGamepad className="text-7xl text-orange-400" />,
+    "chess": <MdGamepad className="text-7xl text-slate-300" />,
+  };
+  return iconMap[value] || <MdEmojiEvents className="text-7xl text-primary-350" />;
+};
+
+// Get category color based on event
+const getCategoryData = (eventValue: string) => {
+  for (const cat of eventCategories) {
+    if (cat.events.find(e => e.value === eventValue)) {
+      const colors: { [key: number]: { bg: string; border: string } } = {
+        1: { bg: "from-primary-350/30 to-primary-500/20", border: "border-primary-350/40" },
+        2: { bg: "from-cyan-500/30 to-blue-600/20", border: "border-cyan-400/40" },
+        3: { bg: "from-purple-500/30 to-pink-600/20", border: "border-purple-400/40" },
+      };
+      return { name: cat.name, ...colors[cat.id] };
+    }
+  }
+  return { name: "Event", bg: "from-primary-350/30 to-primary-500/20", border: "border-primary-350/40" };
+};
 
 const Page = ({ params }: { params: { value: string } }) => {
   const result = getEventBySlug(params.value);
@@ -15,6 +52,8 @@ const Page = ({ params }: { params: { value: string } }) => {
   if (!result) {
     notFound();
   }
+
+  const categoryData = getCategoryData(params.value);
 
   return (
     <div>
@@ -34,10 +73,11 @@ const Page = ({ params }: { params: { value: string } }) => {
             </Link>
           </div>
           <div className="h-[40vh] max-h-[40vh] lg:h-auto lg:w-[45%] lg:pr-4 xl:w-1/2">
-            <div className="h-full max-h-[50vh] w-full rounded-xl shadow-lg lg:h-auto bg-gradient-to-br from-primary-350/20 to-primary-150/20 flex items-center justify-center p-8">
+            <div className={`h-full max-h-[50vh] w-full rounded-xl shadow-lg lg:h-auto bg-gradient-to-br ${categoryData.bg} flex flex-col items-center justify-center p-8 border ${categoryData.border}`}>
               <div className="text-center">
-                <div className="text-8xl mb-4">🎯</div>
-                <p className="text-white/60">Event Image</p>
+                {getEventIcon(params.value)}
+                <p className="text-white/60 text-sm mt-4 uppercase tracking-wider">{categoryData.name}</p>
+                <p className="text-primary-200 font-semibold mt-2">{result.name}</p>
               </div>
             </div>
           </div>
