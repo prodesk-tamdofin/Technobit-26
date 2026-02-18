@@ -42,19 +42,34 @@ app.use('/api/adAction', adActionRouter);
 
 // Health check for Vercel
 app.get('/', (req, res) => {
-  res.json({ message: 'Technobit 26 API - Running on Vercel' });
+  res.json({ message: 'Technobit 26 API - Running on Vercel', timestamp: new Date().toISOString() });
 });
 
 app.get('/api', (req, res) => {
-  res.json({ message: 'Technobit 26 API' });
+  res.json({ message: 'Technobit 26 API', timestamp: new Date().toISOString() });
+});
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.statusCode || 500).json({
+  console.error(`[ERROR] ${err.message}`, err);
+  res.status(err.status || err.statusCode || 500).json({
     succeed: false,
     msg: err.message || 'Something went wrong',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    succeed: false,
+    msg: 'Endpoint not found',
   });
 });
 
@@ -64,5 +79,5 @@ module.exports = app;
 // For local development
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  app.listen(PORT, () => console.log(`[${new Date().toISOString()}] Server running on port ${PORT}`));
 }

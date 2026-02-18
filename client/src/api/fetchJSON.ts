@@ -11,7 +11,8 @@ const fetchJSON = async (
   let modifiedURL = url;
   let modifiedOptions = options;
   let defaultHeaders = {
-    mode: "cors",
+    mode: "cors" as RequestMode,
+    credentials: "include" as RequestCredentials,
   };
   if (
     (options?.method === "POST" ||
@@ -44,9 +45,11 @@ const fetchJSON = async (
     );
   } else {
     modifiedURL = url + "?" + new URLSearchParams(data);
+    modifiedOptions = _.merge(defaultHeaders, options);
   }
 
   try {
+    console.log(`[API] ${options?.method || 'GET'} ${modifiedURL}`);
     const response = await fetch(modifiedURL, modifiedOptions);
     const json = await response.json();
     
@@ -66,8 +69,10 @@ const fetchJSON = async (
     }
   } catch (err: any) {
     // Network error - server not reachable
-    if (err.name === "TypeError" && err.message === "Failed to fetch") {
+    if (err.name === "TypeError" && (err.message === "Failed to fetch" || err.message.includes("Failed to fetch"))) {
       console.error("Network error: Backend server not reachable");
+      console.error("Attempted URL:", modifiedURL);
+      console.error("Backend API:", so);
       throw new Error("Unable to connect to server. Please check if the backend is running or your internet connection.");
     }
     throw err;
