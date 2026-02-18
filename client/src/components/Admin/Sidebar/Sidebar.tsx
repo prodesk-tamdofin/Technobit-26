@@ -1,20 +1,10 @@
 "use client";
-import TriangleBottom from "@/components/ui/TriangleBottom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { BiPhotoAlbum } from "react-icons/bi";
-import { BsGear, BsPeople, BsQuestionCircle } from "react-icons/bs";
-import { FaCalendar, FaCertificate, FaPlusCircle } from "react-icons/fa";
-import { FaQq } from "react-icons/fa6";
-import { GoSponsorTiers } from "react-icons/go";
-import { IoIosStar, IoIosStats } from "react-icons/io";
-import {
-  IoNotificationsCircle,
-  IoNotificationsCircleOutline,
-} from "react-icons/io5";
-import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { MdOutlineChat } from "react-icons/md";
+import { BsGear, BsPeople } from "react-icons/bs";
+import { FaPlusCircle, FaTrophy } from "react-icons/fa";
+import { IoIosStats } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
 
 const SideLink = ({
@@ -51,42 +41,23 @@ const Sidebar = () => {
   return (
     <aside className="mt-[100px] min-h-[80vh] w-[50px] shrink-0 basis-[50px] rounded-full bg-gradient-to-b from-primary-550 to-secondary-600 py-1">
       <ul className="flex flex-col items-center gap-2">
-        <SideLink href="/safiq/" label={"Profile"}>
+        <SideLink href="/safiq/" label={"Dashboard"}>
           <IoIosStats />
         </SideLink>
         <SideLink href="/safiq/events" label={"Events"}>
           <RiDashboardFill />
         </SideLink>
-        <SideLink href="/safiq/ca" label={"CA Applicants"}>
-          <LiaChalkboardTeacherSolid />
-        </SideLink>
         <SideLink href="/safiq/participants" label={"Participants"}>
           <BsPeople />
         </SideLink>
-
-        <SideLink href="/safiq/gallery" label={"Gallery"}>
-          <BiPhotoAlbum />
+        <SideLink href="/safiq/create-user/solo" label={"Add Participant"}>
+          <FaPlusCircle />
         </SideLink>
-        <SideLink href="/safiq/faq" label={"FAQ"}>
-          <BsQuestionCircle />
-        </SideLink>
-        <SideLink href="/safiq/sponsors" label={"Sponsors"}>
-          <GoSponsorTiers />
-        </SideLink>
-        <SideLink href="/safiq/message" label={"Messages"}>
-          <MdOutlineChat />
+        <SideLink href="/safiq/result" label={"Results"}>
+          <FaTrophy />
         </SideLink>
         <SideLink href="/safiq/settings" label={"Settings"}>
           <BsGear />
-        </SideLink>
-        <SideLink href="/safiq/create-user/solo" label={"Add Par"}>
-          <FaPlusCircle />
-        </SideLink>
-        <SideLink href="/safiq/schedule" label={"Schedule"}>
-          <FaCalendar />
-        </SideLink>
-        <SideLink href="/safiq/result" label={"result"}>
-          <FaCertificate />
         </SideLink>
       </ul>
     </aside>
