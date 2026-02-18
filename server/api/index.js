@@ -9,19 +9,34 @@ const cors = require('cors');
 // Connect to MongoDB (async, will retry on failed requests)
 connectDB().catch(err => console.error('Initial DB connection failed:', err));
 
-// CORS
+// CORS - allow multiple origins
 const whitelist = (process.env.REMOTE_CLIENT_APP || 'http://localhost:3000').split(',').map(url => url.trim());
+console.log('CORS whitelist:', whitelist);
+
 const corsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+    console.log('Request origin:', origin);
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+    // Check if origin is in whitelist
+    if (whitelist.some(allowed => origin === allowed || origin.includes(allowed.replace('https://', '').replace('http://', '')))) {
       callback(null, true);
     } else {
+      console.log('CORS rejected origin:', origin, 'Whitelist:', whitelist);
       callback(new Error('Not allowed by CORS'));
     }
   },
   optionsSuccessStatus: 200,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
 };
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
