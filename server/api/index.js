@@ -6,11 +6,11 @@ const connectDB = require('../config/db');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-// Connect to MongoDB
-connectDB();
+// Connect to MongoDB (async, will retry on failed requests)
+connectDB().catch(err => console.error('Initial DB connection failed:', err));
 
 // CORS
-const whitelist = (process.env.REMOTE_CLIENT_APP || 'http://localhost:3000').split(',');
+const whitelist = (process.env.REMOTE_CLIENT_APP || 'http://localhost:3000').split(',').map(url => url.trim());
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
@@ -27,7 +27,8 @@ app.use(cors(corsOptions));
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 // Middlewares
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser('secret'));
 
 // Routers
