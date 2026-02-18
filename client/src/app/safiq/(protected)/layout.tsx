@@ -52,12 +52,12 @@ export default function RootLayout({
     );
   } else {
     return (
-      <main className="max-w-screen relative overflow-hidden">
+      <main className="max-w-screen relative overflow-hidden bg-primary-900">
         <Spotlight
           className="-top-40 left-0 md:-top-20 md:left-60"
           fill={ExtendedColors.primary["200"]}
         />
-        <div className="container-c mb-12 flex h-full gap-8">
+        <div className="container-c mb-12 mt-28 flex h-full min-h-screen gap-8">
           <Sidebar />
           {children}
         </div>

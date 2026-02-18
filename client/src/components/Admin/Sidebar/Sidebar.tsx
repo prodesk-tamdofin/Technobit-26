@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { BsGear, BsPeople } from "react-icons/bs";
-import { FaPlusCircle, FaTrophy } from "react-icons/fa";
+import { BsPeople } from "react-icons/bs";
+import { FaPlusCircle } from "react-icons/fa";
 import { IoIosStats } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
 
@@ -39,7 +39,7 @@ const SideLink = ({
 
 const Sidebar = () => {
   return (
-    <aside className="mt-[100px] min-h-[80vh] w-[50px] shrink-0 basis-[50px] rounded-full bg-gradient-to-b from-primary-550 to-secondary-600 py-1">
+    <aside className="mt-8 min-h-[80vh] w-[50px] shrink-0 basis-[50px] rounded-full bg-gradient-to-b from-primary-550 to-secondary-600 py-1">
       <ul className="flex flex-col items-center gap-2">
         <SideLink href="/safiq/" label={"Dashboard"}>
           <IoIosStats />
@@ -52,12 +52,6 @@ const Sidebar = () => {
         </SideLink>
         <SideLink href="/safiq/create-user/solo" label={"Add Participant"}>
           <FaPlusCircle />
-        </SideLink>
-        <SideLink href="/safiq/result" label={"Results"}>
-          <FaTrophy />
-        </SideLink>
-        <SideLink href="/safiq/settings" label={"Settings"}>
-          <BsGear />
         </SideLink>
       </ul>
     </aside>

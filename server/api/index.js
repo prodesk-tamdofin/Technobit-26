@@ -46,16 +46,24 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser('secret'));
 
-// Routers
-const clientRouter = require('../routers/clientsSimple');
-const adminRouter = require('../routers/adminSimple');
-const adActionRouter = require('../routers/adActionSimple');
+// Logging middleware (BEFORE routes)
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
 
-app.use('/api/client', clientRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/adAction', adActionRouter);
+// DB connection check middleware
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('DB connection failed in middleware:', err);
+    res.status(500).json({ succeed: false, msg: 'Database connection failed' });
+  }
+});
 
-// Health check for Vercel
+// Health check for Vercel (before auth routes)
 app.get('/', (req, res) => {
   res.json({ message: 'Technobit 26 API - Running on Vercel', timestamp: new Date().toISOString() });
 });
@@ -64,11 +72,14 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Technobit 26 API', timestamp: new Date().toISOString() });
 });
 
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  next();
-});
+// Routers
+const clientRouter = require('../routers/clientsSimple');
+const adminRouter = require('../routers/adminSimple');
+const adActionRouter = require('../routers/adActionSimple');
+
+app.use('/api/client', clientRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/adAction', adActionRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
