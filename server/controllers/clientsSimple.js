@@ -145,6 +145,174 @@ const getUser = async (req, res) => {
   }
 };
 
+// Update user profile
+const updateProfile = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { fullName, phone, whatsapp, fb, section, address } = req.body;
+
+    const user = await Participant.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'User not found',
+      });
+    }
+
+    // Update allowed fields
+    if (fullName) user.fullName = fullName;
+    if (phone) user.phone = phone;
+    if (whatsapp !== undefined) user.whatsapp = whatsapp;
+    if (fb !== undefined) user.fb = fb;
+    if (section !== undefined) user.section = section;
+    if (address) user.address = address;
+
+    await user.save();
+
+    res.json({
+      succeed: true,
+      msg: 'Profile updated successfully',
+      user: {
+        fullName: user.fullName,
+        phone: user.phone,
+        whatsapp: user.whatsapp,
+        fb: user.fb,
+        section: user.section,
+        address: user.address,
+      },
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({
+      succeed: false,
+      msg: 'Failed to update profile',
+    });
+  }
+};
+
+// Register for a segment/event with gaming data
+const registerForSegment = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { eventName, bkashNumber, transactionId, gamingData } = req.body;
+
+    if (!eventName) {
+      return res.status(400).json({
+        succeed: false,
+        msg: 'Event name is required',
+      });
+    }
+
+    const user = await Participant.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'User not found',
+      });
+    }
+
+    // Check if already registered
+    if (user.registeredEvents.includes(eventName)) {
+      return res.status(400).json({
+        succeed: false,
+        msg: 'You are already registered for this event',
+      });
+    }
+
+    // Define paid events and their fees
+    const paidEvents = {
+      'crack-the-code': 30,
+      'efootball': 40,
+      'pubg-mobile': 50,
+      'free-fire': 50,
+    };
+
+    // Check if paid event
+    if (paidEvents[eventName]) {
+      if (!bkashNumber || !transactionId) {
+        return res.status(400).json({
+          succeed: false,
+          msg: 'bKash number and transaction ID are required for paid events',
+        });
+      }
+
+      // Store payment info
+      if (!user.paymentInfo) {
+        user.paymentInfo = new Map();
+      }
+      user.paymentInfo.set(eventName, {
+        bkashNumber,
+        transactionId,
+        verified: false,
+        fee: paidEvents[eventName],
+      });
+    }
+
+    // Store gaming-specific data
+    if (gamingData) {
+      if (!user.gamingData) {
+        user.gamingData = new Map();
+      }
+      user.gamingData.set(eventName, gamingData);
+    }
+
+    // Add event to registered events
+    user.registeredEvents.push(eventName);
+    await user.save();
+
+    res.json({
+      succeed: true,
+      msg: `Successfully registered for ${eventName}!`,
+      registeredEvents: user.registeredEvents,
+    });
+  } catch (error) {
+    console.error('Register for segment error:', error);
+    res.status(500).json({
+      succeed: false,
+      msg: 'Failed to register for event',
+    });
+  }
+};
+
+// Verify payment for a participant's segment
+const verifyPayment = async (req, res) => {
+  try {
+    const { participantId, eventName, segment, verified } = req.body;
+    const segmentKey = eventName || segment; // Support both naming conventions
+
+    const participant = await Participant.findById(participantId);
+    if (!participant) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'Participant not found',
+      });
+    }
+
+    if (!participant.paymentInfo || !participant.paymentInfo.get(segmentKey)) {
+      return res.status(400).json({
+        succeed: false,
+        msg: 'No payment info found for this segment',
+      });
+    }
+
+    const paymentData = participant.paymentInfo.get(segmentKey);
+    paymentData.verified = verified;
+    participant.paymentInfo.set(segmentKey, paymentData);
+    await participant.save();
+
+    res.json({
+      succeed: true,
+      msg: `Payment ${verified ? 'verified' : 'unverified'} successfully`,
+    });
+  } catch (error) {
+    console.error('Verify payment error:', error);
+    res.status(500).json({
+      succeed: false,
+      msg: 'Failed to verify payment',
+    });
+  }
+};
+
 const getAllParticipants = async (req, res) => {
   try {
     const { skip = 0, rowNum = 50, searchKey = '' } = req.body || {};
@@ -206,11 +374,146 @@ const getParticipantsCount = async (req, res) => {
   }
 };
 
+// Admin: Delete a participant by ID
+const deleteParticipant = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const participant = await Participant.findById(id);
+    if (!participant) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'Participant not found',
+      });
+    }
+    
+    await Participant.findByIdAndDelete(id);
+    
+    return res.json({
+      succeed: true,
+      msg: 'Participant deleted successfully',
+    });
+  } catch (error) {
+    console.error('Delete participant error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to delete participant.',
+    });
+  }
+};
+
+// Admin: Remove a segment registration from participant
+const removeSegmentRegistration = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { segment } = req.body;
+    
+    if (!segment) {
+      return res.status(400).json({
+        succeed: false,
+        msg: 'Segment value is required',
+      });
+    }
+    
+    const participant = await Participant.findById(id);
+    if (!participant) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'Participant not found',
+      });
+    }
+    
+    // Remove segment from registeredEvents array
+    participant.registeredEvents = participant.registeredEvents.filter(
+      (event) => event !== segment
+    );
+    
+    await participant.save();
+    
+    return res.json({
+      succeed: true,
+      msg: `Removed ${segment} registration successfully`,
+      registeredEvents: participant.registeredEvents,
+    });
+  } catch (error) {
+    console.error('Remove segment error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to remove segment registration.',
+    });
+  }
+};
+
+// Admin: Get dashboard stats
+const getDashboardStats = async (req, res) => {
+  try {
+    const totalParticipants = await Participant.countDocuments();
+    
+    // Count registrations by segment
+    const segmentCounts = await Participant.aggregate([
+      { $unwind: '$registeredEvents' },
+      { $group: { _id: '$registeredEvents', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+    
+    // Recent registrations (last 10)
+    const recentRegistrations = await Participant.find()
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .select('fullName email registeredEvents createdAt')
+      .lean();
+    
+    return res.json({
+      succeed: true,
+      stats: {
+        totalParticipants,
+        segmentCounts: segmentCounts.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {}),
+        recentRegistrations,
+      },
+    });
+  } catch (error) {
+    console.error('Get dashboard stats error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to get dashboard stats.',
+    });
+  }
+};
+
+// Admin: Clear all participant data
+const clearAllParticipants = async (req, res) => {
+  try {
+    const result = await Participant.deleteMany({});
+    
+    return res.json({
+      succeed: true,
+      msg: `Deleted ${result.deletedCount} participants`,
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.error('Clear participants error:', error);
+    return res.status(500).json({
+      succeed: false,
+      msg: 'Failed to clear participants.',
+    });
+  }
+};
+
 module.exports = {
   registration,
   login,
   logout,
   getUser,
+  updateProfile,
+  registerForSegment,
+  verifyPayment,
   getAllParticipants,
   getParticipantsCount,
+  deleteParticipant,
+  removeSegmentRegistration,
+  getDashboardStats,
+  clearAllParticipants,
 };

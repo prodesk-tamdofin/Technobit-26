@@ -1,4 +1,5 @@
 import { getEventBySlug, eventInfo, eventCategories } from "@/data/eventSegments";
+import { getRulesBySlug } from "@/data/eventRules";
 import DetailCard from "@/components/Events/DetailCard";
 import MdSection from "@/components/ui/MdSection";
 import { capitalCase } from "change-case";
@@ -48,6 +49,7 @@ const getCategoryData = (eventValue: string) => {
 
 const Page = ({ params }: { params: { value: string } }) => {
   const result = getEventBySlug(params.value);
+  const rules = getRulesBySlug(params.value);
   
   if (!result) {
     notFound();
@@ -181,17 +183,74 @@ const Page = ({ params }: { params: { value: string } }) => {
           <div id="rules" className="py-16">
             <h2 className="title title-top">RULES AND REGULATIONS</h2>
             <div className="container-c text-white/90">
-              <p className="text-center text-white/60">Rules and regulations will be announced soon. Stay tuned!</p>
-              <div className="mt-8 p-6 rounded-xl bg-primary-600/30 border border-primary-350/20">
-                <h3 className="text-xl font-bold text-primary-350 mb-4">General Guidelines:</h3>
-                <ul className="list-disc list-inside space-y-2 text-white/70">
-                  <li>All participants must register before the deadline</li>
-                  <li>This is an online event - stable internet connection required</li>
-                  <li>Follow fair play guidelines</li>
-                  <li>Decisions by organizers are final</li>
-                  <li>Contact us for any queries: bnmpc.itc@gmail.com</li>
-                </ul>
-              </div>
+              {rules ? (
+                <div className="space-y-8">
+                  {/* Main Rules */}
+                  <div className="p-6 rounded-xl bg-primary-600/30 border border-primary-350/20">
+                    <h3 className="text-xl font-bold text-primary-350 mb-4">Rules:</h3>
+                    <ul className="space-y-2">
+                      {rules.rules.map((rule, index) => (
+                        <li key={index} className="flex items-start gap-3 text-white/80">
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/30 flex items-center justify-center text-xs text-primary-300 font-semibold">
+                            {index + 1}
+                          </span>
+                          <span>{rule}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Topics (for quiz events) */}
+                  {rules.topics && rules.topics.length > 0 && (
+                    <div className="p-6 rounded-xl bg-purple-600/20 border border-purple-400/20">
+                      <h3 className="text-xl font-bold text-purple-300 mb-4">Topics Covered:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {rules.topics.map((topic, index) => (
+                          <span
+                            key={index}
+                            className="px-4 py-2 rounded-full bg-purple-500/20 text-purple-200 text-sm font-medium"
+                          >
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Submission Info */}
+                  {rules.submissionInfo && rules.submissionInfo.length > 0 && (
+                    <div className="p-6 rounded-xl bg-green-600/20 border border-green-400/20">
+                      <h3 className="text-xl font-bold text-green-300 mb-4">Submission Guidelines:</h3>
+                      <ul className="space-y-2">
+                        {rules.submissionInfo.map((info, index) => (
+                          <li key={index} className="flex items-start gap-3 text-white/80">
+                            <span className="text-green-400">•</span>
+                            <span>{info}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* General Note */}
+                  <div className="p-4 rounded-lg bg-yellow-600/10 border border-yellow-500/20 text-center">
+                    <p className="text-yellow-300/80 text-sm">
+                      All participants must comply with this rulebook. The organizers reserve the right to make final decisions in all matters.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-6 rounded-xl bg-primary-600/30 border border-primary-350/20">
+                  <h3 className="text-xl font-bold text-primary-350 mb-4">General Guidelines:</h3>
+                  <ul className="list-disc list-inside space-y-2 text-white/70">
+                    <li>All participants must register before the deadline</li>
+                    <li>This is an online event - stable internet connection required</li>
+                    <li>Follow fair play guidelines</li>
+                    <li>Decisions by organizers are final</li>
+                    <li>Contact us for any queries: bnmpc.itc@gmail.com</li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>

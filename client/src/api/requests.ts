@@ -93,6 +93,17 @@ const reqs = {
   ALL_COUNT_ONEVENT: so + "/api/client/parCount/", //
   LOGGED_CLIENT: so + "/api/client/getClient", //
   FULL_SINGLE_DATA_CLIENT: so + "/api/client/fullSingle/",
+  
+  // Admin participant management
+  DELETE_PARTICIPANT: so + "/api/client/participant/", // DELETE /:id
+  REMOVE_SEGMENT: so + "/api/client/participant/", // POST /:id/remove-segment
+  VERIFY_PAYMENT: so + "/api/client/verify-payment",
+  DASHBOARD_STATS: so + "/api/client/dashboard-stats",
+  CLEAR_ALL_PARTICIPANTS: so + "/api/client/clear-all",
+  
+  // Profile management
+  UPDATE_PROFILE: so + "/api/client/update-profile",
+  
   //PARTICIPANTS
   PAR_REG: so + "/api/client/reg/par", //
   PAR_LOGIN: so + "/api/client/login", //

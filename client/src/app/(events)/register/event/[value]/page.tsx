@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import ExtendedColors from "@/../color.config";
 import { Spotlight } from "@/components/ui/Spotlight/Spotlight";
-import { getEventBySlug, getCategoryById } from "@/data/eventSegments";
+import { getEventBySlug } from "@/data/eventSegments";
 import Link from "next/link";
 import useUser from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
@@ -11,44 +11,137 @@ import ErrorC from "@/components/Error";
 import Separator from "@/components/ui/Separator";
 import { TbCreditCardPay } from "react-icons/tb";
 import CheckBox from "@/components/ui/form/Checkbox";
+import Input from "@/components/ui/form/Input";
 import useForm from "@/hooks/useForm";
 import Loading from "@/components/ui/LoadingWhite";
 import { toast } from "react-toastify";
-import {
-  single_event_par,
-  submit_event,
-  team_event_par,
-} from "@/api/events";
+import { single_event_par } from "@/api/events";
+import TeamGamingForm from "@/components/Events/Register/TeamGamingForm";
+import EFootballForm from "@/components/Events/Register/EFootballForm";
+import ChessForm from "@/components/Events/Register/ChessForm";
+import CrackTheCodeForm from "@/components/Events/Register/CrackTheCodeForm";
+
+// Event type definitions
+const teamGamingEvents = ["pubg-mobile", "free-fire"];
 
 const Page = ({ params }: { params: { value: string } }) => {
-  // Use static event data instead of API fetch
   const staticEvent = getEventBySlug(params.value);
   const Router = useRouter();
   const [user, loadingUser, errorUser] = useUser();
   const checkBox = useRef<HTMLInputElement>(null);
 
-  // Create a result object compatible with the existing template
+  const isTeamEvent = teamGamingEvents.includes(params.value);
+  const isEFootball = params.value === "efootball";
+  const isChess = params.value === "chess";
+  const isCrackTheCode = params.value === "crack-the-code";
+  const isSpecialForm = isTeamEvent || isEFootball || isChess || isCrackTheCode;
+
   const result = staticEvent ? {
     ...staticEvent,
-    team: false,
-    submission: "{}",
+    team: isTeamEvent,
     paid: staticEvent.fee > 0,
-    regPortal: true, // Always enabled for static events
+    regPortal: true,
   } : null;
 
   const [form, formLoading] = useForm(
     {
       handler: async (data) => {
-        if (checkBox?.current?.checked) {
-          // Single event participation
-          const response = await single_event_par({
-            ...data,
-            eventName: params.value,
-          });
-          return response;
-        } else {
+        if (!checkBox?.current?.checked) {
           throw new Error("You haven't agreed to rules and regulations.");
         }
+
+        // Build gamingData based on event type
+        let gamingData: any = {};
+
+        if (isTeamEvent) {
+          // Team gaming events (PUBG/Free Fire)
+          gamingData = {
+            teamName: data.teamName,
+            teamCollege: data.teamCollege,
+            players: [
+              {
+                role: "captain",
+                fullName: data.p1_fullName,
+                inGameName: data.p1_inGameName,
+                uid: data.p1_uid,
+                email: data.p1_email,
+                facebook: data.p1_facebook,
+                class: data.p1_class,
+                section: data.p1_section,
+                roll: data.p1_roll,
+              },
+              {
+                role: "player2",
+                fullName: data.p2_fullName,
+                inGameName: data.p2_inGameName,
+                class: data.p2_class,
+                section: data.p2_section,
+                roll: data.p2_roll,
+              },
+              {
+                role: "player3",
+                fullName: data.p3_fullName,
+                inGameName: data.p3_inGameName,
+                class: data.p3_class,
+                section: data.p3_section,
+                roll: data.p3_roll,
+              },
+              {
+                role: "player4",
+                fullName: data.p4_fullName,
+                inGameName: data.p4_inGameName,
+                class: data.p4_class,
+                section: data.p4_section,
+                roll: data.p4_roll,
+              },
+            ],
+          };
+          // Add optional player 5
+          if (data.p5_fullName && data.p5_inGameName) {
+            gamingData.players.push({
+              role: "substitute",
+              fullName: data.p5_fullName,
+              inGameName: data.p5_inGameName,
+              class: data.p5_class,
+              section: data.p5_section,
+              roll: data.p5_roll,
+            });
+          }
+        } else if (isEFootball) {
+          gamingData = {
+            playerName: data.playerName,
+            teamName: data.teamName,
+            playerClass: data.playerClass,
+            collegeName: data.collegeName,
+            email: data.email,
+            whatsapp: data.whatsapp,
+            facebook: data.facebook,
+          };
+        } else if (isChess) {
+          gamingData = {
+            playerName: data.playerName,
+            lichessUsername: data.lichessUsername,
+            playerClass: data.playerClass,
+            collegeName: data.collegeName,
+            email: data.email,
+            whatsapp: data.whatsapp,
+            facebook: data.facebook,
+          };
+        } else if (isCrackTheCode) {
+          gamingData = {
+            playerName: data.playerName,
+            hackerrankUsername: data.hackerrankUsername,
+            email: data.email,
+          };
+        }
+
+        const response = await single_event_par({
+          eventName: params.value,
+          bkashNumber: data.bkashNumber,
+          transactionId: data.transactionId,
+          gamingData,
+        });
+        return response;
       },
       onSuccess() {
         toast.success("Successfully registered for " + (result?.name || "event") + "!");
@@ -58,139 +151,135 @@ const Page = ({ params }: { params: { value: string } }) => {
     [user, result],
   );
 
-  // Handle redirects
   useEffect(() => {
     if (!loadingUser && errorUser) {
-      // User not logged in - redirect to register
       Router.push("/register");
     }
   }, [loadingUser, errorUser, Router]);
 
-  if (loadingUser) {
-    return <PageLoading />;
-  } else if (!result) {
-    return <ErrorC msg="Event not found!" code={404} href="/events" />;
-  } else if (errorUser) {
-    // Will redirect via useEffect
-    return <PageLoading />;
-  } else if (result && user) {
-    return (
-      <>
-        <main className="bg-grid-white/[0.02] relative flex min-h-screen w-full justify-center overflow-hidden bg-primary-650 antialiased md:justify-center">
-          <Spotlight
-            className="-top-40 left-0 md:-top-20 md:left-60"
-            fill={ExtendedColors.primary["200"]}
-          />
-          <div className="z-30 mt-28 w-screen">
-            <div className="container-c flex flex-col gap-1 text-left">
-              <div className="">
-                <Link
-                  href="/events"
-                  className="mb-1 border-b border-transparent pb-1 text-lg text-primary-200 hover:border-primary-200"
-                >
-                  ← Back to Events
-                </Link>
+  if (loadingUser) return <PageLoading />;
+  if (!result) return <ErrorC msg="Event not found!" code={404} href="/events" />;
+  if (errorUser) return <PageLoading />;
+  
+  if (!user) return <div className="min-h-[100vh] w-full"></div>;
+
+  return (
+    <main className="bg-grid-white/[0.02] relative flex min-h-screen w-full justify-center overflow-hidden bg-primary-650 antialiased">
+      <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={ExtendedColors.primary["200"]} />
+      <div className="z-30 mt-28 w-screen pb-12">
+        <div className="container-c flex flex-col gap-1 text-left">
+          <Link href="/events" className="mb-1 border-b border-transparent pb-1 text-lg text-primary-200 hover:border-primary-200">
+            ← Back to Events
+          </Link>
+          <p className="Inter text-xl font-semibold text-primary-150">EVENT REGISTRATION</p>
+          <h2 className="title mb-0 mt-0 inline-block pb-1 text-left text-4xl md:text-5xl">{result.name}</h2>
+          <p className="text-white/70 mt-2 max-w-2xl">{result.description}</p>
+        </div>
+
+        <div className="container-c mt-8">
+          {/* Participant Info Bar */}
+          <div className="mb-6 inline-flex w-full items-center justify-between gap-6 rounded-xl bg-gradient-to-r from-secondary-600 to-secondary-500/40 p-5">
+            <div>
+              <div className="mb-2 flex items-center text-sm">
+                <p className="text-secondary-200">Logged in as</p>
+                <Separator className="mx-2" />
+                <p>{user.className}</p>
               </div>
-              {/* Heading */}
-              <p className="Inter text-xl font-semibold text-primary-150">
-                EVENT REGISTRATION
-              </p>
-              <div>
-                <h2 className="title mb-0 mt-0 inline-block pb-1 text-left text-4xl md:text-5xl">
-                  {result.name}
-                </h2>
-              </div>
-              <p className="text-white/70 mt-2 max-w-2xl">{result.description}</p>
+              <p className="text-lg font-semibold md:text-xl">{user.fullName}</p>
+              <p className="text-sm opacity-75">{user.institute} | {user.email}</p>
             </div>
-            <div className="grid grid-flow-col grid-cols-1 grid-rows-[auto_1fr_auto] items-start gap-6 py-4 lg:h-full lg:grid-cols-[1fr_.9fr] lg:grid-rows-[auto_1fr] lg:gap-12">
-              {/* Participant info */}
-              <div className="container-padding-left row-span-1 mr-4 inline-flex w-[90%] items-center justify-between gap-6 rounded-r-full bg-gradient-to-l from-secondary-600 to-secondary-500/40 pb-5 pr-8 pt-4 lg:w-full lg:max-w-[1100px]">
-                <div className="z-10 ml-1 lg:-ml-1">
-                  <div className="mb-2 flex items-center text-sm">
-                    <p className="text-secondary-200">Participant</p>
-                    <Separator className="mx-2" />
-                    <p>{user.className}</p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold md:text-xl">
-                      {user.fullName}
-                    </p>
-                    <p className="text-sm opacity-75 md:text-base">
-                      {user.institute}
-                    </p>
-                    <p className="text-sm opacity-50">{user.email}</p>
-                  </div>
-                </div>
+            {result.paid && (
+              <div className="text-right">
+                <p className="text-secondary-200 text-sm">Registration Fee</p>
+                <p className="text-2xl font-bold text-white">৳{result.fee}</p>
               </div>
+            )}
+          </div>
 
-              {/* Input */}
-              <div className="lg:container-padding-left container-c row-span-1 row-start-3 mb-12 lg:row-start-2 lg:max-w-[1100px]">
-                <form ref={form} className="grid gap-4">
-                  <CheckBox
-                    ref={checkBox}
-                    divClass="mx-1 lg:mx-4 mb-2.5 mt-4"
-                    labelText={
-                      <span className="text-sm font-light text-white/80">
-                        I have reviewed all the provided data thoroughly and am
-                        fully aware of all the rules and regulations.
-                      </span>
-                    }
-                  />
-                  <div className="text-right">
-                    <button
-                      type="submit"
-                      disabled={formLoading}
-                      className={
-                        "btn-prim Bebas inline-flex items-center gap-1 py-2.5 pr-8 text-center text-xl tracking-wide " +
-                        (formLoading ? "pl-6" : "pl-8")
-                      }
-                    >
-                      {formLoading ? <Loading scale={0.6} /> : null}
-                      PARTICIPATE
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Instructions */}
-              <div className="lg:container-padding-right container-c col-start-1 row-span-1 row-start-2 mb-8 text-white/75 lg:col-start-2 lg:row-span-2 lg:h-full">
-                <div className="rounded-t-xl from-secondary-600/75 to-secondary-600/50 lg:h-full lg:bg-gradient-to-br lg:p-8">
-                  <h3 className="Inter GradText mb-3 pt-3 text-xl font-bold md:text-2xl">
-                    <TbCreditCardPay className="icn-inline mr-1 text-3xl text-primary-250 md:text-4xl" />{" "}
-                    INSTRUCTIONS
-                  </h3>
-                  <ul className="list-disc ml-4 space-y-2">
-                    <li>Make sure you have registered with correct details.</li>
-                    <li>Each participant can only register once per event.</li>
-                    <li>Please review the event rules before participating.</li>
-                    {result.paid && (
-                      <li className="text-primary-250">
-                        This is a paid event. Fee: ৳{result.fee}
-                      </li>
-                    )}
-                    {result.type === "online" && (
-                      <li>This is an online event. Links will be shared via email.</li>
-                    )}
-                  </ul>
-
-                  {/* Event Details Card */}
-                  <div className="mt-6 p-4 rounded-xl bg-primary-600/50 border border-primary-400/20">
-                    <h4 className="text-primary-200 font-semibold mb-2">Event Details</h4>
-                    <div className="space-y-1 text-sm">
-                      <p><span className="text-white/60">Type:</span> <span className="capitalize">{result.type}</span></p>
-                      <p><span className="text-white/60">Fee:</span> {result.fee === 0 ? "Free" : `৳${result.fee}`}</p>
+          {/* Registration Form */}
+          <form ref={form} className="space-y-6">
+            {/* Dynamic Form Based on Event Type */}
+            {isTeamEvent && <TeamGamingForm eventName={params.value} fee={result.fee} user={user} />}
+            {isEFootball && <EFootballForm fee={result.fee} user={user} />}
+            {isChess && <ChessForm user={user} />}
+            {isCrackTheCode && <CrackTheCodeForm fee={result.fee} user={user} />}
+            
+            {/* Default Simple Form for Non-Gaming Events */}
+            {!isSpecialForm && (
+              <>
+                {result.paid && (
+                  <div className="p-5 rounded-xl bg-pink-600/20 border border-pink-400/20">
+                    <div className="flex items-center gap-3 mb-4">
+                      <img
+                        src="https://play-lh.googleusercontent.com/1CRcUfmtwvWxT2g-xJF8s9_btha42TLi6Lo-qVkVomXBb_citzakZX9BbeY51iholWs"
+                        alt="bKash"
+                        className="w-10 h-10 rounded-lg"
+                      />
+                      <div>
+                        <p className="text-pink-200 font-semibold">bKash Payment Required</p>
+                        <p className="text-white/60 text-sm">Fee: ৳{result.fee}</p>
+                      </div>
+                    </div>
+                    <div className="mb-4 p-3 rounded-lg bg-primary-700/50 border border-primary-500/30">
+                      <p className="text-white/80 text-sm mb-1">Send ৳{result.fee} to:</p>
+                      <p className="text-pink-300 font-mono text-lg font-bold">01XXXXXXXXX</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Input name="bkashNumber" label="Your bKash Number" placeholder="01XXXXXXXXX" required />
+                      <Input name="transactionId" label="Transaction ID" placeholder="e.g., ABC123XYZ" required />
                     </div>
                   </div>
-                </div>
-              </div>
+                )}
+              </>
+            )}
+
+            {/* Agreement Checkbox */}
+            <CheckBox
+              ref={checkBox}
+              divClass="mx-1 mb-2.5 mt-4"
+              labelText={
+                <span className="text-sm font-light text-white/80">
+                  I have reviewed all the provided data thoroughly and am fully aware of all the rules and regulations.
+                  {result.paid && " I confirm that I have completed the payment."}
+                  {isTeamEvent && " All team members are from the same college."}
+                </span>
+              }
+            />
+
+            {/* Submit Button */}
+            <div className="text-center">
+              <button
+                type="submit"
+                disabled={formLoading}
+                className="btn-prim Bebas inline-flex items-center gap-2 py-3 px-12 text-center text-xl tracking-wide"
+              >
+                {formLoading && <Loading scale={0.6} />}
+                {result.paid ? "PAY & REGISTER" : "REGISTER NOW"}
+              </button>
             </div>
+          </form>
+
+          {/* Instructions */}
+          <div className="mt-8 p-6 rounded-xl bg-secondary-600/30 border border-secondary-400/20">
+            <h3 className="text-xl font-bold text-primary-200 mb-4">
+              <TbCreditCardPay className="inline mr-2 text-2xl" />
+              Important Instructions
+            </h3>
+            <ul className="list-disc ml-4 space-y-2 text-white/75">
+              <li>Make sure you have registered with correct details.</li>
+              <li>Each participant can only register once per event.</li>
+              {isTeamEvent && <li className="text-yellow-300">All team members must be from the same college.</li>}
+              {isTeamEvent && <li>Player 5 (Substitute) is optional.</li>}
+              {result.paid && <li className="text-pink-300">Payment via bKash only. Double-check Transaction ID.</li>}
+              {isChess && <li className="text-slate-300">Make sure your LiChess username is correct.</li>}
+              {isCrackTheCode && <li className="text-cyan-300">Competition will be on HackerRank. Verify your username.</li>}
+              <li>Organizers&apos; decisions are final.</li>
+            </ul>
           </div>
-        </main>
-      </>
-    );
-  } else {
-    return <div className="min-h-[100vh] w-full"></div>;
-  }
+        </div>
+      </div>
+    </main>
+  );
 };
 
 export default Page;

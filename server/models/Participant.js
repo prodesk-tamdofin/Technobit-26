@@ -97,6 +97,33 @@ const participantSchema = new mongoose.Schema({
     type: String,
     default: [],
   }],
+  // Payment info for paid segments: { segmentValue: { bkashNumber, transactionId, verified, fee } }
+  paymentInfo: {
+    type: Map,
+    of: new mongoose.Schema({
+      bkashNumber: String,
+      transactionId: String,
+      verified: { type: Boolean, default: false },
+      fee: Number,
+    }, { _id: false }),
+    default: {},
+  },
+  // Gaming event data (team info, usernames, etc.)
+  gamingData: {
+    type: Map,
+    of: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+  // WhatsApp number (can be different from phone)
+  whatsapp: {
+    type: String,
+    default: null,
+  },
+  // Section for class
+  section: {
+    type: String,
+    default: null,
+  },
 }, {
   timestamps: true,
 });
