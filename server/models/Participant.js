@@ -5,6 +5,7 @@ const participantSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true,
   },
   caRef: {
     type: String,
@@ -13,6 +14,7 @@ const participantSchema = new mongoose.Schema({
   fullName: {
     type: String,
     required: true,
+    index: true,
   },
   roll: {
     type: String,
@@ -21,6 +23,7 @@ const participantSchema = new mongoose.Schema({
   college: {
     type: String,
     required: true,
+    index: true,
   },
   fb: {
     type: String,
@@ -29,10 +32,12 @@ const participantSchema = new mongoose.Schema({
   institute: {
     type: String,
     required: true,
+    index: true,
   },
   className: {
     type: String,
     required: true,
+    index: true,
   },
   address: {
     type: String,
@@ -46,6 +51,7 @@ const participantSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true,
   },
   phone: {
     type: String,
@@ -55,6 +61,7 @@ const participantSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    index: true,
   },
   password: {
     type: String,
@@ -83,15 +90,19 @@ const participantSchema = new mongoose.Schema({
   checkedIn: {
     type: Boolean,
     default: false,
+    index: true,
   },
-  // Event registrations stored as JSON
-  events: {
-    type: Map,
-    of: mongoose.Schema.Types.Mixed,
-    default: {},
-  },
+  // Array of event IDs registered for - keeps it simple and small
+  registeredEvents: [{
+    type: String,
+    default: [],
+  }],
 }, {
-  timestamps: true, // Adds createdAt and updatedAt
+  timestamps: true,
 });
+
+// Compound index for faster lookups
+participantSchema.index({ college: 1, className: 1 });
+participantSchema.index({ email: 1, userName: 1 });
 
 module.exports = mongoose.model('Participant', participantSchema);
