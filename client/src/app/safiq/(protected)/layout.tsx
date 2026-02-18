@@ -18,19 +18,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [adminLoggedIn, setAdminLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const path = usePathname();
 
   useEffect(() => {
     setLoading(true);
-    loggedInAdmin().then((resp) => {
-      if (resp.result) {
-        setAdminLoggedIn(true);
-      } else {
+    loggedInAdmin()
+      .then((resp) => {
+        if (resp.result) {
+          setAdminLoggedIn(true);
+        } else {
+          setAdminLoggedIn(false);
+        }
+      })
+      .catch(() => {
         setAdminLoggedIn(false);
-      }
-    });
-    setLoading(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [path]);
 
   if (loading) {
