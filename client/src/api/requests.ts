@@ -100,7 +100,8 @@ const reqs = {
   VERIFY_PAYMENT: so + "/api/client/verify-payment",
   DASHBOARD_STATS: so + "/api/client/dashboard-stats",
   CLEAR_ALL_PARTICIPANTS: so + "/api/client/clear-all",
-  
+  DOWNLOAD_GROUP_CSV: so + "/api/client/download-csv/",
+
   // Profile management
   UPDATE_PROFILE: so + "/api/client/update-profile",
   

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { BsArrowLeft, BsDownload } from "react-icons/bs";
 import { toast } from "react-toastify";
+import reqs from "@/api/requests";
 
 const GROUPS: { key: string; label: string; description: string }[] = [
   { key: "freefire",     label: "Free Fire",     description: "All Free Fire participants" },
@@ -29,7 +30,7 @@ const CSVDownloadPage = () => {
   const downloadCSV = async (group: string) => {
     setLoading(group);
     try {
-      const res = await fetch(`/api/client/download-csv/${group}`, { credentials: "include" });
+      const res = await fetch(reqs.DOWNLOAD_GROUP_CSV + group, { credentials: "include" });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
         toast.error(json.msg || "Download failed");

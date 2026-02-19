@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { BsPeople, BsCreditCard, BsPersonPlus } from "react-icons/bs";
+import { BsPeople, BsCreditCard, BsPersonPlus, BsDownload } from "react-icons/bs";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoIosStats } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
@@ -59,6 +59,9 @@ const Sidebar = () => {
         </SideLink>
         <SideLink href="/safiq/create-user/solo" label={"Add Participant"}>
           <FaPlusCircle />
+        </SideLink>
+        <SideLink href="/safiq/csv" label={"Download CSV"}>
+          <BsDownload />
         </SideLink>
       </ul>
     </aside>
