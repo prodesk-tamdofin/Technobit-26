@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { BsPeople } from "react-icons/bs";
+import { BsPeople, BsCreditCard, BsPersonPlus } from "react-icons/bs";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoIosStats } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
+import { MdEventAvailable, MdPayment } from "react-icons/md";
 
 const SideLink = ({
   href,
@@ -47,8 +48,14 @@ const Sidebar = () => {
         <SideLink href="/safiq/events" label={"Events"}>
           <RiDashboardFill />
         </SideLink>
-        <SideLink href="/safiq/participants" label={"Participants"}>
-          <BsPeople />
+        <SideLink href="/safiq/registered" label={"Registered"}>
+          <BsPersonPlus />
+        </SideLink>
+        <SideLink href="/safiq/participants" label={"Registrations"}>
+          <MdEventAvailable />
+        </SideLink>
+        <SideLink href="/safiq/payments" label={"Payments"}>
+          <MdPayment />
         </SideLink>
         <SideLink href="/safiq/create-user/solo" label={"Add Participant"}>
           <FaPlusCircle />

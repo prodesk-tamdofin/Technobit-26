@@ -24,6 +24,9 @@ import CrackTheCodeForm from "@/components/Events/Register/CrackTheCodeForm";
 // Event type definitions
 const teamGamingEvents = ["pubg-mobile", "free-fire"];
 
+// Events that BMARPC students can register for
+const BMARPC_ALLOWED_EVENTS = ['efootball', 'pubg-mobile', 'free-fire', 'chess', 'crack-the-code'];
+
 const Page = ({ params }: { params: { value: string } }) => {
   const staticEvent = getEventBySlug(params.value);
   const Router = useRouter();
@@ -162,6 +165,35 @@ const Page = ({ params }: { params: { value: string } }) => {
   if (errorUser) return <PageLoading />;
   
   if (!user) return <div className="min-h-[100vh] w-full"></div>;
+
+  // Check BMARPC restriction
+  const isBMARPC = user.college === 'BMARPC';
+  const isEventAllowedForBMARPC = BMARPC_ALLOWED_EVENTS.includes(params.value);
+  
+  if (isBMARPC && !isEventAllowedForBMARPC) {
+    return (
+      <main className="bg-primary-650 min-h-screen flex items-center justify-center">
+        <div className="container-c text-center py-20">
+          <div className="max-w-lg mx-auto bg-red-900/30 border border-red-500/30 rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-red-400 mb-4">Registration Not Available</h2>
+            <p className="text-white/70 mb-6">
+              Students from <span className="font-semibold text-white">Birshreshtha Munshi Abdur Rouf Public College (BMARPC)</span> can only register for:
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <span className="px-3 py-1 rounded-full bg-green-600/30 text-green-400 text-sm">Free Fire</span>
+              <span className="px-3 py-1 rounded-full bg-amber-600/30 text-amber-400 text-sm">PUBG Mobile</span>
+              <span className="px-3 py-1 rounded-full bg-emerald-600/30 text-emerald-400 text-sm">eFootball</span>
+              <span className="px-3 py-1 rounded-full bg-slate-600/30 text-slate-400 text-sm">Chess</span>
+              <span className="px-3 py-1 rounded-full bg-cyan-600/30 text-cyan-400 text-sm">Crack the Code</span>
+            </div>
+            <Link href="/events" className="btn-prim bg-primary-350 px-8 py-2.5 inline-block rounded-full">
+              Browse Available Events
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="bg-grid-white/[0.02] relative flex min-h-screen w-full justify-center overflow-hidden bg-primary-650 antialiased">

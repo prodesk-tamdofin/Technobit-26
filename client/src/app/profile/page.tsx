@@ -6,17 +6,13 @@ import useUser from "@/hooks/useUser";
 import PageLoading from "@/components/PageLoading";
 import ErrorC from "@/components/Error";
 import ProfileCard from "@/components/Profile/ProfileCard";
-import ProfileDashboard from "@/components/Profile/ProfileDashboard";
 import ParticipatedSegments from "@/components/Profile/PerticipatedSegments";
-import PaymentStatus from "@/components/Profile/PaymentStatus";
 import UserContext from "@/context/UserContext";
 import useFetch from "@/hooks/useFetch";
 import { getEventKey } from "@/api/events";
 import EventContext from "@/context/EventContext";
-import CABoard from "@/components/Profile/CABoard";
 import ModalOverlay from "@/components/ui/ModalOverlay";
 import EditProfileModal from "@/components/Profile/EditProfile/EditProfileModal";
-import CAStatus from "@/components/Profile/CAStatus";
 import Link from "next/link";
 
 const Page = () => {
@@ -72,14 +68,6 @@ const Page = () => {
                 Participate in more Events
               </Link>
             </div>
-            <CAStatus
-              user={{
-                hasAppliedForCA: user?.isAppliedCA,
-                isApproved: user?.isCA,
-                caCode: user?.caData?.code,
-                points: user?.caData?.points,
-              }}
-            />
           </UserContext.Provider>
         </EventContext.Provider>
       </section>

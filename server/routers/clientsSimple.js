@@ -57,6 +57,7 @@ router.get('/getClient', authMiddleware, getUser);
 // Update profile (protected)
 router.post('/update-profile', authMiddleware, updateProfile);
 router.put('/profile', authMiddleware, updateProfile);
+router.patch('/editProfile', authMiddleware, updateProfile);
 
 // Segment registration (protected)
 router.post('/singlePart', authMiddleware, registerForSegment);

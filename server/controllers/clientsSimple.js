@@ -21,6 +21,12 @@ const registration = async (req, res) => {
     // Generate unique QR code
     const qrCode = `TECH26-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
 
+    // Random avatar from DiceBear API
+    const avatarStyles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'lorelei', 'micah', 'miniavs', 'personas'];
+    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    const avatarSeed = `${userName}-${Date.now()}`;
+    const randomAvatar = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${avatarSeed}`;
+
     // Create participant
     const newParticipant = await Participant.create({
       qrCode,
@@ -33,7 +39,7 @@ const registration = async (req, res) => {
       institute,
       address: address || 'N/A',
       fb: fb || null,
-      image: '',
+      image: randomAvatar,
       userName,
       password: hashedPassword,
     });
@@ -197,6 +203,9 @@ const updateProfile = async (req, res) => {
 };
 
 // Register for a segment/event with gaming data
+// Gaming segments and Crack the Code - the only events BMARPC can register for
+const BMARPC_ALLOWED_EVENTS = ['efootball', 'pubg-mobile', 'free-fire', 'chess', 'crack-the-code'];
+
 const registerForSegment = async (req, res) => {
   try {
     const { id } = req.user;
@@ -214,6 +223,14 @@ const registerForSegment = async (req, res) => {
       return res.status(404).json({
         succeed: false,
         msg: 'User not found',
+      });
+    }
+
+    // BMARPC students can only register for gaming segments and Crack the Code
+    if (user.college === 'BMARPC' && !BMARPC_ALLOWED_EVENTS.includes(eventName)) {
+      return res.status(403).json({
+        succeed: false,
+        msg: 'BMARPC students can only register for Gaming segments and Crack the Code',
       });
     }
 
@@ -321,8 +338,14 @@ const verifyPayment = async (req, res) => {
 
 const getAllParticipants = async (req, res) => {
   try {
+    const { eventValue } = req.params;
     const { skip = 0, rowNum = 50, searchKey = '' } = req.body || {};
     const query = {};
+
+    // Filter by event if not 'allPar'
+    if (eventValue && eventValue !== 'allPar') {
+      query.registeredEvents = eventValue;
+    }
 
     if (searchKey && String(searchKey).trim().length > 0) {
       const regex = new RegExp(searchKey, 'i');
@@ -337,6 +360,7 @@ const getAllParticipants = async (req, res) => {
     }
 
     const participants = await Participant.find(query)
+      .select('-password -otp -otpCount -otpTime') // Exclude sensitive fields
       .sort({ createdAt: -1 })
       .skip(Number(skip))
       .limit(Number(rowNum))
@@ -354,8 +378,14 @@ const getAllParticipants = async (req, res) => {
 
 const getParticipantsCount = async (req, res) => {
   try {
+    const { eventValue } = req.params;
     const { searchKey = '' } = req.query || {};
     const query = {};
+
+    // Filter by event if not 'allPar'
+    if (eventValue && eventValue !== 'allPar') {
+      query.registeredEvents = eventValue;
+    }
 
     if (searchKey && String(searchKey).trim().length > 0) {
       const regex = new RegExp(searchKey, 'i');
