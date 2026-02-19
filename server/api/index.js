@@ -44,11 +44,16 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 // Middlewares
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(cookieParser('secret'));
+app.use(cookieParser());  // No secret - we're using unsigned cookies
 
 // Logging middleware (BEFORE routes)
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  if (req.cookies?.token) {
+    console.log('✓ Token found in cookies');
+  } else {
+    console.log('✗ No token in cookies');
+  }
   next();
 });
 

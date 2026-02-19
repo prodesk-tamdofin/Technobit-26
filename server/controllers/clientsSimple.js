@@ -539,6 +539,33 @@ const clearAllParticipants = async (req, res) => {
   }
 };
 
+// Get full participant data by username (for profile page)
+const getFullSingle = async (req, res) => {
+  try {
+    const { username } = req.params;
+    
+    const participant = await Participant.findOne({ userName: username }).select('-password');
+    
+    if (!participant) {
+      return res.status(404).json({
+        succeed: false,
+        msg: 'Participant not found',
+      });
+    }
+
+    res.json({
+      succeed: true,
+      result: participant,
+    });
+  } catch (error) {
+    console.error('Get full single error:', error);
+    res.status(500).json({
+      succeed: false,
+      msg: 'Failed to get participant data',
+    });
+  }
+};
+
 module.exports = {
   registration,
   login,
