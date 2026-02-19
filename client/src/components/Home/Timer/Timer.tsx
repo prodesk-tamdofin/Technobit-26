@@ -25,10 +25,10 @@ const Timer = () => {
       <img
         src="./beyondthehorizon.jpg"
         className="absolute left-0 top-0 -z-10 h-full w-[100vw] opacity-20"
-        alt="Beyond the Horizon Background"
+        alt="Built from Bits Background"
       />
       
-      <h1 className="title mb-0 2xl:mb-10 relative z-10">BEYOND THE HORIZON</h1>
+      <h1 className="title mb-0 2xl:mb-10 relative z-10 text-center px-4">BUILT FROM BITS. DRIVEN BY BRAINS</h1>
       <div className="relative z-10 grid max-w-[750px] scale-75 grid-cols-2 grid-rows-2 items-end justify-items-center gap-x-6 md:grid-cols-4 md:grid-rows-none md:gap-16 lg:scale-90 2xl:scale-100">
         <div className="absolute top-0 h-1 w-full bg-primary-200"></div>
         <Tags text="Days" rotate={2} val={countdown.days} />

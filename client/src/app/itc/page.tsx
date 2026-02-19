@@ -96,8 +96,8 @@ const ITCPage = () => {
               </div>
             </div>
 
-            {/* Go To ITC Button */}
-            <div className="flex justify-center mt-16 mb-6">
+            {/* Go To ITC & Join ITC Buttons */}
+            <div className="flex flex-wrap justify-center gap-4 mt-16 mb-6">
               <Link
                 href="https://bnmpc-itc.web.app/"
                 target="_blank"
@@ -106,6 +106,16 @@ const ITCPage = () => {
                 style={{ fontFamily: 'Orbitron, sans-serif' }}
               >
                 Go To ITC
+                <FaExternalLinkAlt className="text-sm opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+              </Link>
+              <Link
+                href="https://bnmpc-itc-recruitment.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 px-10 py-4 rounded-full border-2 border-secondary-400/60 bg-gradient-to-r from-secondary-500/20 to-secondary-400/15 text-secondary-200 text-lg font-bold tracking-wider hover:bg-secondary-400/30 hover:border-secondary-400 hover:shadow-lg hover:shadow-secondary-400/20 transition-all duration-300"
+                style={{ fontFamily: 'Orbitron, sans-serif' }}
+              >
+                JOIN ITC
                 <FaExternalLinkAlt className="text-sm opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
               </Link>
             </div>

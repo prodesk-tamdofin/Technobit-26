@@ -61,12 +61,7 @@ const Footer = () => {
                 >
                   Gallery
                 </Link>
-                <Link
-                  href="/developers"
-                  className="cursor-pointer font-medium text-zinc-500 hover:underline dark:text-zinc-400"
-                >
-                  Developers
-                </Link>
+
               </div>
             </div>
             <div className="order-2 hidden flex-col items-center gap-3 md:flex">
@@ -126,24 +121,6 @@ const Footer = () => {
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 18 18"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m16.344 12.168-1.4-1.4a1.98 1.98 0 0 0-2.8 0l-.7.7a1.98 1.98 0 0 1-2.8 0l-2.1-2.1a1.98 1.98 0 0 1 0-2.8l.7-.7a1.981 1.981 0 0 0 0-2.8l-1.4-1.4a1.828 1.828 0 0 0-2.8 0C-.638 5.323 1.1 9.542 4.78 13.22c3.68 3.678 7.9 5.418 11.564 1.752a1.828 1.828 0 0 0 0-2.804Z"
-                  />
-                </svg>
-                <p>+88 01537266918</p>
-              </div>
-              <div className="flex items-center gap-1 font-medium text-zinc-500 hover:underline dark:text-zinc-400">
-                <svg
-                  className="mr-2 h-5 w-5 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
                   viewBox="0 0 17 21"
                 >
                   <g
@@ -156,7 +133,7 @@ const Footer = () => {
                     <path d="M13.8 12.938h-.01a7 7 0 1 0-11.465.144h-.016l.141.17c.1.128.2.252.3.372L8 20l5.13-6.248c.193-.209.373-.429.54-.66l.13-.154Z" />
                   </g>
                 </svg>
-                <p>Toyenbee Circular Rd, Dhaka 1000</p>
+                <p>Peelkhana, Dhaka 1209</p>
               </div>
             </div>
           </div>

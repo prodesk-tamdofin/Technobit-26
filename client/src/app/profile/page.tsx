@@ -31,14 +31,16 @@ const Page = () => {
     return <PageLoading />;
   }
 
-  if (!user) {
+  if (error && !user) {
     return (
       <ErrorC code={403} msg="Unauthorized" href="/login" handleText="Login" />
     );
   }
 
-  if (error || errorE) {
-    return <ErrorC code={500} msg="Something Went Wrong!" handleText="Login" />;
+  if (!user) {
+    return (
+      <ErrorC code={403} msg="Unauthorized" href="/login" handleText="Login" />
+    );
   }
 
   // cmnt

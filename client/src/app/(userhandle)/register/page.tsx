@@ -13,6 +13,8 @@ import Loading from "@/components/ui/LoadingWhite";
 import { mailRegex } from "@/utils/validations";
 import { useRouter } from "next/navigation";
 import { CLASSES } from "@/data/classes";
+import useUser from "@/hooks/useUser";
+import PageLoading from "@/components/PageLoading";
 
 const COLLEGES = [
   { value: "BNMPC", label: "Birshreshtha Noor Mohammad Public College" },
@@ -21,6 +23,7 @@ const COLLEGES = [
 
 const Register = () => {
   const Router = useRouter();
+  const [user, userLoading] = useUser(false);
   const [form, loading] = useForm({
     handler: async (data) => {
       if (!mailRegex.test(data?.email.trim())) {
@@ -62,6 +65,42 @@ const Register = () => {
       Router.refresh();
     },
   });
+
+  if (userLoading) {
+    return <PageLoading />;
+  }
+
+  if (user) {
+    return (
+      <main className="bg-grid-white/[0.02] relative min-h-screen w-full overflow-hidden bg-primary-650 antialiased flex items-center justify-center">
+        <Spotlight
+          className="-top-40 left-0 md:-top-20 md:left-60"
+          fill={ExtendedColors.primary["200"]}
+        />
+        <div className="flex flex-col items-center justify-center gap-6 text-center px-6 py-20">
+          <AiOutlineUserAdd className="text-primary-150 h-20 w-20 opacity-60" />
+          <h1 className="GradText text-5xl font-bold">Already Registered!</h1>
+          <p className="text-white/70 text-lg max-w-md">
+            You are already registered for Technobit&apos;26. Head to your profile to view your participation details or explore more events.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center mt-4">
+            <Link
+              href="/profile"
+              className="btn-prim px-8 py-3 text-base font-semibold"
+            >
+              Go to Profile
+            </Link>
+            <Link
+              href="/events"
+              className="px-8 py-3 text-base font-semibold rounded-full border-2 border-primary-400 text-primary-200 hover:bg-primary-400/20 transition"
+            >
+              Explore Events
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="bg-grid-white/[0.02] relative min-h-screen w-full overflow-hidden bg-primary-650 antialiased md:mb-10 md:items-center md:justify-start">

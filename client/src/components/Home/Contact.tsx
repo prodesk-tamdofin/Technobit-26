@@ -16,7 +16,7 @@ const Contact = () => {
           width="100%"
           height="600"
           className="h-full min-h-[500px]"
-          src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=notre%20dame%20college+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+          src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=Peelkhana%2C+Dhaka+1209+(BNMPC+IT+Club)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
         ></iframe>
       </div>
       <div className="text- flex flex-1 basis-[50%] flex-col items-center bg-gradient-to-tr from-primary-350/15 to-primary-150/25 py-12 md:mt-8">

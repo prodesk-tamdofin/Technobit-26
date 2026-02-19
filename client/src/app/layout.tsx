@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "/seo/android-chrome-512x512",
+        url: "/ITC_LOGO.png",
         width: 512,
         height: 512,
         alt: "Technobit'26 Logo",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     images: [
       {
-        url: "/seo/android-chrome-512x512",
+        url: "/ITC_LOGO.png",
         width: 512,
         height: 512,
         alt: "Technobit'26 Logo",
