@@ -580,4 +580,5 @@ module.exports = {
   removeSegmentRegistration,
   getDashboardStats,
   clearAllParticipants,
+  getFullSingle,
 };

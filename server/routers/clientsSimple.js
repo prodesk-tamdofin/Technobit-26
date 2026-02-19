@@ -16,6 +16,7 @@ const {
 	getDashboardStats,
 	clearAllParticipants,
 	getFullSingle,
+	getFullSingle,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
@@ -56,6 +57,9 @@ router.post('/logout', logout);
 // Get user data (protected route)
 router.get('/user', authMiddleware, getUser);
 router.get('/getClient', authMiddleware, getUser);
+
+// Get full participant data by username (public route)
+router.get('/fullSingle/:username', getFullSingle);
 
 // Update profile (protected)
 router.post('/update-profile', authMiddleware, updateProfile);
