@@ -316,6 +316,13 @@ const ParticipantsPage = () => {
               <BsDownload />
               Export CSV
             </button>
+            <Link
+              href="/safiq/csv"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 text-white transition-colors"
+            >
+              <BsDownload />
+              Group CSVs
+            </Link>
           </div>
         </div>
 
