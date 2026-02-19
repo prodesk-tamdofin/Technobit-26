@@ -2,24 +2,22 @@ const router = require('express').Router()
 const {
   getAllAdmins,
   adminReg,
-  adminLogin,
   isAdminValidated,
   setEventSetting,
   deleteEventSetting,
-  adminLogout,
   getEventSetting,
   updateBannnerImg,
   editEventSetting,
 } = require('../controllers/admin')
+const { adminLogin, adminAuth, adminLogout } = require('../controllers/adminSimple')
 const { eventSettingValidate } = require('../middlewares/adInputValidate')
 const adminValidate = require('../middlewares/adminTokenVerify')
 const upload = require('../middlewares/uploadFile')
 
 router.get('/', adminValidate, getAllAdmins)
-router.post('/reg', adminReg)
 router.post('/login', adminLogin)
 router.get('/logout', adminLogout)
-router.get('/auth', adminValidate, isAdminValidated)
+router.get('/auth', adminAuth)
 
 //event creator page settings
 router.get('/setting', getEventSetting)

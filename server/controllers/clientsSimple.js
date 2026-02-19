@@ -566,6 +566,50 @@ const getFullSingle = async (req, res) => {
   }
 };
 
+// Admin: Download CSV for a group
+const GROUP_SLUGS = {
+  freefire:    ['free-fire'],
+  pubg:        ['pubg-mobile'],
+  efootball:   ['efootball'],
+  chess:       ['chess'],
+  crackthecode:['crack-the-code'],
+  submission:  ['poster-designing', 'ai-art', 'tech-meme-war', 'sci-fi-story'],
+  quiz:        ['it-olympiad', 'gaming-quiz', 'robothon-olympiad', 'marvel-dc-quiz', 'animelogia', 'google-it'],
+};
+
+const downloadGroupCSV = async (req, res) => {
+  try {
+    const group = (req.params.group || '').toLowerCase();
+    const slugs = GROUP_SLUGS[group];
+    if (!slugs) {
+      return res.status(400).json({ succeed: false, msg: 'Invalid group name. Valid: ' + Object.keys(GROUP_SLUGS).join(', ') });
+    }
+
+    const participants = await Participant.find({
+      registeredEvents: { $in: slugs },
+    }).select('fullName email phone whatsapp registeredEvents');
+
+    // Build CSV
+    const rows = [];
+    rows.push('Full Name,Email,WhatsApp Number,Registered Events');
+    for (const p of participants) {
+      const wa = p.phone || p.whatsapp || '';
+      const email = p.email || '';
+      const name = (p.fullName || '').replace(/,/g, ' ');
+      const events = (p.registeredEvents || []).filter(s => slugs.includes(s)).join(' | ');
+      rows.push(`"${name}","${email}","${wa}","${events}"`);
+    }
+
+    const csv = rows.join('\n');
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="${group}-participants.csv"`);
+    res.send(csv);
+  } catch (error) {
+    console.error('Download CSV error:', error);
+    return res.status(500).json({ succeed: false, msg: 'Failed to generate CSV.' });
+  }
+};
+
 module.exports = {
   registration,
   login,
@@ -581,4 +625,5 @@ module.exports = {
   getDashboardStats,
   clearAllParticipants,
   getFullSingle,
+  downloadGroupCSV,
 };

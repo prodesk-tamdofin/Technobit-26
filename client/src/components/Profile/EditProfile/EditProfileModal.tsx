@@ -1,12 +1,11 @@
 "use client";
 import fetchJSON from "@/api/fetchJSON";
-import reqs, { reqImgWrapper } from "@/api/requests";
+import reqs from "@/api/requests";
 import Input from "@/components/ui/form/Input";
 import Loading from "@/components/ui/LoadingWhite";
-import PhotoUpload from "@/components/ui/PhotoUpload";
 import UserContext from "@/context/UserContext";
 import useForm from "@/hooks/useForm";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 const EditProfileModal = ({
   editEventHandler,
@@ -14,26 +13,18 @@ const EditProfileModal = ({
   editEventHandler: () => void;
 }) => {
   const userData = useContext(UserContext);
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(
-    reqImgWrapper(userData.image),
-  );
   const [form, loading] = useForm({
     handler: async (data) => {
-      // Only send allowed fields to server
       const updateData = {
         fullName: data.fullName,
         phone: data.phone,
-        whatsapp: data.whatsapp || null,
         fb: data.fb || null,
         section: data.section || null,
       };
 
       const response = await fetchJSON(
         reqs.UPDATE_PROFILE,
-        {
-          method: "POST",
-          credentials: "include",
-        },
+        { method: "POST", credentials: "include" },
         updateData,
       );
 
@@ -42,7 +33,6 @@ const EditProfileModal = ({
       }
 
       editEventHandler();
-      // Reload to get updated data
       setTimeout(() => window.location.reload(), 500);
     },
     successMsg: "Profile Updated Successfully!",
@@ -53,13 +43,13 @@ const EditProfileModal = ({
       <p className="text-center text-3xl font-bold text-secondary-200">
         Edit Profile
       </p>
-      
+
       <form className="flex flex-col-reverse gap-6" ref={form}>
+        {/* Buttons */}
         <div className="flex h-full w-full flex-col items-center justify-end gap-2 sm:flex-row">
           <button
             onClick={() => {
               editEventHandler();
-              setProfilePhoto(reqImgWrapper(userData.image));
               form.current?.reset();
             }}
             type="button"
@@ -77,7 +67,7 @@ const EditProfileModal = ({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {/* Full Name - Editable */}
+          {/* Full Name */}
           <Input
             type="text"
             label="Full Name"
@@ -87,24 +77,17 @@ const EditProfileModal = ({
             divClass="md:col-span-2"
           />
 
-          {/* Phone - Editable */}
+          {/* WhatsApp / Phone */}
           <Input
             type="tel"
-            label="Phone Number"
+            label="WhatsApp Number"
             name="phone"
             required
             defaultValue={userData.phone}
+            divClass="md:col-span-2"
           />
 
-          {/* WhatsApp - Editable */}
-          <Input
-            type="tel"
-            label="WhatsApp Number (Optional)"
-            name="whatsapp"
-            defaultValue={userData.whatsapp || ""}
-          />
-
-          {/* Section - Editable */}
+          {/* Section */}
           <Input
             type="text"
             label="Section (Optional)"
@@ -113,23 +96,24 @@ const EditProfileModal = ({
             defaultValue={userData.section || ""}
           />
 
-          {/* Facebook - Editable */}
+          {/* Facebook */}
           <Input
             type="url"
             label="Facebook Profile (Optional)"
             name="fb"
             placeholder="https://facebook.com/yourprofile"
             defaultValue={userData.fb || ""}
-            divClass="md:col-span-2"
           />
 
           {/* Read-only Info */}
-          <div className="p-3 rounded-lg bg-primary-700/50 md:col-span-2">
-            <p className="text-white/60 text-sm mb-2">Your Information (Cannot be changed)</p>
+          <div className="rounded-lg bg-primary-700/50 p-3 md:col-span-2">
+            <p className="mb-2 text-sm text-white/60">
+              Cannot be changed
+            </p>
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div>
                 <p className="text-white/50">Roll</p>
-                <p className="text-white/80 font-mono">{userData.roll}</p>
+                <p className="font-mono text-white/80">{userData.roll}</p>
               </div>
               <div>
                 <p className="text-white/50">Class</p>
@@ -146,14 +130,6 @@ const EditProfileModal = ({
             </div>
           </div>
         </div>
-
-        <PhotoUpload
-          name="profilePic"
-          type="PFP"
-          currentPhoto={profilePhoto}
-          setCurrentPhoto={setProfilePhoto}
-          divClass="col-span-full"
-        />
       </form>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { BsPeople, BsGear, BsTrash } from "react-icons/bs";
+import { BsPeople, BsGear, BsTrash, BsDownload } from "react-icons/bs";
 import { RiDashboardFill } from "react-icons/ri";
 import { FaTrophy, FaUsers, FaGamepad, FaCode, FaQuestionCircle } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
@@ -234,6 +234,13 @@ const AdminDashboard = () => {
             icon={FaTrophy}
             title="Results"
             description="Manage event results"
+            color="from-primary-600/60 to-primary-700/60"
+          />
+          <QuickActionCard
+            href="/safiq/csv"
+            icon={BsDownload}
+            title="Download CSV"
+            description="Export participant lists by event group"
             color="from-primary-600/60 to-primary-700/60"
           />
         </div>

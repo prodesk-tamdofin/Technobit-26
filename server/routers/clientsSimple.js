@@ -16,8 +16,7 @@ const {
 	getDashboardStats,
 	clearAllParticipants,
 	getFullSingle,
-} = require('../controllers/clientsSimple');
-
+        downloadGroupCSV,
 // Auth middleware to verify JWT token
 const authMiddleware = (req, res, next) => {
 	const token = req.cookies?.token;
@@ -79,5 +78,8 @@ router.post('/participant/:id/remove-segment', removeSegmentRegistration);
 router.post('/verify-payment', verifyPayment);
 router.get('/dashboard-stats', getDashboardStats);
 router.delete('/clear-all', clearAllParticipants);
+
+// Admin: CSV download by group
+router.get('/download-csv/:group', downloadGroupCSV);
 
 module.exports = router;
