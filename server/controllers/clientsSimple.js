@@ -113,7 +113,11 @@ const login = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+  });
   res.json({
     succeed: true,
     msg: 'Successfully logged out.',
@@ -133,9 +137,10 @@ const getUser = async (req, res) => {
       });
     }
 
+    // Return format that frontend expects
     res.json({
       succeed: true,
-      user,
+      result: user,
     });
   } catch (error) {
     console.error('Get user error:', error);
