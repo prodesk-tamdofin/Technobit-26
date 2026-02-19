@@ -10,7 +10,7 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import Select from "@/components/ui/form/Select";
 import Checkbox from "@/components/ui/form/Checkbox";
 import Loading from "@/components/ui/LoadingWhite";
-import { mailRegex, passRegEx } from "@/utils/validations";
+import { mailRegex } from "@/utils/validations";
 import { useRouter } from "next/navigation";
 import { CLASSES } from "@/data/classes";
 
@@ -28,11 +28,10 @@ const Register = () => {
           "Please use a popular email provider like Gmail, Outlook, Yahoo, or iCloud.",
         );
       } else if (
-        data?.password.trim().length < 8 ||
-        !passRegEx.test(data?.password.trim())
+        data?.password.trim().length < 8
       ) {
         throw new Error(
-          "Password must be >8 chars with Uppercase letters and digits.",
+          "Password must be at least 8 characters.",
         );
       } else if (data?.password.trim() !== data?.cpassword.trim()) {
         throw new Error("Password and Confirm Password Aren't same.");
@@ -182,7 +181,7 @@ const Register = () => {
               label="Password"
               name="password"
               id="password"
-              placeholder="Min. 8 chars, 1 Uppercase, 1 Digit"
+              placeholder="Min. 8 characters"
               type="password"
               divClass="md:col-span-2"
               required

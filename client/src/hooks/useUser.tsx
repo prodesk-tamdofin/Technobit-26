@@ -1,6 +1,5 @@
 import { getFullData, loggedInAndData } from "@/api/authentication";
 import { parseConditionalJSON } from "@/utils/JSONparse";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const useUser = (fullData?: boolean, deps?: any[]) => {
@@ -21,11 +20,23 @@ const useUser = (fullData?: boolean, deps?: any[]) => {
         } else {
           if (fullData) {
             const fullResp = await getFullData(res.result.userName);
-            Object.keys(fullResp.result.ParEvent).map((key) => {
-              const val = fullResp.result.ParEvent[key];
-              fullResp.result.ParEvent[key] = parseConditionalJSON(val);
-            });
-            setUser({ ...fullResp.result, ...res.result });
+            if (fullResp?.result) {
+              // Old format: has ParEvent object
+              if (fullResp.result.ParEvent) {
+                Object.keys(fullResp.result.ParEvent).map((key) => {
+                  const val = fullResp.result.ParEvent[key];
+                  fullResp.result.ParEvent[key] = parseConditionalJSON(val);
+                });
+              } else if (fullResp.result.registeredEvents) {
+                // New MongoDB format: has registeredEvents array
+                // Build clientEvents from registeredEvents array
+                fullResp.result.clientEvents = fullResp.result.registeredEvents;
+              }
+              setUser({ ...fullResp.result, ...res.result });
+            } else {
+              // fullSingle failed, fall back to basic user data
+              setUser(res.result);
+            }
           } else {
             setUser(res.result);
           }

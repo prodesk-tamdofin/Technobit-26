@@ -223,11 +223,20 @@ const Navbar = () => {
                   type="button"
                   className="rounded-full border border-primary-200 p-1 transition hover:border-primary-400"
                 >
-                  <img
-                    className="z-10 h-[42px] w-[42px] rounded-full hover:brightness-75"
-                    src={reqImgWrapper(user.image) || ""}
-                    alt=""
-                  />
+                  {reqImgWrapper(user.image) ? (
+                    <img
+                      className="z-10 h-[42px] w-[42px] rounded-full hover:brightness-75 object-cover"
+                      src={reqImgWrapper(user.image)!}
+                      alt={user.fullName || "User"}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                        (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+                      }}
+                    />
+                  ) : null}
+                  <span className={`z-10 flex h-[42px] w-[42px] items-center justify-center rounded-full bg-primary-400 text-white ${reqImgWrapper(user.image) ? "hidden" : ""}`}>
+                    <FaUser className="h-4 w-4" />
+                  </span>
                 </button>
               ) : (
                 <>
@@ -367,14 +376,16 @@ const Navbar = () => {
                     label="Schedule" 
                   />
                 ) : null}
-                <NavLink
-                  className="flex items-center justify-center bg-primary-350 hover:bg-primary-450"
-                  classNameLi="md:hidden"
-                  href="/register"
-                >
-                  Register
-                  <LuLogIn className="z-10 h-5 w-5 translate-x-1 opacity-50 transition group-hover:translate-x-2.5 sm:h-4 sm:w-4 xl:mr-2" />
-                </NavLink>
+                {!user && (
+                  <NavLink
+                    className="flex items-center justify-center bg-primary-350 hover:bg-primary-450"
+                    classNameLi="md:hidden"
+                    href="/register"
+                  >
+                    Register
+                    <LuLogIn className="z-10 h-5 w-5 translate-x-1 opacity-50 transition group-hover:translate-x-2.5 sm:h-4 sm:w-4 xl:mr-2" />
+                  </NavLink>
+                )}
               </ul>
             </div>
           </div>

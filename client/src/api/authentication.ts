@@ -50,6 +50,7 @@ export const getFullData = async (id: string) => {
 export const logOut = async () => {
   // this function should be only be runned in client
   const response = await fetchJSON(reqs.CLIENT_LOGOUT, {
+    method: "POST",
     credentials: "include",
   });
 

@@ -1,5 +1,5 @@
 export const passRegEx = new RegExp(
-  "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})",
+  "^.{8,}",
 );
 
 export const mailRegex =
