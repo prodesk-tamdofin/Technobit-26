@@ -16,7 +16,6 @@ const {
 	getDashboardStats,
 	clearAllParticipants,
 	getFullSingle,
-	getFullSingle,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
