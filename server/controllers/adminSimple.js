@@ -28,7 +28,6 @@ const adminLogin = async (req, res) => {
 
   res.cookie('admin_token', token, {
     httpOnly: true,
-    signed: true,
     secure: true,
     sameSite: 'none',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -42,7 +41,7 @@ const adminLogin = async (req, res) => {
 };
 
 const adminAuth = async (req, res) => {
-  const token = req.signedCookies?.admin_token || req.cookies?.admin_token;
+  const token = req.cookies?.admin_token;
 
   if (!token) {
     return res.json({ succeed: true, result: false });
@@ -57,7 +56,7 @@ const adminAuth = async (req, res) => {
 };
 
 const adminLogout = async (req, res) => {
-  res.clearCookie('admin_token');
+  res.clearCookie('admin_token', { httpOnly: true, secure: true, sameSite: 'none' });
   return res.json({ succeed: true, msg: 'Logged out.' });
 };
 
