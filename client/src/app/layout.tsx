@@ -15,7 +15,7 @@ import "@/components/Admin/Dashboard/Dashboard.css";
 export const metadata: Metadata = {
   title: "Technobit'26 | BNMPC IT Club",
   description: "The Ultimate IT Event by BNMPC IT Club",
-  icons: { icon: "/android-chrome-192x192" },
+  icons: { icon: "/ITC_LOGO.png" },
   manifest: "/seo/site.webmanifest",
   openGraph: {
     images: [

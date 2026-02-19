@@ -60,6 +60,7 @@ const Register = () => {
     successMsg: "You successfully registered! Redirecting to events...",
     onSuccess: () => {
       Router.push("/events");
+      Router.refresh();
     },
   });
 
