@@ -19,9 +19,10 @@ const {
 
 // Auth middleware to verify JWT token
 const authMiddleware = (req, res, next) => {
-	const token = req.signedCookies?.token || req.cookies?.token;
+	const token = req.cookies?.token;
 	
 	if (!token) {
+		console.log('No token found in cookies');
 		return res.json({
 			succeed: false,
 			msg: 'Not logged in',
@@ -33,6 +34,7 @@ const authMiddleware = (req, res, next) => {
 		req.user = decoded;
 		next();
 	} catch (err) {
+		console.log('Token verification failed:', err.message);
 		return res.json({
 			succeed: false,
 			msg: 'Invalid or expired token',

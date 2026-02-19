@@ -120,6 +120,16 @@ const Register = () => {
               required
             />
 
+            {/* Section (Optional) */}
+            <Input
+              label="Section (Optional)"
+              name="section"
+              id="section"
+              placeholder="e.g., A, B, C"
+              type="text"
+              divClass="md:col-span-2"
+            />
+
             {/* College Selection */}
             <Select
               label="College"

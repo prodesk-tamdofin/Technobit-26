@@ -4,7 +4,7 @@ const { sign } = require('jsonwebtoken');
 
 const registration = async (req, res) => {
   try {
-    const { fullName, roll, college, email, phone, className, institute, address, fb, password, userName } = req.body;
+    const { fullName, roll, college, email, phone, className, institute, address, fb, password, userName, section } = req.body;
 
     // Check if user exists
     const existingUser = await Participant.findOne({ $or: [{ email }, { userName }] });
@@ -38,6 +38,7 @@ const registration = async (req, res) => {
       className,
       institute,
       address: address || 'N/A',
+      section: section || null,
       fb: fb || null,
       image: randomAvatar,
       userName,
@@ -101,7 +102,6 @@ const login = async (req, res) => {
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       secure: true,
       sameSite: 'none',
-      signed: true,
     });
 
     res.json({
@@ -123,6 +123,7 @@ const logout = (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
+    path: '/',
   });
   res.json({
     succeed: true,
