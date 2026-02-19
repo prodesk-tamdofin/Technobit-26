@@ -16,7 +16,9 @@ const {
 	getDashboardStats,
 	clearAllParticipants,
 	getFullSingle,
-        downloadGroupCSV,
+	downloadGroupCSV,
+} = require('../controllers/clientsSimple');
+
 // Auth middleware to verify JWT token
 const authMiddleware = (req, res, next) => {
 	const token = req.cookies?.token;
