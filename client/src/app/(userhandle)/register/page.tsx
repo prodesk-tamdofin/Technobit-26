@@ -5,7 +5,6 @@ import ExtendedColors from "../../../../color.config";
 import Input from "@/components/ui/form/Input";
 import useForm from "@/hooks/useForm";
 import { register } from "@/api/authentication";
-import { logOut } from "@/api/authentication";
 import Link from "next/link";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import Select from "@/components/ui/form/Select";
@@ -62,11 +61,10 @@ const Register = () => {
         return response;
       }
     },
-    successMsg: "Registration successful! Please log in to continue.",
+    successMsg: "Registration successful! Welcome to Technobit'26.",
     onSuccess: async () => {
-      // Prevent auto-login: clear any session cookie set by registration
-      await logOut();
-      Router.push("/login");
+      Router.push("/profile");
+      Router.refresh();
     },
   });
 

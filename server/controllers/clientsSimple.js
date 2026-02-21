@@ -3,6 +3,17 @@ const { hashSync, compare } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
+const createTransporter = () => nodemailer.createTransport({
+  host: process.env.MAIL_HOST || 'smtp.titan.email',
+  port: parseInt(process.env.MAIL_PORT || '465'),
+  secure: (process.env.MAIL_PORT || '465') !== '587',
+  auth: {
+    user: process.env.SERVER_EMAIL,
+    pass: process.env.MAIL_PASS,
+  },
+  tls: { rejectUnauthorized: false },
+});
+
 const registration = async (req, res) => {
   try {
     const { fullName, roll, college, email, phone, className, institute, address, fb, password, userName, section } = req.body;
@@ -44,28 +55,16 @@ const registration = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Send registration confirmation email
-    try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST || 'smtp.titan.email',
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.SERVER_EMAIL,
-          pass: process.env.MAIL_PASS,
-        },
-        tls: { rejectUnauthorized: false },
-      });
-
-      const firstName = fullName ? fullName.split(' ')[0] : 'Participant';
-      const instituteLabel = institute === 'BMARPC'
-        ? 'Birshreshtha Munshi Abdur Rouf Public College (BMARPC)'
-        : 'Birshreshtha Noor Mohammad Public College (BNMPC)';
-
-      await transporter.sendMail({
-        from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
-        to: email,
-        subject: `Registration Confirmed — Technobit'26`,
+    // Send registration confirmation email (fire-and-forget, don't block response)
+    const transporter = createTransporter();
+    const firstName = fullName ? fullName.split(' ')[0] : 'Participant';
+    const instituteLabel = institute === 'BMARPC'
+      ? 'Birshreshtha Munshi Abdur Rouf Public College (BMARPC)'
+      : 'Birshreshtha Noor Mohammad Public College (BNMPC)';
+    transporter.sendMail({
+      from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
+      to: email,
+      subject: `Registration Confirmed — Technobit'26`,
         html: `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
@@ -179,14 +178,22 @@ const registration = async (req, res) => {
 </body>
 </html>`,
       });
-    } catch (mailErr) {
-      console.error('Registration email error:', mailErr.message);
-      // Do not block registration if email fails
-    }
+    }).catch(err => console.error('Registration email error:', err.message));
+
+    // Auto-login: generate token and set cookie
+    const tokenPayload = { id: newParticipant._id, userName: newParticipant.userName, mode: 'par' };
+    const token = sign(tokenPayload, process.env.CLIENT_SECRET, { expiresIn: '30d' });
+    res.cookie('token', token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      secure: true,
+      sameSite: 'none',
+    });
 
     res.status(201).json({
       succeed: true,
       msg: 'Congratulations!! Your registration is successful.',
+      username: newParticipant.userName,
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -765,19 +772,8 @@ const forgotPassword = async (req, res) => {
 
     // Send OTP email
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST || 'smtp.titan.email',
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.SERVER_EMAIL,
-          pass: process.env.MAIL_PASS,
-        },
-        tls: { rejectUnauthorized: false },
-      });
-
+      const transporter = createTransporter();
       const userName = user.fullName ? user.fullName.split(' ')[0] : 'Participant';
-
       await transporter.sendMail({
         from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
         to: email,
@@ -852,7 +848,7 @@ const forgotPassword = async (req, res) => {
       });
     } catch (mailErr) {
       console.error('Mail send error:', mailErr.message);
-      // Still return success so we don't leak email existence on mail failures
+      return res.status(500).json({ succeed: false, msg: 'Failed to send OTP email. Please check your email address and try again.' });
     }
 
     res.status(200).json({ succeed: true, msg: 'OTP sent to your email.' });
