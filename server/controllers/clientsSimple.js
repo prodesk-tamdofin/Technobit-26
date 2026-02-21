@@ -44,6 +44,146 @@ const registration = async (req, res) => {
       password: hashedPassword,
     });
 
+    // Send registration confirmation email
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.MAIL_HOST || 'smtp.titan.email',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.SERVER_EMAIL,
+          pass: process.env.MAIL_PASS,
+        },
+        tls: { rejectUnauthorized: false },
+      });
+
+      const firstName = fullName ? fullName.split(' ')[0] : 'Participant';
+      const instituteLabel = institute === 'BMARPC'
+        ? 'Birshreshtha Munshi Abdur Rouf Public College (BMARPC)'
+        : 'Birshreshtha Noor Mohammad Public College (BNMPC)';
+
+      await transporter.sendMail({
+        from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
+        to: email,
+        subject: `Registration Confirmed — Technobit'26`,
+        html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#0a0a14;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a14;padding:40px 0;">
+    <tr><td align="center">
+      <table width="540" cellpadding="0" cellspacing="0" style="background:#11111f;border-radius:16px;border:1px solid #2a2a4a;overflow:hidden;max-width:540px;width:100%;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#4f2d8a,#7c3aed,#6d28d9);padding:36px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:4px;color:#c4b5fd;text-transform:uppercase;">BNMPC IT Club Presents</p>
+            <h1 style="margin:0;font-size:34px;font-weight:800;color:#ffffff;letter-spacing:2px;">TECHNOBIT'26</h1>
+            <p style="margin:10px 0 0 0;font-size:13px;color:#ddd6fe;">technobit26-itc.tech</p>
+          </td>
+        </tr>
+
+        <!-- Success Badge -->
+        <tr>
+          <td align="center" style="padding:28px 40px 0;">
+            <div style="display:inline-block;background:#16a34a22;border:1px solid #16a34a55;border-radius:100px;padding:8px 20px;">
+              <span style="color:#4ade80;font-size:13px;font-weight:600;">&#10003; Registration Confirmed</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:24px 40px 32px;">
+            <p style="margin:0 0 6px 0;font-size:18px;font-weight:600;color:#e2e0ff;">Hello, ${firstName}!</p>
+            <p style="margin:0 0 24px 0;font-size:14px;color:#8888aa;line-height:1.7;">
+              You have successfully registered for <strong style="color:#c4b5fd;">Technobit'26</strong> — the annual tech festival organized by BNMPC IT Club. Welcome aboard!
+            </p>
+
+            <!-- Account Details Box -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#1a1a30;border:1px solid #2a2a50;border-radius:12px;margin-bottom:24px;">
+              <tr><td style="padding:20px 24px;">
+                <p style="margin:0 0 14px 0;font-size:11px;letter-spacing:2px;color:#6b6b8a;text-transform:uppercase;">Your Registration Details</p>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding:5px 0;font-size:13px;color:#6b6b8a;width:40%;">Full Name</td>
+                    <td style="padding:5px 0;font-size:13px;color:#e2e0ff;font-weight:500;">${fullName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;font-size:13px;color:#6b6b8a;">Username</td>
+                    <td style="padding:5px 0;font-size:13px;color:#e2e0ff;font-weight:500;">@${userName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;font-size:13px;color:#6b6b8a;">Email</td>
+                    <td style="padding:5px 0;font-size:13px;color:#e2e0ff;font-weight:500;">${email}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;font-size:13px;color:#6b6b8a;">Institution</td>
+                    <td style="padding:5px 0;font-size:13px;color:#e2e0ff;font-weight:500;">${instituteLabel}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:5px 0;font-size:13px;color:#6b6b8a;">Class & Section</td>
+                    <td style="padding:5px 0;font-size:13px;color:#e2e0ff;font-weight:500;">${className}${section ? ' — ' + section : ''}</td>
+                  </tr>
+                </table>
+              </td></tr>
+            </table>
+
+            <!-- What's Next -->
+            <p style="margin:0 0 10px 0;font-size:11px;letter-spacing:2px;color:#6b6b8a;text-transform:uppercase;">What's Next</p>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+              <tr>
+                <td style="padding:7px 0;vertical-align:top;">
+                  <span style="display:inline-block;width:20px;height:20px;background:#7c3aed;border-radius:50%;text-align:center;line-height:20px;font-size:11px;color:#fff;font-weight:700;margin-right:10px;">1</span>
+                  <span style="font-size:13px;color:#a0a0c0;">Log in to your account at <a href="https://www.technobit26-itc.tech/login" style="color:#a78bfa;text-decoration:none;">technobit26-itc.tech/login</a></span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;vertical-align:top;">
+                  <span style="display:inline-block;width:20px;height:20px;background:#7c3aed;border-radius:50%;text-align:center;line-height:20px;font-size:11px;color:#fff;font-weight:700;margin-right:10px;">2</span>
+                  <span style="font-size:13px;color:#a0a0c0;">Browse the <a href="https://www.technobit26-itc.tech/events" style="color:#a78bfa;text-decoration:none;">Events page</a> and register for your preferred segment(s)</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:7px 0;vertical-align:top;">
+                  <span style="display:inline-block;width:20px;height:20px;background:#7c3aed;border-radius:50%;text-align:center;line-height:20px;font-size:11px;color:#fff;font-weight:700;margin-right:10px;">3</span>
+                  <span style="font-size:13px;color:#a0a0c0;">Check your profile for updates and event notifications</span>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Dates Banner -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#1e1030;border:1px solid #4f2d8a55;border-radius:10px;margin-bottom:8px;">
+              <tr><td style="padding:14px 20px;text-align:center;">
+                <p style="margin:0;font-size:12px;color:#8888aa;">Event Dates</p>
+                <p style="margin:4px 0 0 0;font-size:16px;font-weight:700;color:#c4b5fd;">5 – 10 March 2026</p>
+              </td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr><td style="padding:0 40px;"><div style="height:1px;background:#1e1e38;"></div></td></tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:22px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;font-size:12px;color:#444460;">This is an automated confirmation from Technobit'26. Please do not reply.</p>
+            <p style="margin:0;font-size:11px;color:#333350;">© 2026 BNMPC IT Club — Birshreshtha Noor Mohammad Public College</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
+      });
+    } catch (mailErr) {
+      console.error('Registration email error:', mailErr.message);
+      // Do not block registration if email fails
+    }
+
     res.status(201).json({
       succeed: true,
       msg: 'Congratulations!! Your registration is successful.',

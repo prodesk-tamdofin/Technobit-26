@@ -29,7 +29,7 @@ export const eventCategories: EventCategory[] = [
         id: 101,
         name: "IT Olympiad",
         value: "it-olympiad",
-        description: "Test your IT knowledge in this comprehensive olympiad covering hardware, software, networking, and more.",
+        description: "30 MCQs based on IT knowledge and technology — hardware, software, networking, and more. Solo event for BNMPC students.",
         fee: 0,
         type: "online",
         image: "/events/it-olympiad.jpg"
@@ -38,7 +38,7 @@ export const eventCategories: EventCategory[] = [
         id: 102,
         name: "Gaming Quiz",
         value: "gaming-quiz",
-        description: "How well do you know the gaming world? From retro classics to modern masterpieces, prove your gaming knowledge!",
+        description: "30 MCQs based on gaming knowledge. Prove how much you know about games — solo event for BNMPC students.",
         fee: 0,
         type: "online",
         image: "/events/gaming-quiz.jpg"
@@ -47,7 +47,7 @@ export const eventCategories: EventCategory[] = [
         id: 103,
         name: "Robothon Olympiad",
         value: "robothon-olympiad",
-        description: "A robotics knowledge challenge covering mechanics, electronics, programming and AI concepts.",
+        description: "30 MCQs covering Robotics and Cybersecurity. Individual event for BNMPC students.",
         fee: 0,
         type: "online",
         image: "/events/robothon.jpg"
@@ -56,7 +56,7 @@ export const eventCategories: EventCategory[] = [
         id: 104,
         name: "Marvel-DC Quiz",
         value: "marvel-dc-quiz",
-        description: "Are you Team Marvel or Team DC? Test your superhero universe knowledge in this ultimate comic quiz!",
+        description: "Test your knowledge of Spider-Man, Iron Man, The Batman (2022), and Superman (2025). Solo quiz for BNMPC students.",
         fee: 0,
         type: "online",
         image: "/events/marvel-dc.jpg"
@@ -65,7 +65,7 @@ export const eventCategories: EventCategory[] = [
         id: 105,
         name: "Animelogia",
         value: "animelogia",
-        description: "From Naruto to Attack on Titan, prove you're the ultimate otaku in this anime knowledge showdown!",
+        description: "Anime quiz covering Attack On Titan, Demon Slayer, Chainsaw Man, Spy x Family, and Jujutsu Kaisen. Solo event.",
         fee: 0,
         type: "online",
         image: "/events/animelogia.jpg"
@@ -74,7 +74,7 @@ export const eventCategories: EventCategory[] = [
         id: 106,
         name: "Google It",
         value: "google-it",
-        description: "Master the art of searching! Find answers faster than anyone else using your Google-fu skills.",
+        description: "A solo speed-search competition in MCQ format. Use Google to find answers — AI tools and chatbots are not allowed.",
         fee: 0,
         type: "online",
         image: "/events/google-it.jpg"
@@ -90,7 +90,7 @@ export const eventCategories: EventCategory[] = [
         id: 201,
         name: "Crack the Code",
         value: "crack-the-code",
-        description: "The ultimate programming challenge! Solve algorithmic puzzles and prove your coding prowess.",
+        description: "Solve ciphers, numeric puzzles, word riddles, and logic challenges on HackerRank within the time limit.",
         fee: 30,
         type: "online",
         image: "/events/crack-the-code.jpg"
@@ -99,7 +99,7 @@ export const eventCategories: EventCategory[] = [
         id: 202,
         name: "Sci-Fi Story Writing",
         value: "sci-fi-story",
-        description: "Unleash your imagination and craft captivating science fiction narratives set in the future.",
+        description: "Write an original sci-fi story about the future — AI, space, time travel, or technology. Bangla or English accepted.",
         fee: 0,
         type: "online",
         image: "/events/sci-fi-story.jpg"
@@ -108,7 +108,7 @@ export const eventCategories: EventCategory[] = [
         id: 203,
         name: "Tech Meme War",
         value: "tech-meme-war",
-        description: "Create the funniest, most relatable tech memes and win the internet! Creativity is your weapon.",
+        description: "Create one original tech-related meme and submit it to the EXHIB_IT Facebook group with #Technobit26_meme.",
         fee: 0,
         type: "online",
         image: "/events/tech-meme.jpg"
@@ -117,7 +117,7 @@ export const eventCategories: EventCategory[] = [
         id: 204,
         name: "AI Art",
         value: "ai-art",
-        description: "Harness the power of AI to create stunning digital artwork. Prompt engineering meets creativity!",
+        description: "Generate an AI artwork using any AI tool and submit it to the EXHIB_IT Facebook group with #Technobit26_art.",
         fee: 0,
         type: "online",
         image: "/events/ai-art.jpg"
@@ -126,7 +126,7 @@ export const eventCategories: EventCategory[] = [
         id: 205,
         name: "Poster Designing",
         value: "poster-designing",
-        description: "Design eye-catching posters that communicate powerful messages. Show your graphic design skills!",
+        description: "Design an original poster using any graphic design software. Theme announced at the start of the event.",
         fee: 0,
         type: "online",
         image: "/events/poster-design.jpg"
@@ -142,7 +142,7 @@ export const eventCategories: EventCategory[] = [
         id: 301,
         name: "eFootball",
         value: "efootball",
-        description: "Battle it out on the virtual pitch! Show your football gaming skills in this intense tournament.",
+        description: "Knockout friendly matches using your own Dream Team. No emulators allowed. Follow the No Mercy rule at 7+ goal difference.",
         fee: 40,
         type: "online",
         image: "/events/efootball.jpg"
@@ -151,7 +151,7 @@ export const eventCategories: EventCategory[] = [
         id: 302,
         name: "PUBG Mobile",
         value: "pubg-mobile",
-        description: "Drop in, loot up, and be the last squad standing in this battle royale showdown!",
+        description: "Team Deathmatch (TDM) — 4 main players + 1 substitute. Play on your own account. No emulators or third-party tools.",
         fee: 100,
         type: "online",
         image: "/events/pubg.jpg"
@@ -160,7 +160,7 @@ export const eventCategories: EventCategory[] = [
         id: 303,
         name: "Free Fire",
         value: "free-fire",
-        description: "Fast-paced battle royale action! Survive the battlefield and claim victory.",
+        description: "Team-based event in the game mode announced by organizers. 4 main players + 1 substitute. No emulators allowed.",
         fee: 100,
         type: "online",
         image: "/events/freefire.jpg"
@@ -169,7 +169,7 @@ export const eventCategories: EventCategory[] = [
         id: 304,
         name: "Chess",
         value: "chess",
-        description: "The classic game of strategy and intellect. Checkmate your opponents in this mind sport tournament.",
+        description: "Online chess tournament on Lichess.org. All ratings welcome. Top 2 players with the highest points win.",
         fee: 0,
         type: "online",
         image: "/events/chess.jpg"
