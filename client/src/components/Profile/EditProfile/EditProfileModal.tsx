@@ -55,14 +55,14 @@ const EditProfileModal = ({
             type="button"
             className="w-full rounded-3xl bg-red-500 px-7 py-3 text-white hover:bg-red-400 sm:w-auto md:px-9"
           >
-            Cancel ✕
+            Cancel
           </button>
           <button
             type="submit"
             disabled={loading}
             className="flex w-full justify-center gap-2 rounded-3xl bg-primary-400 px-7 py-3 text-white hover:bg-primary-500 disabled:opacity-50 sm:w-auto md:px-9"
           >
-            {loading ? <Loading /> : "Save Changes ✓"}
+            {loading ? <Loading /> : "Save Changes"}
           </button>
         </div>
 

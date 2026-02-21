@@ -270,7 +270,7 @@ export default function Gallery3DTimeline() {
                   <img
                     src={galleryImages[index]}
                     alt={`Gallery ${index + 1}`}
-                    className="w-full h-full object-contain bg-black/80"
+                    className="w-full h-full object-contain bg-black"
                     onLoad={() => handleImageLoad(index)}
                     draggable={false}
                     loading={offset === 0 ? "eager" : "lazy"}
@@ -319,7 +319,7 @@ export default function Gallery3DTimeline() {
                   <img
                     src={galleryImages[index]}
                     alt={`Gallery ${index + 1}`}
-                    className="w-full h-full object-contain bg-black/80"
+                    className="w-full h-full object-contain bg-black"
                     draggable={false}
                     loading={offset === 0 ? "eager" : "lazy"}
                   />

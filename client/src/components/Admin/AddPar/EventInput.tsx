@@ -66,9 +66,9 @@ const EventInput = ({ forceRefresh }: { forceRefresh?: any }) => {
         return ev.map(
           (d: any) =>
             d["name"] +
-            (d["submission"] !== "{}" ? " - 🔗 Submission" : "") +
-            (d["team"] ? " - 👥 Team" : "") +
-            (d["paid"] ? " - 💵 " + d.fee : ""),
+            (d["submission"] !== "{}" ? " - Submission" : "") +
+            (d["team"] ? " - Team" : "") +
+            (d["paid"] ? " - " + d.fee : ""),
         );
       }
     }, [events]) || [];

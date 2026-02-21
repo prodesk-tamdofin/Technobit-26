@@ -262,7 +262,7 @@ const RegisteredUsersPage = () => {
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
                         <img 
-                          src={participant.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${participant.userName}`}
+                          src={participant.image || `https://api.dicebear.com/7.x/bottts/svg?seed=${participant.userName}`}
                           alt=""
                           className="w-10 h-10 rounded-full"
                         />
@@ -351,7 +351,7 @@ const RegisteredUsersPage = () => {
 
             <div className="flex items-center gap-4 mb-6">
               <img 
-                src={selectedUser.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${selectedUser.userName}`}
+                src={selectedUser.image || `https://api.dicebear.com/7.x/bottts/svg?seed=${selectedUser.userName}`}
                 alt=""
                 className="w-20 h-20 rounded-full"
               />

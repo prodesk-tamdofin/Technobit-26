@@ -57,51 +57,26 @@ const Page = ({ params }: { params: { value: string } }) => {
         let gamingData: any = {};
 
         if (isTeamEvent) {
-          // Team gaming events (PUBG/Free Fire)
-          gamingData = {
-            teamName: data.teamName,
-            teamCollege: data.teamCollege,
-            players: [
-              {
-                role: "captain",
-                fullName: data.p1_fullName,
-                inGameName: data.p1_inGameName,
-                uid: data.p1_uid,
-                email: data.p1_email,
-                facebook: data.p1_facebook,
-                class: data.p1_class,
-                section: data.p1_section,
-                roll: data.p1_roll,
-              },
-              {
-                role: "player2",
-                fullName: data.p2_fullName,
-                inGameName: data.p2_inGameName,
-                class: data.p2_class,
-                section: data.p2_section,
-                roll: data.p2_roll,
-              },
-              {
-                role: "player3",
-                fullName: data.p3_fullName,
-                inGameName: data.p3_inGameName,
-                class: data.p3_class,
-                section: data.p3_section,
-                roll: data.p3_roll,
-              },
-              {
-                role: "player4",
-                fullName: data.p4_fullName,
-                inGameName: data.p4_inGameName,
-                class: data.p4_class,
-                section: data.p4_section,
-                roll: data.p4_roll,
-              },
-            ],
-          };
-          // Add optional player 5
+          // Team gaming events (PUBG/Free Fire) — players 2-4 are optional
+          const players: any[] = [
+            {
+              role: "captain",
+              fullName: data.p1_fullName,
+              inGameName: data.p1_inGameName,
+              uid: data.p1_uid,
+              email: data.p1_email,
+              facebook: data.p1_facebook,
+              class: data.p1_class,
+              section: data.p1_section,
+              roll: data.p1_roll,
+            },
+          ];
+          if (data.p2_fullName?.trim()) players.push({ role: "player2", fullName: data.p2_fullName, inGameName: data.p2_inGameName, class: data.p2_class, section: data.p2_section, roll: data.p2_roll });
+          if (data.p3_fullName?.trim()) players.push({ role: "player3", fullName: data.p3_fullName, inGameName: data.p3_inGameName, class: data.p3_class, section: data.p3_section, roll: data.p3_roll });
+          if (data.p4_fullName?.trim()) players.push({ role: "player4", fullName: data.p4_fullName, inGameName: data.p4_inGameName, class: data.p4_class, section: data.p4_section, roll: data.p4_roll });
+          // Add optional substitute player 5
           if (data.p5_fullName && data.p5_inGameName) {
-            gamingData.players.push({
+            players.push({
               role: "substitute",
               fullName: data.p5_fullName,
               inGameName: data.p5_inGameName,
@@ -110,6 +85,11 @@ const Page = ({ params }: { params: { value: string } }) => {
               roll: data.p5_roll,
             });
           }
+          gamingData = {
+            teamName: data.teamName,
+            teamCollege: data.teamCollege,
+            players,
+          };
         } else if (isEFootball) {
           gamingData = {
             playerName: data.playerName,
@@ -147,7 +127,6 @@ const Page = ({ params }: { params: { value: string } }) => {
         return response;
       },
       onSuccess() {
-        toast.success("Successfully registered for " + (result?.name || "event") + "!");
         Router.push("/profile");
       },
     },
@@ -165,6 +144,28 @@ const Page = ({ params }: { params: { value: string } }) => {
   if (errorUser) return <PageLoading />;
   
   if (!user) return <div className="min-h-[100vh] w-full"></div>;
+
+  // Already-registered guard
+  const isAlreadyRegistered =
+    user.registeredEvents?.includes(params.value) ||
+    (user as any).clientEvents?.includes(params.value);
+  if (isAlreadyRegistered) {
+    return (
+      <main className="bg-primary-650 min-h-screen flex items-center justify-center">
+        <div className="container-c text-center py-20">
+          <div className="max-w-lg mx-auto bg-green-900/30 border border-green-500/30 rounded-2xl p-8">
+            <h2 className="text-2xl font-bold text-green-400 mb-4">Already Registered</h2>
+            <p className="text-white/70 mb-6">
+              You have already registered for <span className="font-semibold text-white">{result.name}</span>.
+            </p>
+            <Link href="/profile" className="btn-prim bg-primary-350 px-8 py-2.5 inline-block rounded-full">
+              Go to Profile
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   // Check BMARPC restriction
   const isBMARPC = user.college === 'BMARPC';
@@ -254,7 +255,7 @@ const Page = ({ params }: { params: { value: string } }) => {
                     </div>
                     <div className="mb-4 p-3 rounded-lg bg-primary-700/50 border border-primary-500/30">
                       <p className="text-white/80 text-sm mb-1">Send ৳{result.fee} to:</p>
-                      <p className="text-pink-300 font-mono text-lg font-bold">01XXXXXXXXX</p>
+                      <p className="text-pink-300 font-mono text-lg font-bold">01313817741</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Input name="bkashNumber" label="Your bKash Number" placeholder="01XXXXXXXXX" required />

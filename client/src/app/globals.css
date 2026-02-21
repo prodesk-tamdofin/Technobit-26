@@ -38,6 +38,27 @@ body {
   background-attachment: fixed;
 }
 
+/* Performance: respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Promote frequently-animated elements to their own compositor layer */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Reduce expensive backdrop-blur on low-end devices */
+@media (max-width: 640px) {
+  .backdrop-blur-xl { backdrop-filter: blur(8px) !important; }
+  .backdrop-blur-2xl { backdrop-filter: blur(12px) !important; }
+}
+
 h1,
 h2,
 h3,

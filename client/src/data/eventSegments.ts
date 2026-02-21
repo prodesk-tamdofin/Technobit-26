@@ -1,5 +1,5 @@
 // Technobit'26 Event Segments Data
-// Intra Online Event: 5-8 March 2026
+// Intra Online Event: 5-10 March 2026
 // Motto: Built from bits, driven by brains
 
 export interface Event {
@@ -152,7 +152,7 @@ export const eventCategories: EventCategory[] = [
         name: "PUBG Mobile",
         value: "pubg-mobile",
         description: "Drop in, loot up, and be the last squad standing in this battle royale showdown!",
-        fee: 50,
+        fee: 100,
         type: "online",
         image: "/events/pubg.jpg"
       },
@@ -161,7 +161,7 @@ export const eventCategories: EventCategory[] = [
         name: "Free Fire",
         value: "free-fire",
         description: "Fast-paced battle royale action! Survive the battlefield and claim victory.",
-        fee: 50,
+        fee: 100,
         type: "online",
         image: "/events/freefire.jpg"
       },
@@ -197,7 +197,7 @@ export const getCategoryById = (id: number): EventCategory | undefined => {
 export const eventInfo = {
   name: "Technobit'26",
   tagline: "Built from bits, driven by brains",
-  dates: "5-8 March 2026",
+  dates: "5-10 March 2026",
   type: "Intra Online Event",
   organizer: "BNMPC IT Club",
 };

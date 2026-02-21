@@ -16,7 +16,7 @@ const EFootballForm = ({ fee, user }: EFootballFormProps) => {
     <div className="space-y-6">
       {/* Player Info */}
       <div className="p-5 rounded-xl bg-emerald-600/20 border border-emerald-400/20">
-        <h3 className="text-lg font-semibold text-emerald-300 mb-4">⚽ Player Information</h3>
+        <h3 className="text-lg font-semibold text-emerald-300 mb-4">Player Information</h3>
         <p className="text-white/60 text-sm mb-4">Auto-filled from your profile. Edit if needed.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input name="playerName" label="Full Name" defaultValue={user?.fullName} required />
@@ -59,7 +59,7 @@ const EFootballForm = ({ fee, user }: EFootballFormProps) => {
 
         <div className="mb-4 p-3 rounded-lg bg-primary-700/50 border border-primary-500/30">
           <p className="text-white/80 text-sm mb-1">Send ৳{fee} to this bKash number:</p>
-          <p className="text-pink-300 font-mono text-lg font-bold">01XXXXXXXXX</p>
+          <p className="text-pink-300 font-mono text-lg font-bold">01313817741</p>
           <p className="text-white/50 text-xs mt-1">Use &quot;Send Money&quot; option in bKash</p>
         </div>
 

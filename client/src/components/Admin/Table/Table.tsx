@@ -133,7 +133,7 @@ const TableRow = ({
           <div className="flex flex-col gap-1">
             <div className="inline-flex items-center gap-2">
               <Link href={`https://wa.me/88${rowData.phone?.replace(/\D/g, '')}`} target="_blank" className="text-green-400 hover:text-green-300">
-                📱 {rowData.phone}
+                {rowData.phone}
               </Link>
             </div>
             {rowData.fb && (

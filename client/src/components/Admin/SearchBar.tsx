@@ -21,7 +21,7 @@ const SearchBar = ({ eventSelected }: { eventSelected: string }) => {
         href={`?event=${encodeURIComponent(eventSelected)}&s=${encodeURIComponent(searchVal)}`}
         className="flex shrink-0 cursor-pointer items-center rounded-full bg-secondary-600 px-5 py-2.5 before:bg-secondary-600 hover:bg-secondary-500 sm:px-8"
       >
-        🔎 Search
+        Search
       </Link>
     </div>
   );

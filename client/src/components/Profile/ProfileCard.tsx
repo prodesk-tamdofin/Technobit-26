@@ -19,12 +19,12 @@ const ProfileCard = ({
               <img
                 src={
                   reqImgWrapper(user.image) ||
-                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.userName}`
+                  `https://api.dicebear.com/7.x/bottts/svg?seed=${user.userName}`
                 }
                 alt={user.fullName}
                 className="h-40 w-40 rounded-full object-cover bg-primary-700"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.userName}`;
+                  (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/bottts/svg?seed=${user.userName}`;
                 }}
               />
             </div>

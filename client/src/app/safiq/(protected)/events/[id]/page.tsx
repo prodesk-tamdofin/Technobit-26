@@ -264,7 +264,7 @@ const EventEditForm = ({ params }: { params: { id: string } }) => {
                     divClass=" w-full"
                     name="type"
                     label="Type"
-                    labels={["Online 🌐", "Offline 🏫"]}
+                    labels={["Online", "Offline"]}
                     values={["online", "offline"]}
                     defaultValue={dV("type")}
                   />

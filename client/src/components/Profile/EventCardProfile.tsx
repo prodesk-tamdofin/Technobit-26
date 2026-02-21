@@ -59,12 +59,12 @@ const EventCardProfile = ({ slug }: { slug: string }) => {
         )}
 
         <div className="mt-2 flex justify-end">
-          <Link
+          <a
             href={"/events/" + slug}
             className="rounded-full bg-primary-400 px-5 py-2 text-sm text-white transition hover:bg-primary-450"
           >
             About
-          </Link>
+          </a>
         </div>
       </div>
     </div>
