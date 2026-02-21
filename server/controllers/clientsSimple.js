@@ -177,7 +177,6 @@ const registration = async (req, res) => {
   </table>
 </body>
 </html>`,
-      });
     }).catch(err => console.error('Registration email error:', err.message));
 
     // Auto-login: generate token and set cookie
