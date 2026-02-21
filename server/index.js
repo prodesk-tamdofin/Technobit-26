@@ -7,13 +7,25 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const cloudinary = require('cloudinary').v2;
 
-// var RateLimit = require('express-rate-limit');
+var RateLimit = require('express-rate-limit');
 
-// // Anti-Ddos
-// var limiter = RateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100, // max 100 requests per windowMs
-// });
+// Anti-DDoS: 120 requests per 15 minutes per IP
+var limiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { succeed: false, msg: 'Too many requests. Please try again later.' },
+});
+
+// Stricter limiter for auth endpoints
+var authLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { succeed: false, msg: 'Too many attempts. Please wait and try again.' },
+});
 
 // Configuration
 cloudinary.config({
@@ -43,7 +55,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 //middlewares
 app.use(express.json());
 app.use(cookieParser('secret'));
-// app.use(limiter);
+app.use(limiter);
 //routers
 const adminRouter = require('./routers/admin');
 const galleryRouter = require('./routers/gallery');
@@ -64,7 +76,7 @@ app.use('/api/adAction', adminActionRouter);
 app.use('/api/qr', qrScannerRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/notice', noticeRouter);
-app.use('/api/client', clientRouter);
+app.use('/api/client', authLimiter, clientRouter);
 app.use('/api/faq', faqRouter);
 app.use('/api/sponsor', sponsorRouter);
 app.use('/api/prize', prizeRouter);

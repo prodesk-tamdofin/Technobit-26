@@ -27,7 +27,7 @@ const EventCardProfile = ({ slug }: { slug: string }) => {
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-white/5 bg-gradient-to-tl from-secondary-700 to-primary-600 p-6 text-white backdrop-blur-md">
-      <MdOutlineCategory className="absolute -bottom-4 -right-4 h-24 w-24 rotate-12 text-white/5" />
+      <MdOutlineCategory className="pointer-events-none absolute -bottom-4 -right-4 h-24 w-24 rotate-12 text-white/5" />
 
       <div className="flex flex-col gap-3">
         <p className="text-xl font-semibold text-primary-150">{eventName}</p>
