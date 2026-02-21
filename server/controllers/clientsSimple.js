@@ -626,30 +626,89 @@ const forgotPassword = async (req, res) => {
     // Send OTP email
     try {
       const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST || 'smtp.gmail.com',
+        host: process.env.MAIL_HOST || 'smtp.titan.email',
         port: 587,
         secure: false,
         auth: {
           user: process.env.SERVER_EMAIL,
           pass: process.env.MAIL_PASS,
         },
+        tls: { rejectUnauthorized: false },
       });
 
+      const userName = user.fullName ? user.fullName.split(' ')[0] : 'Participant';
+
       await transporter.sendMail({
-        from: `"Technobit'26" <${process.env.SERVER_EMAIL}>`,
+        from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
         to: email,
-        subject: "Password Reset OTP — Technobit'26",
-        html: `
-          <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;background:#0f0f1a;color:#fff;padding:32px;border-radius:12px;border:1px solid #333;">
-            <h2 style="color:#a78bfa;margin-bottom:8px;">Password Reset</h2>
-            <p style="color:#ccc;margin-bottom:24px;">Your OTP for resetting your Technobit'26 account password is:</p>
-            <div style="background:#1e1e2e;border-radius:8px;padding:20px;text-align:center;margin-bottom:24px;">
-              <span style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#a78bfa;">${otp}</span>
-            </div>
-            <p style="color:#999;font-size:13px;">This OTP is valid for <strong style="color:#fff;">15 minutes</strong>. Do not share it with anyone.</p>
-            <p style="color:#666;font-size:12px;margin-top:16px;">If you did not request this, please ignore this email.</p>
-          </div>
-        `,
+        subject: `Your Password Reset OTP — Technobit'26`,
+        html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#0a0a14;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a14;padding:40px 0;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#11111f;border-radius:16px;border:1px solid #2a2a4a;overflow:hidden;max-width:520px;width:100%;">
+        
+        <!-- Header Banner -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#4f2d8a,#7c3aed,#6d28d9);padding:32px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:4px;color:#c4b5fd;text-transform:uppercase;">BNMPC IT Club Presents</p>
+            <h1 style="margin:0;font-size:32px;font-weight:800;color:#ffffff;letter-spacing:2px;">TECHNOBIT'26</h1>
+            <p style="margin:8px 0 0 0;font-size:12px;color:#ddd6fe;letter-spacing:1px;">technobit26-itc.tech</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px;">
+            <p style="margin:0 0 8px 0;font-size:15px;color:#a0a0c0;">Hello, <strong style="color:#e2e0ff;">${userName}</strong></p>
+            <p style="margin:0 0 28px 0;font-size:14px;color:#8888aa;line-height:1.6;">
+              We received a request to reset the password for your Technobit'26 account 
+              associated with <strong style="color:#c4b5fd;">${email}</strong>.
+              Use the OTP below to proceed.
+            </p>
+
+            <!-- OTP Box -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+              <tr>
+                <td align="center" style="background:#1a1a30;border:1px solid #4f2d8a;border-radius:12px;padding:28px 20px;">
+                  <p style="margin:0 0 8px 0;font-size:11px;letter-spacing:3px;color:#7c6ea0;text-transform:uppercase;">One-Time Password</p>
+                  <p style="margin:0;font-size:44px;font-weight:700;letter-spacing:12px;color:#a78bfa;font-family:'Courier New',monospace;">${otp}</p>
+                  <p style="margin:10px 0 0 0;font-size:12px;color:#6b6b8a;">Valid for <strong style="color:#c4b5fd;">15 minutes</strong></p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 8px 0;font-size:13px;color:#8888aa;line-height:1.6;">
+              Enter this OTP on the password reset page along with your new password.
+            </p>
+            <p style="margin:0;font-size:12px;color:#555570;line-height:1.6;">
+              ⚠️ If you did not request a password reset, please ignore this email. Your account remains secure.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Divider -->
+        <tr><td style="padding:0 40px;"><div style="height:1px;background:#1e1e38;"></div></td></tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;font-size:12px;color:#444460;">
+              This is an automated email from Technobit'26. Please do not reply.
+            </p>
+            <p style="margin:0;font-size:11px;color:#333350;">
+              © 2026 BNMPC IT Club — Birshreshtha Noor Mohammad Public College
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
       });
     } catch (mailErr) {
       console.error('Mail send error:', mailErr.message);
