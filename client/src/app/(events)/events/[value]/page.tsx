@@ -5,10 +5,36 @@ import MdSection from "@/components/ui/MdSection";
 import { capitalCase } from "change-case";
 import Link from "next/link";
 import React from "react";
+import type { Metadata } from "next";
 import { FiGlobe } from "react-icons/fi";
 import { IoPerson } from "react-icons/io5";
 import { MdEventAvailable, MdQuiz, MdGamepad, MdCode, MdBrush, MdEmojiEvents } from "react-icons/md";
 import { notFound } from "next/navigation";
+
+export async function generateMetadata({ params }: { params: { value: string } }): Promise<Metadata> {
+  const event = getEventBySlug(params.value);
+  if (!event) return {};
+  const siteUrl = "https://www.technobit26-itc.tech";
+  return {
+    title: `${event.name} — Register Now`,
+    description: `${event.description} Join ${event.name} at Technobit'26 by BNMPC IT Club. ${event.fee === 0 ? "Free to participate!" : `Registration fee: ৳${event.fee}.`} 5–10 March 2026.`,
+    alternates: { canonical: `${siteUrl}/events/${params.value}` },
+    openGraph: {
+      title: `${event.name} | Technobit'26`,
+      description: event.description,
+      url: `${siteUrl}/events/${params.value}`,
+    },
+  };
+}
+
+export function generateStaticParams() {
+  return [
+    "it-olympiad","gaming-quiz","robothon-olympiad","marvel-dc-quiz","animelogia",
+    "google-it","crack-the-code","sci-fi-story","tech-meme-war","ai-art",
+    "poster-designing","efootball","pubg-mobile","free-fire","chess",
+  ].map((value) => ({ value }));
+}
+
 
 // Get event icon based on event value
 const getEventIcon = (value: string) => {

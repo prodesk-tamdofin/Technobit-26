@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import React from "react";
 import EventSegment from "@/components/Events/EventSegment";
 import categoryIcons from "@/data/categoryIcons";
@@ -6,6 +7,14 @@ import Link from "next/link";
 import { eventCategories, eventInfo } from "@/data/eventSegments";
 import { BackgroundPaths } from "@/components/ui/background-paths";
 import { FaCalendarAlt, FaGlobe } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Events — All Segments",
+  description:
+    "Browse all 15 segments of Technobit'26: IT Olympiad, Crack the Code, eFootball, PUBG Mobile, Free Fire, Chess, Gaming Quiz, Animelogia, Marvel-DC Quiz, AI Art, Sci-Fi Story, Tech Meme War, Poster Designing, Robothon Olympiad, and Google It. Register now for free!",
+  alternates: { canonical: "https://www.technobit26-itc.tech/events" },
+};
+
 
 const page = () => {
   // Use static event data
