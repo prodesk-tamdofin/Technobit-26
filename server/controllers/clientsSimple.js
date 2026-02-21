@@ -1,6 +1,7 @@
 const Participant = require('../models/Participant');
 const { hashSync, compare } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 const registration = async (req, res) => {
   try {
@@ -21,11 +22,9 @@ const registration = async (req, res) => {
     // Generate unique QR code
     const qrCode = `TECH26-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
 
-    // Random avatar from DiceBear API
-    const avatarStyles = ['adventurer', 'avataaars', 'bottts', 'fun-emoji', 'lorelei', 'micah', 'miniavs', 'personas'];
-    const randomStyle = avatarStyles[Math.floor(Math.random() * avatarStyles.length)];
+    // Always use bottts style (robot/gender-neutral) for avatars
     const avatarSeed = `${userName}-${Date.now()}`;
-    const randomAvatar = `https://api.dicebear.com/7.x/${randomStyle}/svg?seed=${avatarSeed}`;
+    const randomAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
     // Create participant
     const newParticipant = await Participant.create({
@@ -610,6 +609,89 @@ const downloadGroupCSV = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ succeed: false, msg: 'Email is required.' });
+
+    const user = await Participant.findOne({ email });
+    if (!user) return res.status(404).json({ succeed: false, msg: 'No account found with this email.' });
+
+    // Generate 6-digit OTP valid for 15 minutes
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiry = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    await Participant.updateOne({ email }, { otp, otpTime: expiry });
+
+    // Send OTP email
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.MAIL_HOST || 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.SERVER_EMAIL,
+          pass: process.env.MAIL_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: `"Technobit'26" <${process.env.SERVER_EMAIL}>`,
+        to: email,
+        subject: "Password Reset OTP — Technobit'26",
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;background:#0f0f1a;color:#fff;padding:32px;border-radius:12px;border:1px solid #333;">
+            <h2 style="color:#a78bfa;margin-bottom:8px;">Password Reset</h2>
+            <p style="color:#ccc;margin-bottom:24px;">Your OTP for resetting your Technobit'26 account password is:</p>
+            <div style="background:#1e1e2e;border-radius:8px;padding:20px;text-align:center;margin-bottom:24px;">
+              <span style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#a78bfa;">${otp}</span>
+            </div>
+            <p style="color:#999;font-size:13px;">This OTP is valid for <strong style="color:#fff;">15 minutes</strong>. Do not share it with anyone.</p>
+            <p style="color:#666;font-size:12px;margin-top:16px;">If you did not request this, please ignore this email.</p>
+          </div>
+        `,
+      });
+    } catch (mailErr) {
+      console.error('Mail send error:', mailErr.message);
+      // Still return success so we don't leak email existence on mail failures
+    }
+
+    res.status(200).json({ succeed: true, msg: 'OTP sent to your email.' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ succeed: false, msg: 'Failed to process request.' });
+  }
+};
+
+const resetPasswordWithOTP = async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+    if (!email || !otp || !password) {
+      return res.status(400).json({ succeed: false, msg: 'Email, OTP, and new password are required.' });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ succeed: false, msg: 'Password must be at least 6 characters.' });
+    }
+
+    const user = await Participant.findOne({ email });
+    if (!user) return res.status(404).json({ succeed: false, msg: 'Account not found.' });
+    if (!user.otp || user.otp !== otp) {
+      return res.status(400).json({ succeed: false, msg: 'Invalid OTP.' });
+    }
+    if (!user.otpTime || new Date() > new Date(user.otpTime)) {
+      return res.status(400).json({ succeed: false, msg: 'OTP has expired. Please request a new one.' });
+    }
+
+    const hashedPassword = hashSync(password, 10);
+    await Participant.updateOne({ email }, { password: hashedPassword, otp: null, otpTime: null });
+
+    res.status(200).json({ succeed: true, msg: 'Password reset successfully.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ succeed: false, msg: 'Failed to reset password.' });
+  }
+};
+
 module.exports = {
   registration,
   login,
@@ -626,4 +708,6 @@ module.exports = {
   clearAllParticipants,
   getFullSingle,
   downloadGroupCSV,
+  forgotPassword,
+  resetPasswordWithOTP,
 };

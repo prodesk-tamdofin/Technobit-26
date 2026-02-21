@@ -243,6 +243,7 @@ export default function Gallery3DTimeline() {
               <motion.div
                 key={`card-${index}`}
                 className="absolute cursor-pointer"
+                style={{ zIndex: offset === 0 ? 10 : Math.max(1, 5 - Math.abs(offset)) }}
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{
                   ...getCardTransform(offset, false),

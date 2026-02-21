@@ -17,6 +17,8 @@ const {
 	clearAllParticipants,
 	getFullSingle,
 	downloadGroupCSV,
+	forgotPassword,
+	resetPasswordWithOTP,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
@@ -83,5 +85,9 @@ router.delete('/clear-all', clearAllParticipants);
 
 // Admin: CSV download by group
 router.get('/download-csv/:group', downloadGroupCSV);
+
+// Password reset via OTP email (public routes)
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password-otp', resetPasswordWithOTP);
 
 module.exports = router;

@@ -10,15 +10,15 @@ const FAQCont = async () => {
     },
     {
       question: "What is Technobit'26?",
-      answer: "Technobit'26 is the flagship tech event organized by BNMPC IT Club. It's a multi-day extravaganza featuring coding competitions, hackathons, workshops, and showcases that bring together the brightest tech minds for an unforgettable experience of innovation and growth."
+      answer: "Technobit'26 is a flagship annual tech event organized by BNMPC IT Club. It is a multi-day celebration featuring coding competitions, quiz bowls, gaming tournaments, creative showcases, and more — bringing together the brightest tech minds for an unforgettable experience of innovation and growth."
     },
     {
       question: "Who can participate?",
-      answer: "Students from all educational institutions are welcome to participate in Technobit'26. Whether you're a beginner or an experienced developer, there's something for everyone - from introductory workshops to advanced competitions."
+      answer: "Students of Birshreshtha Noor Mohammad Public College (BNMPC) are eligible to participate in all events. Students of Birshreshtha Munshi Abdur Rouf Public College (BMARPC) are eligible for all gaming segments (eFootball, PUBG Mobile, Free Fire, Chess) and Crack the Code. All participants must be currently enrolled students of their respective institution."
     },
     {
       question: "What activities does the club organize?",
-      answer: "We organize technical workshops, coding competitions, hackathons, project showcases, tech talks, mentorship programs, and industry collaboration events. Our goal is to create opportunities for students to learn, grow, and excel in technology."
+      answer: "We organize technical workshops, coding competitions, quiz events, gaming tournaments, creative challenges, project showcases, and tech talks. Our goal is to create meaningful opportunities for students to learn, grow, and excel in the world of technology."
     },
   ];
   

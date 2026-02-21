@@ -11,7 +11,6 @@ interface TeamGamingFormProps {
 
 const colleges = ["BNMPC", "BMARPC"];
 const classes = ["VI", "VII", "VIII", "IX", "X", "XI", "XII"];
-const sections = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 
 const TeamGamingForm = ({ eventName, fee, user }: TeamGamingFormProps) => {
   const isPUBG = eventName === "pubg-mobile";
@@ -53,14 +52,7 @@ const TeamGamingForm = ({ eventName, fee, user }: TeamGamingFormProps) => {
             defaultValue={user?.className}
             required
           />
-          <Select
-            name="p1_section"
-            label="Section"
-            values={sections}
-            labels={sections}
-            defaultValue={user?.section}
-            required
-          />
+          <Input name="p1_section" label="Section" placeholder="e.g. A, B, Science" defaultValue={user?.section} />
           <Input name="p1_roll" label="Roll" defaultValue={user?.roll} required />
         </div>
       </div>
@@ -79,12 +71,7 @@ const TeamGamingForm = ({ eventName, fee, user }: TeamGamingFormProps) => {
               values={["", ...classes]}
               labels={["Select", ...classes]}
             />
-            <Select
-              name={`p${playerNum}_section`}
-              label="Section"
-              values={["", ...sections]}
-              labels={["Select", ...sections]}
-            />
+            <Input name={`p${playerNum}_section`} label="Section" placeholder="e.g. A, B, Science" />
             <Input name={`p${playerNum}_roll`} label="Roll" placeholder="Optional" />
           </div>
         </div>
@@ -102,12 +89,7 @@ const TeamGamingForm = ({ eventName, fee, user }: TeamGamingFormProps) => {
             values={["", ...classes]}
             labels={["Select", ...classes]}
           />
-          <Select
-            name="p5_section"
-            label="Section"
-            values={["", ...sections]}
-            labels={["Select", ...sections]}
-          />
+          <Input name="p5_section" label="Section" placeholder="e.g. A, B, Science" />
           <Input name="p5_roll" label="Roll" placeholder="Optional" />
         </div>
       </div>

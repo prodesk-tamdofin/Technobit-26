@@ -208,8 +208,8 @@ const Page = ({ params }: { params: { value: string } }) => {
       <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={ExtendedColors.primary["200"]} />
       <div className="z-30 mt-28 w-screen pb-12">
         <div className="container-c flex flex-col gap-1 text-left">
-          <Link href="/events" className="mb-1 border-b border-transparent pb-1 text-lg text-primary-200 hover:border-primary-200">
-            ← Back to Events
+          <Link href={`/events/${params.value}`} className="mb-1 border-b border-transparent pb-1 text-lg text-primary-200 hover:border-primary-200">
+            ← Back to Segment
           </Link>
           <p className="Inter text-xl font-semibold text-primary-150">EVENT REGISTRATION</p>
           <h2 className="title mb-0 mt-0 inline-block pb-1 text-left text-4xl md:text-5xl">{result.name}</h2>
@@ -279,7 +279,8 @@ const Page = ({ params }: { params: { value: string } }) => {
               divClass="mx-1 mb-2.5 mt-4"
               labelText={
                 <span className="text-sm font-light text-white/80">
-                  I have reviewed all the provided data thoroughly and am fully aware of all the rules and regulations.
+                  I have reviewed all the provided data thoroughly and am fully aware of all the{" "}
+                  <a href={`/events/${params.value}#rules`} target="_blank" className="text-primary-300 underline hover:text-primary-200">rules and regulations</a>.
                   {result.paid && " I confirm that I have completed the payment."}
                   {isTeamEvent && " All team members are from the same college."}
                 </span>

@@ -125,6 +125,8 @@ const reqs = {
   //password reset
   RESET_PASSWORD_TOKEN: so + "/api/client/rPassToken", //
   OTP_VERIFY_RESET_PASSWORD: so + "/api/client/rPassVerify", //
+  FORGOT_PASSWORD: so + "/api/client/forgot-password",
+  RESET_PASSWORD_OTP: so + "/api/client/reset-password-otp",
 
   //profile edits
   TRANSACTION_ID_EDIT: so + "/api/client/editTransaction",
