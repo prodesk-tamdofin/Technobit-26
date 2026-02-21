@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ExtendedColors from "@/../color.config";
 import { Spotlight } from "@/components/ui/Spotlight/Spotlight";
 import { getEventBySlug } from "@/data/eventSegments";
@@ -14,12 +14,12 @@ import CheckBox from "@/components/ui/form/Checkbox";
 import Input from "@/components/ui/form/Input";
 import useForm from "@/hooks/useForm";
 import Loading from "@/components/ui/LoadingWhite";
-import { toast } from "react-toastify";
 import { single_event_par } from "@/api/events";
 import TeamGamingForm from "@/components/Events/Register/TeamGamingForm";
 import EFootballForm from "@/components/Events/Register/EFootballForm";
 import ChessForm from "@/components/Events/Register/ChessForm";
 import CrackTheCodeForm from "@/components/Events/Register/CrackTheCodeForm";
+import WhatsAppJoinModal from "@/components/Events/Register/WhatsAppJoinModal";
 
 // Event type definitions
 const teamGamingEvents = ["pubg-mobile", "free-fire"];
@@ -32,6 +32,7 @@ const Page = ({ params }: { params: { value: string } }) => {
   const Router = useRouter();
   const [user, loadingUser, errorUser] = useUser();
   const checkBox = useRef<HTMLInputElement>(null);
+  const [showWaModal, setShowWaModal] = useState(false);
 
   const isTeamEvent = teamGamingEvents.includes(params.value);
   const isEFootball = params.value === "efootball";
@@ -127,7 +128,7 @@ const Page = ({ params }: { params: { value: string } }) => {
         return response;
       },
       onSuccess() {
-        Router.push("/profile");
+        setShowWaModal(true);
       },
     },
     [user, result],
@@ -198,6 +199,12 @@ const Page = ({ params }: { params: { value: string } }) => {
 
   return (
     <main className="bg-grid-white/[0.02] relative flex min-h-screen w-full justify-center overflow-hidden bg-primary-650 antialiased">
+      <WhatsAppJoinModal
+        open={showWaModal}
+        eventSlug={params.value}
+        eventName={result.name}
+        onDone={() => { setShowWaModal(false); Router.push("/profile"); }}
+      />
       <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={ExtendedColors.primary["200"]} />
       <div className="z-30 mt-28 w-screen pb-12">
         <div className="container-c flex flex-col gap-1 text-left">

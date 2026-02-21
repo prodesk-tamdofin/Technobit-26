@@ -53,6 +53,7 @@ export default function RootLayout({
             bodyClassName={"Inter"}
             theme="dark"
             limit={3}
+            autoClose={2000}
             toastStyle={{
               backgroundColor: ExtendedColors.secondary["600"],
             }}

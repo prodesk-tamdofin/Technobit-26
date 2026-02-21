@@ -257,7 +257,7 @@ export default function Gallery3DTimeline() {
               >
                 {/* Desktop Card - LARGER for landscape */}
                 <div 
-                  className="hidden md:block relative rounded-2xl overflow-hidden"
+                  className="hidden md:block relative rounded-2xl overflow-hidden bg-black"
                   style={{
                     position: "relative",
                     width: offset === 0 ? "600px" : "480px",
@@ -306,7 +306,7 @@ export default function Gallery3DTimeline() {
 
                 {/* Mobile Card - Larger for landscape */}
                 <motion.div 
-                  className="md:hidden relative rounded-xl overflow-hidden"
+                  className="md:hidden relative rounded-xl overflow-hidden bg-black"
                   style={{
                     width: offset === 0 ? "320px" : "240px",
                     height: offset === 0 ? "260px" : "180px",

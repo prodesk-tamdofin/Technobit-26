@@ -5,6 +5,7 @@ import ExtendedColors from "../../../../color.config";
 import Input from "@/components/ui/form/Input";
 import useForm from "@/hooks/useForm";
 import { register } from "@/api/authentication";
+import { logOut } from "@/api/authentication";
 import Link from "next/link";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import Select from "@/components/ui/form/Select";
@@ -30,6 +31,8 @@ const Register = () => {
         throw new Error(
           "Please use a popular email provider like Gmail, Outlook, Yahoo, or iCloud.",
         );
+      } else if (!data?.className) {
+        throw new Error("Please select your class.");
       } else if (
         data?.password.trim().length < 8
       ) {
@@ -59,10 +62,11 @@ const Register = () => {
         return response;
       }
     },
-    successMsg: "You successfully registered! Redirecting to events...",
-    onSuccess: () => {
-      Router.push("/events");
-      Router.refresh();
+    successMsg: "Registration successful! Please log in to continue.",
+    onSuccess: async () => {
+      // Prevent auto-login: clear any session cookie set by registration
+      await logOut();
+      Router.push("/login");
     },
   });
 
@@ -209,6 +213,16 @@ const Register = () => {
               id="facebook"
               placeholder="https://facebook.com/yourprofile"
               type="url"
+              divClass="md:col-span-4"
+            />
+
+            {/* Reference (Optional) */}
+            <Input
+              label="Reference (Optional)"
+              name="reference"
+              id="reference"
+              placeholder="Who referred you? (name or roll number)"
+              type="text"
               divClass="md:col-span-4"
             />
 

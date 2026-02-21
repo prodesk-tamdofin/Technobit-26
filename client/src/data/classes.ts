@@ -1,4 +1,5 @@
 export const CLASSES = [
+  { value: "", label: "Select Class" },
   { value: "VI", label: "Class VI" },
   { value: "VII", label: "Class VII" },
   { value: "VIII", label: "Class VIII" },
