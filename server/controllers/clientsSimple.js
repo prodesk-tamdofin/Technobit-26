@@ -1,18 +1,8 @@
 const Participant = require('../models/Participant');
 const { hashSync, compare } = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-
-const createTransporter = () => nodemailer.createTransport({
-  host: process.env.MAIL_HOST || 'smtp.titan.email',
-  port: parseInt(process.env.MAIL_PORT || '465'),
-  secure: (process.env.MAIL_PORT || '465') !== '587',
-  auth: {
-    user: process.env.SERVER_EMAIL,
-    pass: process.env.MAIL_PASS,
-  },
-  tls: { rejectUnauthorized: false },
-});
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registration = async (req, res) => {
   try {
@@ -56,14 +46,13 @@ const registration = async (req, res) => {
     });
 
     // Send registration confirmation email (fire-and-forget, don't block response)
-    const transporter = createTransporter();
     const firstName = fullName ? fullName.split(' ')[0] : 'Participant';
     const instituteLabel = institute === 'BMARPC'
       ? 'Birshreshtha Munshi Abdur Rouf Public College (BMARPC)'
       : 'Birshreshtha Noor Mohammad Public College (BNMPC)';
-    transporter.sendMail({
-      from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
-      to: email,
+    resend.emails.send({
+      from: `Technobit'26 — BNMPC IT Club <${process.env.SERVER_EMAIL}>`,
+      to: [email],
       subject: `Registration Confirmed — Technobit'26`,
         html: `<!DOCTYPE html>
 <html lang="en">
@@ -771,16 +760,15 @@ const forgotPassword = async (req, res) => {
 
     // Send OTP email
     try {
-      const transporter = createTransporter();
       const userName = user.fullName ? user.fullName.split(' ')[0] : 'Participant';
-      await transporter.sendMail({
-        from: `"Technobit'26 — BNMPC IT Club" <${process.env.SERVER_EMAIL}>`,
-        to: email,
+      const { error: mailErr } = await resend.emails.send({
+        from: `Technobit'26 — BNMPC IT Club <${process.env.SERVER_EMAIL}>`,
+        to: [email],
         subject: `Your Password Reset OTP — Technobit'26`,
         html: `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#0a0a14;font-family:'Segoe UI',Arial,sans-serif;">
+<body style="margin:0;padding:0;background-color:#0a0a14;font-family:Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a14;padding:40px 0;">
     <tr><td align="center">
       <table width="520" cellpadding="0" cellspacing="0" style="background:#11111f;border-radius:16px;border:1px solid #2a2a4a;overflow:hidden;max-width:520px;width:100%;">
@@ -845,9 +833,12 @@ const forgotPassword = async (req, res) => {
 </body>
 </html>`,
       });
-    } catch (mailErr) {
-      console.error('Mail send error:', mailErr.message);
-      return res.status(500).json({ succeed: false, msg: 'Failed to send OTP email. Please check your email address and try again.' });
+      if (mailErr) {
+        console.error('Mail send error:', mailErr.message);
+        return res.status(500).json({ succeed: false, msg: 'Failed to send OTP email. Please try again.' });
+      }
+    } catch (err) {
+      throw err;
     }
 
     res.status(200).json({ succeed: true, msg: 'OTP sent to your email.' });
