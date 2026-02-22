@@ -184,7 +184,14 @@ const RegisteredUsersPage = () => {
         <div>
           <h1 className="text-2xl font-bold text-white">Registered Users</h1>
           <p className="text-white/60 text-sm mt-1">
-            All accounts registered on the platform ({totalCount} total{searchQuery ? ` matching "${searchQuery}"` : ""})
+            {searchQuery ? (
+              <>
+                <span className="text-white font-semibold">{totalCount}</span> result{totalCount !== 1 ? "s" : ""} for{" "}
+                <span className="text-primary-400">&ldquo;{searchQuery}&rdquo;</span>
+              </>
+            ) : (
+              <>All accounts registered on the platform &mdash; <span className="text-white font-semibold">{totalCount}</span> total</>
+            )}
           </p>
         </div>
       </div>
@@ -337,56 +344,67 @@ const RegisteredUsersPage = () => {
 
       {/* User Detail Modal */}
       {selectedUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-primary-800 rounded-2xl border border-primary-600/30 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={() => setSelectedUser(null)}
+        >
+          <div
+            className="bg-primary-800 rounded-2xl border border-primary-600/30 max-w-2xl w-full max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Sticky header — always visible */}
+            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-primary-800 rounded-t-2xl border-b border-primary-600/30 shrink-0">
               <h2 className="text-xl font-bold text-white">User Details</h2>
               <button
                 onClick={() => setSelectedUser(null)}
                 className="p-2 rounded-lg hover:bg-primary-700/50 text-white/60 hover:text-white transition-colors"
+                aria-label="Close"
               >
                 <MdClose size={24} />
               </button>
             </div>
 
-            <div className="flex items-center gap-4 mb-6">
-              <img 
-                src={selectedUser.image || `https://api.dicebear.com/7.x/bottts/svg?seed=${selectedUser.userName}`}
-                alt=""
-                className="w-20 h-20 rounded-full"
-              />
-              <div>
-                <h3 className="text-lg font-bold text-white">{selectedUser.fullName}</h3>
-                <p className="text-white/60">@{selectedUser.userName}</p>
+            {/* Scrollable body */}
+            <div className="overflow-y-auto flex-1 p-6">
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src={selectedUser.image || `https://api.dicebear.com/7.x/bottts/svg?seed=${selectedUser.userName}`}
+                  alt=""
+                  className="w-20 h-20 rounded-full shrink-0"
+                />
+                <div className="min-w-0">
+                  <h3 className="text-lg font-bold text-white truncate">{selectedUser.fullName}</h3>
+                  <p className="text-white/60 truncate">@{selectedUser.userName}</p>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <InfoField label="Email" value={selectedUser.email} />
-              <InfoField label="Phone" value={selectedUser.phone} />
-              <InfoField label="WhatsApp" value={selectedUser.whatsapp || selectedUser.phone} />
-              <InfoField label="Roll" value={selectedUser.roll} />
-              <InfoField label="College" value={selectedUser.college} />
-              <InfoField label="Institute" value={selectedUser.institute} />
-              <InfoField label="Class" value={selectedUser.className} />
-              <InfoField label="Section" value={selectedUser.section} />
-              <InfoField label="Facebook" value={selectedUser.fb} />
-              <InfoField label="Reference Code" value={selectedUser.refCode} />
-              <InfoField label="Registered" value={selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleString() : ""} />
-            </div>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <InfoField label="Email" value={selectedUser.email} />
+                <InfoField label="Phone" value={selectedUser.phone} />
+                <InfoField label="WhatsApp" value={selectedUser.whatsapp || selectedUser.phone} />
+                <InfoField label="Roll" value={selectedUser.roll} />
+                <InfoField label="College" value={selectedUser.college} />
+                <InfoField label="Institute" value={selectedUser.institute} />
+                <InfoField label="Class" value={selectedUser.className} />
+                <InfoField label="Section" value={selectedUser.section} />
+                <InfoField label="Facebook" value={selectedUser.fb} fullWidth />
+                <InfoField label="Reference Code" value={selectedUser.refCode} />
+                <InfoField label="Registered" value={selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleString() : ""} />
+              </div>
 
-            <div className="border-t border-primary-600/30 pt-4">
-              <h4 className="font-medium text-white mb-2">Registered Events ({selectedUser.registeredEvents?.length || 0})</h4>
-              <div className="flex flex-wrap gap-2">
-                {selectedUser.registeredEvents?.length ? (
-                  selectedUser.registeredEvents.map((event) => (
-                    <span key={event} className="px-3 py-1 rounded-lg bg-primary-600/50 text-sm">
-                      {event}
-                    </span>
-                  ))
-                ) : (
-                  <p className="text-white/50">No events registered</p>
-                )}
+              <div className="border-t border-primary-600/30 pt-4">
+                <h4 className="font-medium text-white mb-2">Registered Events ({selectedUser.registeredEvents?.length || 0})</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedUser.registeredEvents?.length ? (
+                    selectedUser.registeredEvents.map((event) => (
+                      <span key={event} className="px-3 py-1 rounded-lg bg-primary-600/50 text-sm">
+                        {event}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-white/50">No events registered</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -396,10 +414,18 @@ const RegisteredUsersPage = () => {
   );
 };
 
-const InfoField = ({ label, value }: { label: string; value?: string | null }) => (
-  <div>
+const InfoField = ({
+  label,
+  value,
+  fullWidth,
+}: {
+  label: string;
+  value?: string | null;
+  fullWidth?: boolean;
+}) => (
+  <div className={fullWidth ? "col-span-2" : ""}>
     <div className="text-sm text-white/50">{label}</div>
-    <div className="text-white/80">{value || "-"}</div>
+    <div className="text-white/80 break-all">{value || "-"}</div>
   </div>
 );
 

@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const registration = async (req, res) => {
   try {
-    const { fullName, roll, college, email, phone, className, institute, address, fb, password, userName, section } = req.body;
+    const { fullName, roll, college, email, phone, className, institute, address, fb, password, userName, section, reference } = req.body;
 
     // Check if user exists
     const existingUser = await Participant.findOne({ $or: [{ email }, { userName }] });
@@ -40,6 +40,7 @@ const registration = async (req, res) => {
       address: address || 'N/A',
       section: section || null,
       fb: fb || null,
+      refCode: reference || null,
       image: randomAvatar,
       userName,
       password: hashedPassword,
