@@ -190,8 +190,8 @@ export const eventRules: Record<string, EventRules> = {
     },
   },
   "ai-art": {
+    topic: "Sci/Tech Related",
     rules: [
-      "There is no specific topic for the AI Art segment.",
       "All artworks must be generated using AI tools by the participant.",
       "Manually edited or copied artworks will be disqualified.",
       "Offensive, plagiarized, or disrespectful content is strictly prohibited.",

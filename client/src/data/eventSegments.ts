@@ -117,7 +117,7 @@ export const eventCategories: EventCategory[] = [
         id: 204,
         name: "AI Art",
         value: "ai-art",
-        description: "Generate an AI artwork using any AI tool and submit it to the EXHIB_IT Facebook group with #Technobit26_art.",
+        description: "Generate an AI artwork on the theme \"Sci/Tech Related\" and submit it to the EXHIB_IT Facebook group with #Technobit26_art.",
         fee: 0,
         type: "online",
         image: "/events/ai-art.jpg"

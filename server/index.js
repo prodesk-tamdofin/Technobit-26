@@ -76,7 +76,7 @@ app.use('/api/adAction', adminActionRouter);
 app.use('/api/qr', qrScannerRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/notice', noticeRouter);
-app.use('/api/client', authLimiter, clientRouter);
+app.use('/api/client', clientRouter);
 app.use('/api/faq', faqRouter);
 app.use('/api/sponsor', sponsorRouter);
 app.use('/api/prize', prizeRouter);

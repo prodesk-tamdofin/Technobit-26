@@ -1,6 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const { verify } = require('jsonwebtoken');
+const RateLimit = require('express-rate-limit');
+
+// Strict limiter only for sensitive auth endpoints (login, register, password reset)
+const authLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { succeed: false, msg: 'Too many attempts. Please wait and try again.' },
+});
 const {
 	registration,
 	login,
@@ -48,11 +58,11 @@ const authMiddleware = (req, res, next) => {
 };
 
 // Registration route
-router.post('/reg/par', registration);
+router.post('/reg/par', authLimiter, registration);
 
 // Login routes
-router.post('/login', login);
-router.post('/login/par', login);
+router.post('/login', authLimiter, login);
+router.post('/login/par', authLimiter, login);
 
 // Logout route
 router.post('/logout', logout);
@@ -88,8 +98,8 @@ router.delete('/clear-all', clearAllParticipants);
 router.get('/download-csv/:group', downloadGroupCSV);
 
 // Password reset via OTP email (public routes)
-router.post('/forgot-password', forgotPassword);
-router.post('/reset-password-otp', resetPasswordWithOTP);
+router.post('/forgot-password', authLimiter, forgotPassword);
+router.post('/reset-password-otp', authLimiter, resetPasswordWithOTP);
 
 // Event capacity (public — used by frontend to show slot availability)
 router.get('/event-capacity/:slug', getEventCapacity);
