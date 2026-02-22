@@ -380,7 +380,7 @@ const BMARPC_ALLOWED_EVENTS = ['efootball', 'pubg-mobile', 'free-fire', 'chess',
 // Team/slot limits for capped gaming events (0 = unlimited)
 const EVENT_LIMITS = {
   'pubg-mobile': 32,
-  'free-fire':   24,
+  'free-fire':   18,
   'efootball':   16,
 };
 
