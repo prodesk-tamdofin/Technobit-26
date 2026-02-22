@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { Suspense } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import "@/components/Admin/Dashboard/Dashboard.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const siteUrl = "https://www.technobit26-itc.tech";
 const ogImage = `${siteUrl}/TechnobitLogo.png`;
@@ -195,6 +196,7 @@ export default function RootLayout({
           <Navbar />
           <Suspense>{children}</Suspense>
           <Footer />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
