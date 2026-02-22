@@ -257,6 +257,14 @@ const Page = async ({ params }: { params: { value: string } }) => {
                     </ul>
                   </div>
 
+                  {/* Single Topic (e.g. Poster Designing) */}
+                  {rules.topic && (
+                    <div className="p-6 rounded-xl bg-red-600/15 border border-red-400/30">
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-red-400/80 mb-2">Topic</h3>
+                      <p className="text-2xl font-extrabold text-white">{rules.topic}</p>
+                    </div>
+                  )}
+
                   {/* Topics (for quiz events) */}
                   {rules.topics && rules.topics.length > 0 && (
                     <div className="p-6 rounded-xl bg-purple-600/20 border border-purple-400/20">
