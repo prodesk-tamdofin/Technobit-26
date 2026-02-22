@@ -950,6 +950,74 @@ const resetPasswordWithOTP = async (req, res) => {
   }
 };
 
+// Admin: Update any participant field by ID
+const adminUpdateParticipant = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      fullName, email, phone, whatsapp, roll, college,
+      institute, className, section, fb, refCode, address,
+    } = req.body;
+
+    const user = await Participant.findById(id);
+    if (!user) return res.status(404).json({ succeed: false, msg: 'Participant not found' });
+
+    if (fullName  !== undefined && fullName  !== '') user.fullName  = fullName;
+    if (email     !== undefined && email     !== '') user.email     = email;
+    if (phone     !== undefined && phone     !== '') user.phone     = phone;
+    if (whatsapp  !== undefined) user.whatsapp  = whatsapp;
+    if (roll      !== undefined) user.roll      = roll;
+    if (college   !== undefined) user.college   = college;
+    if (institute !== undefined) user.institute = institute;
+    if (className !== undefined) user.className = className;
+    if (section   !== undefined) user.section   = section;
+    if (fb        !== undefined) user.fb        = fb;
+    if (refCode   !== undefined) user.refCode   = refCode || null;
+    if (address   !== undefined) user.address   = address;
+
+    await user.save();
+    res.json({ succeed: true, msg: 'Participant updated successfully', user });
+  } catch (error) {
+    console.error('Admin update participant error:', error);
+    res.status(500).json({ succeed: false, msg: 'Failed to update participant' });
+  }
+};
+
+// Admin: Reference code usage stats
+const getRefCodeStats = async (req, res) => {
+  try {
+    const stats = await Participant.aggregate([
+      {
+        $group: {
+          _id: { $ifNull: ['$refCode', '__none__'] },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+    ]);
+    const total = await Participant.countDocuments();
+    res.json({ succeed: true, stats, total });
+  } catch (error) {
+    console.error('RefCode stats error:', error);
+    res.status(500).json({ succeed: false, msg: 'Failed to get reference stats' });
+  }
+};
+
+// Admin: Full JSON backup of all participants
+const adminBackupParticipants = async (req, res) => {
+  try {
+    const participants = await Participant.find({})
+      .select('-password -otp -otpCount -otpTime')
+      .lean();
+    res.setHeader('Content-Disposition', `attachment; filename="backup_participants_${Date.now()}.json"`);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(participants);
+  } catch (error) {
+    console.error('Backup error:', error);
+    res.status(500).json({ succeed: false, msg: 'Backup failed' });
+  }
+};
+
 module.exports = {
   registration,
   login,
@@ -969,4 +1037,7 @@ module.exports = {
   forgotPassword,
   resetPasswordWithOTP,
   getEventCapacity,
+  adminUpdateParticipant,
+  getRefCodeStats,
+  adminBackupParticipants,
 };

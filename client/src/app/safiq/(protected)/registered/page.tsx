@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import fetchJSON from "@/api/fetchJSON";
 import reqs from "@/api/requests";
 import { toast } from "react-toastify";
-import { BsSearch, BsTrash, BsEye, BsX, BsDownload } from "react-icons/bs";
+import { BsSearch, BsTrash, BsEye, BsX, BsDownload, BsPencil } from "react-icons/bs";
 import { MdRefresh, MdClose } from "react-icons/md";
 
 interface Participant {
@@ -40,6 +40,9 @@ const RegisteredUsersPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState(searchQuery);
   const [selectedUser, setSelectedUser] = useState<Participant | null>(null);
+  const [editUser, setEditUser] = useState<Participant | null>(null);
+  const [editSaving, setEditSaving] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<Participant>>({});
 
   const fetchParticipants = useCallback(async () => {
     setLoading(true);
@@ -119,6 +122,45 @@ const RegisteredUsersPage = () => {
     } catch (error) {
       toast.error("Failed to delete user");
     }
+  };
+
+  const openEdit = (p: Participant) => {
+    setEditUser(p);
+    setEditForm({
+      fullName: p.fullName,
+      email: p.email,
+      phone: p.phone,
+      whatsapp: p.whatsapp || "",
+      roll: p.roll,
+      college: p.college,
+      institute: p.institute,
+      className: p.className,
+      section: p.section || "",
+      fb: p.fb || "",
+      refCode: p.refCode || "",
+    });
+  };
+
+  const handleEditSave = async () => {
+    if (!editUser) return;
+    setEditSaving(true);
+    try {
+      const response = await fetchJSON(
+        reqs.ADMIN_UPDATE_PARTICIPANT + editUser._id,
+        { method: "PATCH", credentials: "include" },
+        editForm
+      );
+      if (response?.succeed) {
+        toast.success("Participant updated");
+        setEditUser(null);
+        fetchParticipants();
+      } else {
+        toast.error(response?.msg || "Failed to update");
+      }
+    } catch {
+      toast.error("Failed to update participant");
+    }
+    setEditSaving(false);
   };
 
   const handleDownloadExcel = async () => {
@@ -303,6 +345,13 @@ const RegisteredUsersPage = () => {
                           <BsEye />
                         </button>
                         <button
+                          onClick={() => openEdit(participant)}
+                          className="p-2 rounded-lg bg-yellow-600/80 hover:bg-yellow-500 text-white transition-colors"
+                          title="Edit Participant"
+                        >
+                          <BsPencil />
+                        </button>
+                        <button
                           onClick={() => handleDeleteParticipant(participant._id, participant.fullName)}
                           className="p-2 rounded-lg bg-red-600/80 hover:bg-red-500 text-white transition-colors"
                           title="Delete User"
@@ -339,6 +388,74 @@ const RegisteredUsersPage = () => {
           >
             Next
           </button>
+        </div>
+      )}
+
+      {/* Edit Participant Modal */}
+      {editUser && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={() => setEditUser(null)}
+        >
+          <div
+            className="bg-primary-800 rounded-2xl border border-primary-600/30 max-w-2xl w-full max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-primary-800 rounded-t-2xl border-b border-primary-600/30 shrink-0">
+              <div>
+                <h2 className="text-xl font-bold text-white">Edit Participant</h2>
+                <p className="text-white/50 text-sm truncate">@{editUser.userName}</p>
+              </div>
+              <button
+                onClick={() => setEditUser(null)}
+                className="p-2 rounded-lg hover:bg-primary-700/50 text-white/60 hover:text-white transition-colors"
+              >
+                <MdClose size={24} />
+              </button>
+            </div>
+            <div className="overflow-y-auto flex-1 p-6">
+              <div className="grid grid-cols-2 gap-4">
+                {([
+                  { key: "fullName", label: "Full Name" },
+                  { key: "email", label: "Email" },
+                  { key: "phone", label: "Phone" },
+                  { key: "whatsapp", label: "WhatsApp" },
+                  { key: "roll", label: "Roll Number" },
+                  { key: "college", label: "College" },
+                  { key: "institute", label: "Institute" },
+                  { key: "className", label: "Class" },
+                  { key: "section", label: "Section" },
+                  { key: "fb", label: "Facebook" },
+                  { key: "refCode", label: "Reference Code" },
+                ] as { key: keyof typeof editForm; label: string }[]).map(({ key, label }) => (
+                  <div key={key} className={key === "fb" ? "col-span-2" : ""}>
+                    <label className="block text-sm text-white/50 mb-1">{label}</label>
+                    <input
+                      type="text"
+                      value={(editForm[key] as string) || ""}
+                      onChange={(e) => setEditForm((prev) => ({ ...prev, [key]: e.target.value }))}
+                      className="w-full px-4 py-2 rounded-xl bg-primary-700/50 border border-primary-600/30 text-white placeholder:text-white/30 focus:outline-none focus:border-primary-400"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t border-primary-600/30 flex items-center justify-end gap-3 shrink-0">
+              <button
+                onClick={() => setEditUser(null)}
+                className="px-5 py-2 rounded-xl bg-primary-700/50 hover:bg-primary-600/50 text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEditSave}
+                disabled={editSaving}
+                className="px-5 py-2 rounded-xl bg-primary-500 hover:bg-primary-400 text-white transition-colors disabled:opacity-50"
+              >
+                {editSaving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

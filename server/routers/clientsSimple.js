@@ -30,6 +30,9 @@ const {
 	forgotPassword,
 	resetPasswordWithOTP,
 	getEventCapacity,
+	adminUpdateParticipant,
+	getRefCodeStats,
+	adminBackupParticipants,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
@@ -112,5 +115,14 @@ router.post('/reset-password-otp', authLimiter, resetPasswordWithOTP);
 
 // Event capacity (public — used by frontend to show slot availability)
 router.get('/event-capacity/:slug', getEventCapacity);
+
+// Admin: update any participant field
+router.patch('/admin/participant/:id', adminUpdateParticipant);
+
+// Admin: reference code usage stats
+router.get('/admin/refcode-stats', getRefCodeStats);
+
+// Admin: full JSON backup
+router.get('/admin/backup', adminBackupParticipants);
 
 module.exports = router;

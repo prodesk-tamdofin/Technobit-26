@@ -96,6 +96,9 @@ const reqs = {
   
   // Admin participant management
   DELETE_PARTICIPANT: so + "/api/client/participant/", // DELETE /:id
+  ADMIN_UPDATE_PARTICIPANT: so + "/api/client/admin/participant/", // PATCH /:id
+  ADMIN_REFCODE_STATS: so + "/api/client/admin/refcode-stats",
+  ADMIN_BACKUP: so + "/api/client/admin/backup",
   REMOVE_SEGMENT: so + "/api/client/participant/", // POST /:id/remove-segment
   VERIFY_PAYMENT: so + "/api/client/verify-payment",
   DASHBOARD_STATS: so + "/api/client/dashboard-stats",

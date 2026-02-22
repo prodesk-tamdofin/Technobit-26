@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { BsPeople, BsCreditCard, BsPersonPlus, BsDownload } from "react-icons/bs";
+import { BsPeople, BsCreditCard, BsPersonPlus, BsDownload, BsPieChartFill } from "react-icons/bs";
 import { FaPlusCircle } from "react-icons/fa";
 import { IoIosStats } from "react-icons/io";
 import { RiDashboardFill } from "react-icons/ri";
@@ -62,6 +62,9 @@ const Sidebar = () => {
         </SideLink>
         <SideLink href="/safiq/csv" label={"Download CSV"}>
           <BsDownload />
+        </SideLink>
+        <SideLink href="/safiq/references" label={"References"}>
+          <BsPieChartFill />
         </SideLink>
       </ul>
     </aside>
