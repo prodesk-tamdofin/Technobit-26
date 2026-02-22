@@ -559,6 +559,7 @@ const getAllParticipants = async (req, res) => {
         { userName: regex },
         { roll: regex },
         { college: regex },
+        { refCode: regex },
       ];
     }
 
@@ -599,6 +600,7 @@ const getParticipantsCount = async (req, res) => {
         { userName: regex },
         { roll: regex },
         { college: regex },
+        { refCode: regex },
       ];
     }
 

@@ -41,7 +41,12 @@ const participantSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true,
+    default: '',
+  },
+  refCode: {
+    type: String,
+    default: null,
+    index: true,
   },
   image: {
     type: String,

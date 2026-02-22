@@ -20,7 +20,7 @@ interface Participant {
   section?: string;
   whatsapp?: string;
   fb?: string;
-  address?: string;
+  refCode?: string;
   userName: string;
   image?: string;
   registeredEvents: string[];
@@ -145,7 +145,7 @@ const RegisteredUsersPage = () => {
       }
 
       // Convert to CSV - Registration data only
-      const headers = ["Name", "Username", "Email", "Phone", "WhatsApp", "Roll", "College", "Institute", "Class", "Section", "Facebook", "Address", "Registered At"];
+      const headers = ["Name", "Username", "Email", "Phone", "WhatsApp", "Roll", "College", "Institute", "Class", "Section", "Facebook", "Reference Code", "Registered At"];
       const csvContent = [
         headers.join(","),
         ...data.map((p: Participant) => [
@@ -160,7 +160,7 @@ const RegisteredUsersPage = () => {
           `"${p.className || ""}"`,
           `"${p.section || ""}"`,
           `"${p.fb || ""}"`,
-          `"${p.address || ""}"`,
+          `"${p.refCode || ""}"`,
           `"${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : ""}"`,
         ].join(","))
       ].join("\n");
@@ -184,7 +184,7 @@ const RegisteredUsersPage = () => {
         <div>
           <h1 className="text-2xl font-bold text-white">Registered Users</h1>
           <p className="text-white/60 text-sm mt-1">
-            All accounts registered on the platform ({totalCount} total)
+            All accounts registered on the platform ({totalCount} total{searchQuery ? ` matching "${searchQuery}"` : ""})
           </p>
         </div>
       </div>
@@ -196,7 +196,7 @@ const RegisteredUsersPage = () => {
             <BsSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
             <input
               type="text"
-              placeholder="Search by name, email, phone, roll..."
+              placeholder="Search by name, email, phone, roll, ref code..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-primary-800/50 border border-primary-600/30 text-white placeholder:text-white/40 focus:outline-none focus:border-primary-500"
@@ -371,7 +371,7 @@ const RegisteredUsersPage = () => {
               <InfoField label="Class" value={selectedUser.className} />
               <InfoField label="Section" value={selectedUser.section} />
               <InfoField label="Facebook" value={selectedUser.fb} />
-              <InfoField label="Address" value={selectedUser.address} />
+              <InfoField label="Reference Code" value={selectedUser.refCode} />
               <InfoField label="Registered" value={selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleString() : ""} />
             </div>
 
