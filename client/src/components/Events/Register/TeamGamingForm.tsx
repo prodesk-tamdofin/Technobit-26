@@ -60,19 +60,23 @@ const TeamGamingForm = ({ eventName, fee, user }: TeamGamingFormProps) => {
       {/* Players 2-4 */}
       {[2, 3, 4].map((playerNum) => (
         <div key={playerNum} className="p-5 rounded-xl bg-primary-600/20 border border-primary-400/20">
-          <h3 className="text-lg font-semibold text-primary-200 mb-2">Player {playerNum} <span className="text-white/40 text-sm font-normal">(Optional)</span></h3>
-          <p className="text-white/50 text-xs mb-4">Leave blank if your team has fewer than {playerNum} members.</p>
+          <h3 className="text-lg font-semibold text-primary-200 mb-2">
+            Player {playerNum}
+            {isPUBG && <span className="text-white/40 text-sm font-normal"> (Optional)</span>}
+          </h3>
+          {isPUBG && <p className="text-white/50 text-xs mb-4">Leave blank if your team has fewer than {playerNum} members.</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input name={`p${playerNum}_fullName`} label="Full Name" placeholder="Optional" />
-            <Input name={`p${playerNum}_inGameName`} label="In-Game Name" placeholder={`${gameName} name (optional)`} />
+            <Input name={`p${playerNum}_fullName`} label="Full Name" placeholder={isPUBG ? "Optional" : "Full name"} required={isFreeFire} />
+            <Input name={`p${playerNum}_inGameName`} label="In-Game Name" placeholder={`${gameName} name${isPUBG ? " (optional)" : ""}`} required={isFreeFire} />
             <Select
               name={`p${playerNum}_class`}
               label="Class"
               values={["", ...classes]}
               labels={["Select", ...classes]}
+              required={isFreeFire}
             />
             <Input name={`p${playerNum}_section`} label="Section" placeholder="e.g. A, B, Science" />
-            <Input name={`p${playerNum}_roll`} label="Roll" placeholder="Optional" />
+            <Input name={`p${playerNum}_roll`} label="Roll" placeholder={isPUBG ? "Optional" : "Roll number"} required={isFreeFire} />
           </div>
         </div>
       ))}
