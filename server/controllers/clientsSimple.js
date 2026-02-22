@@ -57,30 +57,30 @@ const registration = async (req, res) => {
       html: `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Registration Confirmed</title></head>
-<body style="margin:0;padding:0;background:#07070f;font-family:Arial,Helvetica,sans-serif;">
+<body style="margin:0;padding:0;background:#0B0D12;font-family:Arial,Helvetica,sans-serif;">
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#07070f;padding:32px 0;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0B0D12;padding:32px 0;">
   <tr><td align="center" style="padding:0 16px;">
 
-    <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#0d0d1a;border:1px solid #1e1e38;">
+    <table width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#0f0b0b;border:1px solid #1e1010;">
 
       <!-- TOP ACCENT BAR -->
-      <tr><td style="background:#6d28d9;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="background:#b91c1c;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
       <!-- HEADER -->
       <tr>
-        <td style="background:#0d0d1a;padding:32px 40px 28px;border-bottom:1px solid #1e1e38;">
+        <td style="background:#0f0b0b;padding:32px 40px 28px;border-bottom:1px solid #1e1010;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="vertical-align:middle;">
                 <img src="https://www.technobit26-itc.tech/TechnobitLogo.png" alt="Technobit'26" width="48" height="48" style="display:block;border:0;" />
               </td>
               <td style="vertical-align:middle;padding-left:14px;">
-                <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:1px;">TECHNOBIT<span style="color:#7c3aed;">'26</span></p>
-                <p style="margin:2px 0 0 0;font-size:11px;color:#4a4a6a;letter-spacing:2px;text-transform:uppercase;">BNMPC IT Club</p>
+                <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:1px;">TECHNOBIT<span style="color:#FF1744;">'26</span></p>
+                <p style="margin:2px 0 0 0;font-size:11px;color:#5a3535;letter-spacing:2px;text-transform:uppercase;">BNMPC IT Club</p>
               </td>
               <td align="right" style="vertical-align:middle;">
-                <span style="display:inline-block;background:#6d28d9;padding:5px 14px;font-size:11px;font-weight:700;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">REGISTERED</span>
+                <span style="display:inline-block;background:#b91c1c;padding:5px 14px;font-size:11px;font-weight:700;color:#ffffff;letter-spacing:1px;text-transform:uppercase;">REGISTERED</span>
               </td>
             </tr>
           </table>
@@ -89,10 +89,10 @@ const registration = async (req, res) => {
 
       <!-- HERO -->
       <tr>
-        <td style="background:#100f20;padding:36px 40px;border-bottom:1px solid #1e1e38;">
-          <p style="margin:0 0 4px 0;font-size:12px;color:#6d28d9;letter-spacing:3px;text-transform:uppercase;font-weight:700;">Welcome aboard</p>
+        <td style="background:#130a0a;padding:36px 40px;border-bottom:1px solid #1e1010;">
+          <p style="margin:0 0 4px 0;font-size:12px;color:#b91c1c;letter-spacing:3px;text-transform:uppercase;font-weight:700;">Welcome aboard</p>
           <h1 style="margin:0 0 12px 0;font-size:26px;font-weight:800;color:#ffffff;line-height:1.2;">Registration<br>Confirmed, ${firstName}!</h1>
-          <p style="margin:0;font-size:14px;color:#6b6b8a;line-height:1.7;">You have successfully registered for <strong style="color:#a78bfa;">Technobit'26</strong> — the annual technology festival organized by BNMPC IT Club. Your spot is secured.</p>
+          <p style="margin:0;font-size:14px;color:#6b6b8a;line-height:1.7;">You have successfully registered for <strong style="color:#FF006E;">Technobit'26</strong> — the annual technology festival organized by BNMPC IT Club. Your spot is secured.</p>
         </td>
       </tr>
 
@@ -100,25 +100,25 @@ const registration = async (req, res) => {
       <tr>
         <td style="padding:0;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr><td colspan="2" style="padding:20px 40px 10px;font-size:10px;letter-spacing:3px;color:#4a4a6a;text-transform:uppercase;font-weight:700;border-bottom:1px solid #1e1e38;">Registration Details</td></tr>
-            <tr style="border-bottom:1px solid #131320;">
-              <td style="padding:13px 40px;font-size:12px;color:#4a4a6a;font-weight:700;letter-spacing:1px;text-transform:uppercase;width:38%;border-bottom:1px solid #131320;">Full Name</td>
-              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;font-weight:600;border-bottom:1px solid #131320;">${fullName}</td>
+            <tr><td colspan="2" style="padding:20px 40px 10px;font-size:10px;letter-spacing:3px;color:#5a3535;text-transform:uppercase;font-weight:700;border-bottom:1px solid #1e1010;">Registration Details</td></tr>
+            <tr style="border-bottom:1px solid #160a0a;">
+              <td style="padding:13px 40px;font-size:12px;color:#5a3535;font-weight:700;letter-spacing:1px;text-transform:uppercase;width:38%;border-bottom:1px solid #160a0a;">Full Name</td>
+              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;font-weight:600;border-bottom:1px solid #160a0a;">${fullName}</td>
             </tr>
             <tr>
-              <td style="padding:13px 40px;font-size:12px;color:#4a4a6a;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #131320;">Username</td>
-              <td style="padding:13px 40px 13px 0;font-size:13px;color:#a78bfa;font-weight:700;font-family:'Courier New',monospace;border-bottom:1px solid #131320;">@${userName}</td>
+              <td style="padding:13px 40px;font-size:12px;color:#5a3535;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #160a0a;">Username</td>
+              <td style="padding:13px 40px 13px 0;font-size:13px;color:#FF006E;font-weight:700;font-family:'Courier New',monospace;border-bottom:1px solid #160a0a;">@${userName}</td>
             </tr>
             <tr>
-              <td style="padding:13px 40px;font-size:12px;color:#4a4a6a;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #131320;">Email</td>
-              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;border-bottom:1px solid #131320;">${email}</td>
+              <td style="padding:13px 40px;font-size:12px;color:#5a3535;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #160a0a;">Email</td>
+              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;border-bottom:1px solid #160a0a;">${email}</td>
             </tr>
             <tr>
-              <td style="padding:13px 40px;font-size:12px;color:#4a4a6a;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #131320;">Institution</td>
-              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;border-bottom:1px solid #131320;">${instituteLabel}</td>
+              <td style="padding:13px 40px;font-size:12px;color:#5a3535;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #160a0a;">Institution</td>
+              <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;border-bottom:1px solid #160a0a;">${instituteLabel}</td>
             </tr>
             <tr>
-              <td style="padding:13px 40px;font-size:12px;color:#4a4a6a;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Class</td>
+              <td style="padding:13px 40px;font-size:12px;color:#5a3535;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Class</td>
               <td style="padding:13px 40px 13px 0;font-size:13px;color:#e2e0ff;">${className}${section ? ' &mdash; ' + section : ''}</td>
             </tr>
           </table>
@@ -127,15 +127,15 @@ const registration = async (req, res) => {
 
       <!-- EVENT BANNER -->
       <tr>
-        <td style="background:#0a0818;border-top:1px solid #1e1e38;border-bottom:1px solid #1e1e38;padding:20px 40px;">
+        <td style="background:#0d0808;border-top:1px solid #1e1010;border-bottom:1px solid #1e1010;padding:20px 40px;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="vertical-align:middle;">
-                <p style="margin:0;font-size:10px;letter-spacing:3px;color:#4a4a6a;text-transform:uppercase;font-weight:700;">Event Dates</p>
-                <p style="margin:4px 0 0 0;font-size:18px;font-weight:800;color:#7c3aed;letter-spacing:1px;">5 &ndash; 10 March 2026</p>
+                <p style="margin:0;font-size:10px;letter-spacing:3px;color:#5a3535;text-transform:uppercase;font-weight:700;">Event Dates</p>
+                <p style="margin:4px 0 0 0;font-size:18px;font-weight:800;color:#FF1744;letter-spacing:1px;">5 &ndash; 10 March 2026</p>
               </td>
               <td align="right" style="vertical-align:middle;">
-                <a href="https://www.technobit26-itc.tech/events" style="display:inline-block;background:#6d28d9;padding:10px 20px;font-size:12px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:1px;text-transform:uppercase;">View Events &rarr;</a>
+                <a href="https://www.technobit26-itc.tech/events" style="display:inline-block;background:#b91c1c;padding:10px 20px;font-size:12px;font-weight:700;color:#ffffff;text-decoration:none;letter-spacing:1px;text-transform:uppercase;">View Events &rarr;</a>
               </td>
             </tr>
           </table>
@@ -144,30 +144,30 @@ const registration = async (req, res) => {
 
       <!-- NEXT STEPS -->
       <tr>
-        <td style="padding:28px 40px;border-bottom:1px solid #1e1e38;">
-          <p style="margin:0 0 16px 0;font-size:10px;letter-spacing:3px;color:#4a4a6a;text-transform:uppercase;font-weight:700;">Next Steps</p>
+        <td style="padding:28px 40px;border-bottom:1px solid #1e1010;">
+          <p style="margin:0 0 16px 0;font-size:10px;letter-spacing:3px;color:#5a3535;text-transform:uppercase;font-weight:700;">Next Steps</p>
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="padding:0 0 12px 0;vertical-align:top;">
                 <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="vertical-align:top;"><span style="display:inline-block;background:#6d28d9;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">1</span></td>
-                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;">Your account is active. <a href="https://www.technobit26-itc.tech/profile" style="color:#a78bfa;text-decoration:none;font-weight:600;">Visit your profile</a> to get started.</span></td>
+                  <td style="vertical-align:top;"><span style="display:inline-block;background:#b91c1c;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">1</span></td>
+                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;">Your account is active. <a href="https://www.technobit26-itc.tech/profile" style="color:#FF006E;text-decoration:none;font-weight:600;">Visit your profile</a> to get started.</span></td>
                 </tr></table>
               </td>
             </tr>
             <tr>
               <td style="padding:0 0 12px 0;vertical-align:top;">
                 <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="vertical-align:top;"><span style="display:inline-block;background:#6d28d9;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">2</span></td>
-                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;"><a href="https://www.technobit26-itc.tech/events" style="color:#a78bfa;text-decoration:none;font-weight:600;">Browse Events</a> and register for any segment(s) you want to compete in.</span></td>
+                  <td style="vertical-align:top;"><span style="display:inline-block;background:#b91c1c;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">2</span></td>
+                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;"><a href="https://www.technobit26-itc.tech/events" style="color:#FF006E;text-decoration:none;font-weight:600;">Browse Events</a> and register for any segment(s) you want to compete in.</span></td>
                 </tr></table>
               </td>
             </tr>
             <tr>
               <td style="vertical-align:top;">
                 <table cellpadding="0" cellspacing="0" border="0"><tr>
-                  <td style="vertical-align:top;"><span style="display:inline-block;background:#6d28d9;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">3</span></td>
-                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;">Check the <a href="https://www.technobit26-itc.tech/schedule" style="color:#a78bfa;text-decoration:none;font-weight:600;">Schedule page</a> for event timing and venue details.</span></td>
+                  <td style="vertical-align:top;"><span style="display:inline-block;background:#b91c1c;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;font-weight:800;color:#fff;margin-right:12px;">3</span></td>
+                  <td style="vertical-align:middle;"><span style="font-size:13px;color:#9090b0;">Check the <a href="https://www.technobit26-itc.tech/schedule" style="color:#FF006E;text-decoration:none;font-weight:600;">Schedule page</a> for event timing and venue details.</span></td>
                 </tr></table>
               </td>
             </tr>
@@ -177,7 +177,7 @@ const registration = async (req, res) => {
 
       <!-- FOOTER -->
       <tr>
-        <td style="background:#080814;padding:20px 40px;">
+        <td style="background:#0a0808;padding:20px 40px;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td style="vertical-align:middle;">
@@ -193,7 +193,7 @@ const registration = async (req, res) => {
       </tr>
 
       <!-- BOTTOM ACCENT BAR -->
-      <tr><td style="background:#6d28d9;height:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="background:#b91c1c;height:2px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
     </table>
 
@@ -807,12 +807,12 @@ const forgotPassword = async (req, res) => {
 <body style="margin:0;padding:0;background-color:#0a0a14;font-family:Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a14;padding:40px 0;">
     <tr><td align="center">
-      <table width="520" cellpadding="0" cellspacing="0" style="background:#11111f;border-radius:16px;border:1px solid #2a2a4a;overflow:hidden;max-width:520px;width:100%;">
+      <table width="520" cellpadding="0" cellspacing="0" style="background:#11111f;border-radius:16px;border:1px solid #2a1212;overflow:hidden;max-width:520px;width:100%;">
         
         <!-- Header Banner -->
         <tr>
-          <td style="background:linear-gradient(135deg,#4f2d8a,#7c3aed,#6d28d9);padding:32px 40px;text-align:center;">
-            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:4px;color:#c4b5fd;text-transform:uppercase;">BNMPC IT Club Presents</p>
+          <td style="background:linear-gradient(135deg,#7f1d1d,#FF1744,#b91c1c);padding:32px 40px;text-align:center;">
+            <p style="margin:0 0 4px 0;font-size:11px;letter-spacing:4px;color:#FF6B7A;text-transform:uppercase;">BNMPC IT Club Presents</p>
             <h1 style="margin:0;font-size:32px;font-weight:800;color:#ffffff;letter-spacing:2px;">TECHNOBIT'26</h1>
             <p style="margin:8px 0 0 0;font-size:12px;color:#ddd6fe;letter-spacing:1px;">technobit26-itc.tech</p>
           </td>
@@ -824,17 +824,17 @@ const forgotPassword = async (req, res) => {
             <p style="margin:0 0 8px 0;font-size:15px;color:#a0a0c0;">Hello, <strong style="color:#e2e0ff;">${userName}</strong></p>
             <p style="margin:0 0 28px 0;font-size:14px;color:#8888aa;line-height:1.6;">
               We received a request to reset the password for your Technobit'26 account 
-              associated with <strong style="color:#c4b5fd;">${email}</strong>.
+              associated with <strong style="color:#FF6B7A;">${email}</strong>.
               Use the OTP below to proceed.
             </p>
 
             <!-- OTP Box -->
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
               <tr>
-                <td align="center" style="background:#1a1a30;border:1px solid #4f2d8a;border-radius:12px;padding:28px 20px;">
+                <td align="center" style="background:#160b0b;border:1px solid #7f1d1d;border-radius:12px;padding:28px 20px;">
                   <p style="margin:0 0 8px 0;font-size:11px;letter-spacing:3px;color:#7c6ea0;text-transform:uppercase;">One-Time Password</p>
-                  <p style="margin:0;font-size:44px;font-weight:700;letter-spacing:12px;color:#a78bfa;font-family:'Courier New',monospace;">${otp}</p>
-                  <p style="margin:10px 0 0 0;font-size:12px;color:#6b6b8a;">Valid for <strong style="color:#c4b5fd;">15 minutes</strong></p>
+                  <p style="margin:0;font-size:44px;font-weight:700;letter-spacing:12px;color:#FF006E;font-family:'Courier New',monospace;">${otp}</p>
+                  <p style="margin:10px 0 0 0;font-size:12px;color:#6b6b8a;">Valid for <strong style="color:#FF6B7A;">15 minutes</strong></p>
                 </td>
               </tr>
             </table>
@@ -849,7 +849,7 @@ const forgotPassword = async (req, res) => {
         </tr>
 
         <!-- Divider -->
-        <tr><td style="padding:0 40px;"><div style="height:1px;background:#1e1e38;"></div></td></tr>
+        <tr><td style="padding:0 40px;"><div style="height:1px;background:#1e1010;"></div></td></tr>
 
         <!-- Footer -->
         <tr>
