@@ -26,6 +26,10 @@ export const login = async (data: any) => {
   if (!response.succeed) {
     throw new Error(response.msg);
   }
+  // Store token for browsers that block third-party cookies
+  if (response.token && typeof window !== 'undefined') {
+    localStorage.setItem('_tb26_token', response.token);
+  }
   return response;
 };
 
@@ -49,6 +53,9 @@ export const getFullData = async (id: string) => {
 
 export const logOut = async () => {
   // this function should be only be runned in client
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('_tb26_token');
+  }
   const response = await fetchJSON(reqs.CLIENT_LOGOUT, {
     method: "POST",
     credentials: "include",
@@ -69,5 +76,9 @@ export const register = async (data: any) => {
     false,
   );
 
+  // Store token for browsers that block third-party cookies
+  if (response?.token && typeof window !== 'undefined') {
+    localStorage.setItem('_tb26_token', response.token);
+  }
   return response;
 };

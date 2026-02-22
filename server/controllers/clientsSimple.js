@@ -219,6 +219,7 @@ const registration = async (req, res) => {
       succeed: true,
       msg: 'Congratulations!! Your registration is successful.',
       username: newParticipant.userName,
+      token: token,
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -279,6 +280,7 @@ const login = async (req, res) => {
       succeed: true,
       msg: `Successfully logged in as ${user.fullName}`,
       username: user.userName,
+      token: token,
     });
   } catch (error) {
     console.error('Login error:', error);

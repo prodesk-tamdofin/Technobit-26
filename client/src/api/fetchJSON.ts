@@ -10,9 +10,12 @@ const fetchJSON = async (
 ) => {
   let modifiedURL = url;
   let modifiedOptions = options;
+  // Read stored token from localStorage (fallback for browsers blocking 3rd-party cookies)
+  const storedToken = typeof window !== 'undefined' ? localStorage.getItem('_tb26_token') : null;
   let defaultHeaders = {
     mode: "cors" as RequestMode,
     credentials: "include" as RequestCredentials,
+    ...(storedToken ? { headers: { Authorization: `Bearer ${storedToken}` } } : {}),
   };
   if (
     (options?.method === "POST" ||

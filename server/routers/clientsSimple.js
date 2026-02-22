@@ -33,17 +33,26 @@ const {
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
+// Checks both httpOnly cookie (standard) and Authorization header (fallback for
+// browsers that block third-party cookies, e.g. Safari, Firefox, Brave)
 const authMiddleware = (req, res, next) => {
-	const token = req.cookies?.token;
-	
+	let token = req.cookies?.token;
+
+	// Fallback: Authorization: Bearer <token> header
 	if (!token) {
-		console.log('No token found in cookies');
+		const authHeader = req.headers['authorization'];
+		if (authHeader && authHeader.startsWith('Bearer ')) {
+			token = authHeader.slice(7);
+		}
+	}
+
+	if (!token) {
 		return res.json({
 			succeed: false,
 			msg: 'Not logged in',
 		});
 	}
-	
+
 	try {
 		const decoded = verify(token, process.env.CLIENT_SECRET);
 		req.user = decoded;
