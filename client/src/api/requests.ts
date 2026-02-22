@@ -113,6 +113,7 @@ const reqs = {
   TEAM_EVENT_PARTICIPATION: so + "/api/client/teamPart", //
   PAYMENT_VERIFICATION: so + "/api/client/paidVerify/", //
   FIND_TEAM_INFO: so + "/api/client/findTeam/", //
+  EVENT_CAPACITY: so + "/api/client/event-capacity/", //
   //client logout
   CLIENT_LOGOUT: so + "/api/client/logout", //
   DELETE_ACCOUNT_CLIENT: so + "/api/client/deleteAcc",

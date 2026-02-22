@@ -10,6 +10,7 @@ import { FiGlobe } from "react-icons/fi";
 import { IoPerson } from "react-icons/io5";
 import { MdEventAvailable, MdQuiz, MdGamepad, MdCode, MdBrush, MdEmojiEvents } from "react-icons/md";
 import { notFound } from "next/navigation";
+import { getEventCapacity } from "@/api/events";
 
 export async function generateMetadata({ params }: { params: { value: string } }): Promise<Metadata> {
   const event = getEventBySlug(params.value);
@@ -73,7 +74,7 @@ const getCategoryData = (eventValue: string) => {
   return { name: "Event", bg: "from-primary-350/30 to-primary-500/20", border: "border-primary-350/40" };
 };
 
-const Page = ({ params }: { params: { value: string } }) => {
+const Page = async ({ params }: { params: { value: string } }) => {
   const result = getEventBySlug(params.value);
   const rules = getRulesBySlug(params.value);
   
@@ -82,6 +83,9 @@ const Page = ({ params }: { params: { value: string } }) => {
   }
 
   const categoryData = getCategoryData(params.value);
+
+  // Fetch live capacity for capped gaming events
+  const capacity = await getEventCapacity(params.value);
 
   return (
     <div>
@@ -176,16 +180,43 @@ const Page = ({ params }: { params: { value: string } }) => {
               </div>
             </div>
 
+            {/* Slot capacity (only for capped events) */}
+            {capacity.limit > 0 && (
+              <div className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${capacity.isFull ? 'border-red-500/40 bg-red-950/40' : 'border-primary-350/30 bg-primary-600/20'}`}>
+                <div className="flex flex-col">
+                  <span className={`text-xs font-bold uppercase tracking-widest ${capacity.isFull ? 'text-red-400' : 'text-primary-300'}`}>
+                    {capacity.isFull ? '⛔ Registration Full' : '🎮 Slots Available'}
+                  </span>
+                  <span className="text-white/70 text-sm mt-0.5">
+                    <span className={`font-bold text-base ${capacity.isFull ? 'text-red-300' : 'text-white'}`}>{capacity.count}</span>
+                    <span className="text-white/40"> / {capacity.limit} {params.value === 'efootball' ? 'players' : 'teams'} registered</span>
+                  </span>
+                </div>
+                {!capacity.isFull && (
+                  <div className="ml-auto text-right">
+                    <span className="text-2xl font-bold text-primary-200">{capacity.limit - capacity.count}</span>
+                    <p className="text-white/40 text-xs">slots left</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Buttons */}
 
             <div className="z-30 flex w-full gap-2 sm:gap-4">
-              <Link
-                href={"/register/event/" + params.value}
-                className="btn-prim Bebas flex-1 cursor-pointer rounded-full bg-primary-350 px-4 py-2.5 sm:px-8 md:text-xl"
-                type="button"
-              >
-                Register →
-              </Link>
+              {capacity.isFull ? (
+                <div className="btn-prim Bebas flex flex-1 cursor-not-allowed items-center justify-center rounded-full bg-red-900/60 px-4 py-2.5 text-red-400 opacity-75 sm:px-8 md:text-xl select-none border border-red-500/30">
+                  ⛔ REGISTRATION FULL
+                </div>
+              ) : (
+                <Link
+                  href={"/register/event/" + params.value}
+                  className="btn-prim Bebas flex-1 cursor-pointer rounded-full bg-primary-350 px-4 py-2.5 sm:px-8 md:text-xl"
+                  type="button"
+                >
+                  Register →
+                </Link>
+              )}
               <a
                 href="#rules"
                 className="btn-prim Bebas flex flex-1 cursor-pointer justify-center rounded-full bg-secondary-400 px-4 py-2.5 before:bg-secondary-600 sm:px-8 md:text-xl"

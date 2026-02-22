@@ -19,6 +19,7 @@ const {
 	downloadGroupCSV,
 	forgotPassword,
 	resetPasswordWithOTP,
+	getEventCapacity,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
@@ -89,5 +90,8 @@ router.get('/download-csv/:group', downloadGroupCSV);
 // Password reset via OTP email (public routes)
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password-otp', resetPasswordWithOTP);
+
+// Event capacity (public — used by frontend to show slot availability)
+router.get('/event-capacity/:slug', getEventCapacity);
 
 module.exports = router;

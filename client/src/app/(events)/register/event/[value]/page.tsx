@@ -14,7 +14,7 @@ import CheckBox from "@/components/ui/form/Checkbox";
 import Input from "@/components/ui/form/Input";
 import useForm from "@/hooks/useForm";
 import Loading from "@/components/ui/LoadingWhite";
-import { single_event_par } from "@/api/events";
+import { single_event_par, getEventCapacity } from "@/api/events";
 import TeamGamingForm from "@/components/Events/Register/TeamGamingForm";
 import EFootballForm from "@/components/Events/Register/EFootballForm";
 import ChessForm from "@/components/Events/Register/ChessForm";
@@ -33,6 +33,11 @@ const Page = ({ params }: { params: { value: string } }) => {
   const [user, loadingUser, errorUser] = useUser();
   const checkBox = useRef<HTMLInputElement>(null);
   const [showWaModal, setShowWaModal] = useState(false);
+  const [capacityData, setCapacityData] = useState<{ count: number; limit: number; isFull: boolean }>({ count: 0, limit: 0, isFull: false });
+
+  useEffect(() => {
+    getEventCapacity(params.value).then(setCapacityData);
+  }, [params.value]);
 
   const isTeamEvent = teamGamingEvents.includes(params.value);
   const isEFootball = params.value === "efootball";
@@ -190,6 +195,27 @@ const Page = ({ params }: { params: { value: string } }) => {
             </div>
             <Link href="/events" className="btn-prim bg-primary-350 px-8 py-2.5 inline-block rounded-full">
               Browse Available Events
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Check if registration is full for this event
+  if (capacityData.isFull) {
+    return (
+      <main className="bg-primary-650 min-h-screen flex items-center justify-center">
+        <div className="container-c text-center py-20">
+          <div className="max-w-lg mx-auto bg-red-950/40 border border-red-500/40 rounded-2xl p-10">
+            <div className="text-6xl mb-4">⛔</div>
+            <h2 className="text-3xl font-bold text-red-400 mb-3">Registration Full</h2>
+            <p className="text-white/70 mb-2">
+              All <span className="font-bold text-white">{capacityData.limit}</span> slots for <span className="font-bold text-white">{result.name}</span> have been filled.
+            </p>
+            <p className="text-white/40 text-sm mb-8">No further registrations are being accepted for this event.</p>
+            <Link href="/events" className="btn-prim bg-primary-350 px-8 py-2.5 inline-block rounded-full">
+              Browse Other Events
             </Link>
           </div>
         </div>

@@ -37,6 +37,14 @@ export const getEvent = async (value: string) => {
   return response;
 };
 
+export const getEventCapacity = async (slug: string): Promise<{ count: number; limit: number; isFull: boolean }> => {
+  try {
+    const response = await fetchJSON(reqs.EVENT_CAPACITY + slug, { cache: "no-store" });
+    if (response?.succeed) return { count: response.count, limit: response.limit, isFull: response.isFull };
+  } catch {}
+  return { count: 0, limit: 0, isFull: false };
+};
+
 export const single_event_par = async (data: any) => {
   const response = await fetchJSON(
     reqs.SINGLE_EVENT_PARTICIPATION,

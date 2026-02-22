@@ -377,6 +377,26 @@ const updateProfile = async (req, res) => {
 // Gaming segments and Crack the Code - the only events BMARPC can register for
 const BMARPC_ALLOWED_EVENTS = ['efootball', 'pubg-mobile', 'free-fire', 'chess', 'crack-the-code'];
 
+// Team/slot limits for capped gaming events (0 = unlimited)
+const EVENT_LIMITS = {
+  'pubg-mobile': 32,
+  'free-fire':   24,
+  'efootball':   16,
+};
+
+// GET /api/client/event-capacity/:slug
+const getEventCapacity = async (req, res) => {
+  try {
+    const slug = req.params.slug;
+    const limit = EVENT_LIMITS[slug] || 0;
+    if (!limit) return res.json({ succeed: true, count: 0, limit: 0, isFull: false });
+    const count = await Participant.countDocuments({ registeredEvents: slug });
+    res.json({ succeed: true, count, limit, isFull: count >= limit });
+  } catch (err) {
+    res.status(500).json({ succeed: false, count: 0, limit: 0, isFull: false });
+  }
+};
+
 const registerForSegment = async (req, res) => {
   try {
     const { id } = req.user;
@@ -411,6 +431,18 @@ const registerForSegment = async (req, res) => {
         succeed: false,
         msg: 'You are already registered for this event',
       });
+    }
+
+    // Enforce team/slot limits
+    const eventLimit = EVENT_LIMITS[eventName];
+    if (eventLimit) {
+      const currentCount = await Participant.countDocuments({ registeredEvents: eventName });
+      if (currentCount >= eventLimit) {
+        return res.status(400).json({
+          succeed: false,
+          msg: `Registration is full for this event. Maximum ${eventLimit} slots have been filled.`,
+        });
+      }
     }
 
     // Define paid events and their fees
@@ -931,4 +963,5 @@ module.exports = {
   downloadGroupCSV,
   forgotPassword,
   resetPasswordWithOTP,
+  getEventCapacity,
 };
