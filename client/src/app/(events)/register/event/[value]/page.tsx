@@ -206,7 +206,7 @@ const Page = ({ params }: { params: { value: string } }) => {
         onDone={() => { setShowWaModal(false); Router.push("/profile"); }}
       />
       <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill={ExtendedColors.primary["200"]} />
-      <div className="z-30 mt-28 w-screen pb-12">
+      <div className="relative z-30 mt-28 w-screen pb-12">
         <div className="container-c flex flex-col gap-1 text-left">
           <Link href={`/events/${params.value}`} className="mb-1 border-b border-transparent pb-1 text-lg text-primary-200 hover:border-primary-200">
             ← Back to Segment

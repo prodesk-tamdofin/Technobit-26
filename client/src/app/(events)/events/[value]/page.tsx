@@ -87,7 +87,7 @@ const Page = ({ params }: { params: { value: string } }) => {
     <div>
       {" "}
       <div className="relative flex min-h-screen w-full max-w-[100vw] items-center justify-center overflow-hidden bg-primary-650">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-350/10 via-transparent to-primary-150/5" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary-350/10 via-transparent to-primary-150/5" />
 
         {/* Hero Section */}
 
