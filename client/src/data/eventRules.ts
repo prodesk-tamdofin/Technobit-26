@@ -210,7 +210,7 @@ export const eventRules: Record<string, EventRules> = {
     rules: [
       "This is an individual (solo) event.",
       "Participants must create an original digital poster during the event.",
-      "The theme will be announced at the beginning of the event.",
+      "The theme for this year is: \"Justice for Hadi\".",
       "The artwork must be created using any graphic designing software.",
       "Use of pre-made templates, stock images, AI tools, or copied content is strictly prohibited.",
       "The time limit must be followed strictly. Late submissions will not be accepted.",

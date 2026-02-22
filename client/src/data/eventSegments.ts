@@ -126,7 +126,7 @@ export const eventCategories: EventCategory[] = [
         id: 205,
         name: "Poster Designing",
         value: "poster-designing",
-        description: "Design an original poster using any graphic design software. Theme announced at the start of the event.",
+        description: "Design an original digital poster on this year's official theme — \"Justice for Hadi\". Create using any graphic design software and submit to the EXHIB_IT Facebook group.",
         fee: 0,
         type: "online",
         image: "/events/poster-design.jpg"
