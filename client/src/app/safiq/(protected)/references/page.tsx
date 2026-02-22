@@ -130,7 +130,7 @@ const ReferencesPage = () => {
                   contentStyle={{ background: "#1a1025", border: "1px solid #4c1d95", borderRadius: 8 }}
                   labelStyle={{ color: "#fff" }}
                   itemStyle={{ color: "#ddd" }}
-                  formatter={(value: number) => [`${value} participants`, ""]}
+                  formatter={(value: number | undefined) => [`${value ?? 0} participants`, ""]}
                 />
                 <Legend
                   wrapperStyle={{ fontSize: 12, color: "#bbb" }}
