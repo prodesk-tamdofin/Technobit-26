@@ -554,15 +554,22 @@ const getAllParticipants = async (req, res) => {
     }
 
     if (searchKey && String(searchKey).trim().length > 0) {
-      const regex = new RegExp(searchKey, 'i');
+      const raw = String(searchKey).trim();
+      // Normalize phone: strip spaces, hyphens, +880/880 prefix so partial phone searches work
+      const normalized = raw.replace(/[\s\-]/g, '').replace(/^\+?880/, '0');
+      const useNorm = /^[0-9]+$/.test(normalized) && normalized !== raw.replace(/[\s\-]/g, '');
+      const regexSrc = useNorm ? normalized : raw;
+      const regex = new RegExp(regexSrc, 'i');
+      const rawRegex = new RegExp(raw, 'i');
       query.$or = [
-        { fullName: regex },
-        { email: regex },
+        { fullName: rawRegex },
+        { email: rawRegex },
         { phone: regex },
-        { userName: regex },
-        { roll: regex },
-        { college: regex },
-        { refCode: regex },
+        { whatsapp: regex },
+        { userName: rawRegex },
+        { roll: rawRegex },
+        { college: rawRegex },
+        { refCode: rawRegex },
       ];
     }
 
@@ -595,15 +602,21 @@ const getParticipantsCount = async (req, res) => {
     }
 
     if (searchKey && String(searchKey).trim().length > 0) {
-      const regex = new RegExp(searchKey, 'i');
+      const raw_q = String(searchKey).trim();
+      const normalized_q = raw_q.replace(/[\s\-]/g, '').replace(/^\+?880/, '0');
+      const useNorm_q = /^[0-9]+$/.test(normalized_q) && normalized_q !== raw_q.replace(/[\s\-]/g, '');
+      const regexSrc_q = useNorm_q ? normalized_q : raw_q;
+      const regex = new RegExp(regexSrc_q, 'i');
+      const rawRegex_q = new RegExp(raw_q, 'i');
       query.$or = [
-        { fullName: regex },
-        { email: regex },
+        { fullName: rawRegex_q },
+        { email: rawRegex_q },
         { phone: regex },
-        { userName: regex },
-        { roll: regex },
-        { college: regex },
-        { refCode: regex },
+        { whatsapp: regex },
+        { userName: rawRegex_q },
+        { roll: rawRegex_q },
+        { college: rawRegex_q },
+        { refCode: rawRegex_q },
       ];
     }
 
@@ -782,6 +795,24 @@ const GROUP_SLUGS = {
   crackthecode:['crack-the-code'],
   submission:  ['poster-designing', 'ai-art', 'tech-meme-war', 'sci-fi-story'],
   quiz:        ['it-olympiad', 'gaming-quiz', 'robothon-olympiad', 'marvel-dc-quiz', 'animelogia', 'google-it'],
+};
+
+// Admin: Get WhatsApp/phone numbers for a group as JSON
+const getGroupWhatsApp = async (req, res) => {
+  try {
+    const group = (req.params.group || '').toLowerCase();
+    const slugs = GROUP_SLUGS[group];
+    if (!slugs) {
+      return res.status(400).json({ succeed: false, msg: 'Invalid group' });
+    }
+    const participants = await Participant.find({ registeredEvents: { $in: slugs } })
+      .select('fullName phone whatsapp -_id');
+    const numbers = participants.map(p => p.whatsapp || p.phone).filter(Boolean);
+    return res.json({ succeed: true, numbers, total: numbers.length });
+  } catch (error) {
+    console.error('getGroupWhatsApp error:', error);
+    return res.status(500).json({ succeed: false, msg: 'Failed to fetch numbers.' });
+  }
 };
 
 const downloadGroupCSV = async (req, res) => {
@@ -1018,6 +1049,34 @@ const adminBackupParticipants = async (req, res) => {
   }
 };
 
+// Admin: Update gamingData for a specific event registration
+const adminUpdateGamingData = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { eventSlug, gamingData } = req.body;
+
+    if (!eventSlug || !gamingData) {
+      return res.status(400).json({ succeed: false, msg: 'eventSlug and gamingData are required.' });
+    }
+
+    const participant = await Participant.findById(id);
+    if (!participant) {
+      return res.status(404).json({ succeed: false, msg: 'Participant not found.' });
+    }
+
+    if (!participant.gamingData) {
+      participant.gamingData = new Map();
+    }
+    participant.gamingData.set(eventSlug, gamingData);
+    await participant.save();
+
+    return res.json({ succeed: true, msg: 'Gaming data updated successfully.' });
+  } catch (error) {
+    console.error('adminUpdateGamingData error:', error);
+    return res.status(500).json({ succeed: false, msg: 'Failed to update gaming data.' });
+  }
+};
+
 module.exports = {
   registration,
   login,
@@ -1034,10 +1093,12 @@ module.exports = {
   clearAllParticipants,
   getFullSingle,
   downloadGroupCSV,
+  getGroupWhatsApp,
   forgotPassword,
   resetPasswordWithOTP,
   getEventCapacity,
   adminUpdateParticipant,
+  adminUpdateGamingData,
   getRefCodeStats,
   adminBackupParticipants,
 };

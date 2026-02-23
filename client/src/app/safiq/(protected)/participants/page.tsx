@@ -257,6 +257,64 @@ const ParticipantsPage = () => {
   };
 
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
+  const [editGaming, setEditGaming] = useState<{ participantId: string; eventSlug: string; data: any } | null>(null);
+  const [editGamingLoading, setEditGamingLoading] = useState(false);
+
+  const openEditGaming = (participantId: string, eventSlug: string, gamingInfo: any) => {
+    // Deep clone so we can edit without mutating existing data
+    const clone = JSON.parse(JSON.stringify(gamingInfo));
+    setEditGaming({ participantId, eventSlug, data: clone });
+  };
+
+  const handleGamingFieldChange = (field: string, value: string) => {
+    setEditGaming((prev) => prev ? { ...prev, data: { ...prev.data, [field]: value } } : null);
+  };
+
+  const handlePlayerFieldChange = (idx: number, field: string, value: string) => {
+    setEditGaming((prev) => {
+      if (!prev) return null;
+      const players = [...(prev.data.players || [])];
+      players[idx] = { ...players[idx], [field]: value };
+      return { ...prev, data: { ...prev.data, players } };
+    });
+  };
+
+  const handleSaveGamingData = async () => {
+    if (!editGaming) return;
+    setEditGamingLoading(true);
+    try {
+      const response = await fetchJSON(
+        reqs.ADMIN_UPDATE_GAMING_DATA + editGaming.participantId,
+        { method: "PATCH", credentials: "include" },
+        { eventSlug: editGaming.eventSlug, gamingData: editGaming.data }
+      );
+      if (response?.succeed) {
+        toast.success("Gaming data updated!");
+        // Update local state
+        setParticipants((prev) =>
+          prev.map((p) => {
+            if (p._id === editGaming.participantId) {
+              const newGamingData = { ...(p.gamingData || {}) };
+              newGamingData[editGaming.eventSlug] = editGaming.data;
+              return { ...p, gamingData: newGamingData };
+            }
+            return p;
+          })
+        );
+        if (selectedParticipant?._id === editGaming.participantId) {
+          const newGamingData = { ...(selectedParticipant.gamingData || {}) };
+          newGamingData[editGaming.eventSlug] = editGaming.data;
+          setSelectedParticipant({ ...selectedParticipant, gamingData: newGamingData });
+        }
+        setEditGaming(null);
+      } else {
+        toast.error(response?.msg || "Failed to update gaming data");
+      }
+    } catch {
+      toast.error("Failed to update gaming data");
+    }
+    setEditGamingLoading(false);
+  };
 
   // Get selected event data
   const selectedEventData = allEvents.find(e => e.value === selectedSegment);
@@ -663,7 +721,15 @@ const ParticipantsPage = () => {
                         {/* Gaming Data */}
                         {gamingInfo && Object.keys(gamingInfo).length > 0 && (
                           <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
-                            <p className="text-blue-300 text-xs mb-2 font-medium">Gaming Info</p>
+                            <div className="flex items-center justify-between mb-2">
+                              <p className="text-blue-300 text-xs font-medium">Gaming Info</p>
+                              <button
+                                onClick={() => openEditGaming(selectedParticipant._id, eventSlug, gamingInfo)}
+                                className="text-xs px-2 py-1 rounded bg-blue-500/20 hover:bg-blue-500/40 text-blue-300 transition-colors"
+                              >
+                                ✏️ Edit Team Data
+                              </button>
+                            </div>
                             {gamingInfo.teamName && (
                               <div className="mb-2">
                                 <p className="text-white/50 text-xs">Team Name</p>
@@ -678,14 +744,20 @@ const ParticipantsPage = () => {
                             )}
                             {gamingInfo.players && (
                               <div>
-                                <p className="text-white/50 text-xs mb-2">Players</p>
+                                <p className="text-white/50 text-xs mb-2">Players ({gamingInfo.players.length})</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                   {gamingInfo.players.map((player: any, idx: number) => (
-                                    <div key={idx} className="bg-primary-800/50 rounded-lg p-2 text-xs">
-                                      <p className="text-white font-medium">{player.fullName}</p>
-                                      <p className="text-white/60">IGN: {player.inGameName}</p>
-                                      {player.uid && <p className="text-white/60">UID: {player.uid}</p>}
-                                      <p className="text-primary-300 capitalize">{player.role}</p>
+                                    <div key={idx} className="bg-primary-800/50 rounded-lg p-3 text-xs space-y-0.5">
+                                      <p className="text-white font-semibold text-sm">{player.fullName || "—"}</p>
+                                      <p className="text-primary-300 capitalize font-medium">{player.role}</p>
+                                      {player.inGameName && <p className="text-white/70">IGN: <span className="text-white font-mono">{player.inGameName}</span></p>}
+                                      {player.uid && <p className="text-white/70">UID: <span className="text-white font-mono">{player.uid}</span></p>}
+                                      {player.email && <p className="text-white/70">Email: <span className="text-white">{player.email}</span></p>}
+                                      {player.facebook && <p className="text-white/70">FB: <span className="text-white break-all">{player.facebook}</span></p>}
+                                      {player.college && <p className="text-white/70">College: <span className="text-white">{player.college}</span></p>}
+                                      {player.class && <p className="text-white/70">Class: <span className="text-white">{player.class}</span></p>}
+                                      {player.section && <p className="text-white/70">Section: <span className="text-white">{player.section}</span></p>}
+                                      {player.roll && <p className="text-white/70">Roll: <span className="text-white">{player.roll}</span></p>}
                                     </div>
                                   ))}
                                 </div>
@@ -710,6 +782,89 @@ const ParticipantsPage = () => {
                   })}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Gaming Data Modal */}
+      {editGaming && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-primary-900 rounded-2xl w-full max-w-2xl border border-blue-500/30 shadow-2xl">
+            <div className="sticky top-0 bg-primary-900 border-b border-primary-700/50 p-5 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-white">Edit Team Data</h2>
+                <p className="text-white/50 text-sm">{editGaming.eventSlug}</p>
+              </div>
+              <button onClick={() => setEditGaming(null)} className="p-2 rounded-lg hover:bg-primary-700 text-white/70 hover:text-white">
+                <MdClose className="text-xl" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-5 max-h-[75vh] overflow-y-auto">
+              {/* Team Name */}
+              <div>
+                <label className="text-white/70 text-xs font-medium block mb-1">Team Name</label>
+                <input
+                  className="w-full px-3 py-2 rounded-lg bg-primary-800 border border-primary-600 text-white text-sm focus:outline-none focus:border-blue-500"
+                  value={editGaming.data.teamName || ""}
+                  onChange={(e) => handleGamingFieldChange("teamName", e.target.value)}
+                  placeholder="Team name"
+                />
+              </div>
+
+              {/* Players */}
+              {(editGaming.data.players || []).map((player: any, idx: number) => (
+                <div key={idx} className="p-4 rounded-xl bg-primary-800/60 border border-primary-600/30">
+                  <p className="text-white font-semibold text-sm mb-3 capitalize">
+                    {player.role === "captain" ? "🟢 Player 1 (Captain)" :
+                     player.role === "player2" ? "🔵 Player 2" :
+                     player.role === "player3" ? "🔵 Player 3" :
+                     player.role === "player4" ? "🔵 Player 4" :
+                     player.role === "substitute" ? "🟡 Player 5 (Substitute)" :
+                     `Player (${player.role})`}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    {[
+                      { field: "fullName", label: "Full Name" },
+                      { field: "inGameName", label: "In-Game Name (IGN)" },
+                      { field: "uid", label: "Game UID" },
+                      { field: "email", label: "Email" },
+                      { field: "facebook", label: "Facebook" },
+                      { field: "college", label: "College" },
+                      { field: "class", label: "Class" },
+                      { field: "section", label: "Section" },
+                      { field: "roll", label: "Roll Number" },
+                    ].map(({ field, label }) => (
+                      <div key={field}>
+                        <label className="text-white/50 text-xs block mb-1">{label}</label>
+                        <input
+                          className="w-full px-3 py-2 rounded-lg bg-primary-700 border border-primary-600/50 text-white text-sm focus:outline-none focus:border-blue-400"
+                          value={player[field] || ""}
+                          onChange={(e) => handlePlayerFieldChange(idx, field, e.target.value)}
+                          placeholder={label}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-5 border-t border-primary-700/50 flex justify-end gap-3">
+              <button
+                onClick={() => setEditGaming(null)}
+                className="px-4 py-2 rounded-lg bg-primary-700 hover:bg-primary-600 text-white text-sm transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveGamingData}
+                disabled={editGamingLoading}
+                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors disabled:opacity-50"
+              >
+                {editGamingLoading ? "Saving..." : "Save Changes"}
+              </button>
             </div>
           </div>
         </div>

@@ -97,6 +97,7 @@ const reqs = {
   // Admin participant management
   DELETE_PARTICIPANT: so + "/api/client/participant/", // DELETE /:id
   ADMIN_UPDATE_PARTICIPANT: so + "/api/client/admin/participant/", // PATCH /:id
+  ADMIN_UPDATE_GAMING_DATA: so + "/api/client/admin/gaming-data/", // PATCH /:id
   ADMIN_REFCODE_STATS: so + "/api/client/admin/refcode-stats",
   ADMIN_BACKUP: so + "/api/client/admin/backup",
   REMOVE_SEGMENT: so + "/api/client/participant/", // POST /:id/remove-segment
@@ -104,6 +105,7 @@ const reqs = {
   DASHBOARD_STATS: so + "/api/client/dashboard-stats",
   CLEAR_ALL_PARTICIPANTS: so + "/api/client/clear-all",
   DOWNLOAD_GROUP_CSV: so + "/api/client/download-csv/",
+  GROUP_WHATSAPP: so + "/api/client/whatsapp-numbers/",
 
   // Profile management
   UPDATE_PROFILE: so + "/api/client/update-profile",

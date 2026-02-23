@@ -147,7 +147,7 @@ const Page = async ({ params }: { params: { value: string } }) => {
 
               <div className="mr-2 flex items-center gap-2 text-2xl font-semibold text-white/75 lg:mr-0">
                 <IoPerson className="text-3xl text-primary-300" />
-                <p>Solo</p>
+                <p>{["pubg-mobile", "free-fire"].includes(params.value) ? "Team" : "Solo"}</p>
               </div>
             </div>
 

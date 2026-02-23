@@ -33,8 +33,8 @@ interface Participant {
 const PAID_EVENTS = [
   { value: 'crack-the-code', name: 'Crack the Code', fee: 30 },
   { value: 'efootball', name: 'eFootball', fee: 40 },
-  { value: 'pubg-mobile', name: 'PUBG Mobile', fee: 50 },
-  { value: 'free-fire', name: 'Free Fire', fee: 50 },
+  { value: 'pubg-mobile', name: 'PUBG Mobile', fee: 100 },
+  { value: 'free-fire', name: 'Free Fire', fee: 100 },
 ];
 
 const perPage = 25;

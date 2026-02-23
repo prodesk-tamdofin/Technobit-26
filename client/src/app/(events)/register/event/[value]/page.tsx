@@ -63,7 +63,7 @@ const Page = ({ params }: { params: { value: string } }) => {
         let gamingData: any = {};
 
         if (isTeamEvent) {
-          // Team gaming events (PUBG/Free Fire) — players 2-4 are optional
+          // Team gaming events (PUBG/Free Fire)
           const players: any[] = [
             {
               role: "captain",
@@ -75,25 +75,51 @@ const Page = ({ params }: { params: { value: string } }) => {
               class: data.p1_class,
               section: data.p1_section,
               roll: data.p1_roll,
+              college: data.p1_college,
             },
           ];
-          if (data.p2_fullName?.trim()) players.push({ role: "player2", fullName: data.p2_fullName, inGameName: data.p2_inGameName, class: data.p2_class, section: data.p2_section, roll: data.p2_roll });
-          if (data.p3_fullName?.trim()) players.push({ role: "player3", fullName: data.p3_fullName, inGameName: data.p3_inGameName, class: data.p3_class, section: data.p3_section, roll: data.p3_roll });
-          if (data.p4_fullName?.trim()) players.push({ role: "player4", fullName: data.p4_fullName, inGameName: data.p4_inGameName, class: data.p4_class, section: data.p4_section, roll: data.p4_roll });
+          if (data.p2_fullName?.trim()) players.push({
+            role: "player2",
+            fullName: data.p2_fullName,
+            inGameName: data.p2_inGameName,
+            uid: data.p2_uid,
+            class: data.p2_class,
+            section: data.p2_section,
+            roll: data.p2_roll,
+            college: data.p2_college,
+          });
+          if (data.p3_fullName?.trim()) players.push({
+            role: "player3",
+            fullName: data.p3_fullName,
+            inGameName: data.p3_inGameName,
+            uid: data.p3_uid,
+            roll: data.p3_roll,
+            college: data.p3_college,
+            class: data.p3_class,
+          });
+          if (data.p4_fullName?.trim()) players.push({
+            role: "player4",
+            fullName: data.p4_fullName,
+            inGameName: data.p4_inGameName,
+            uid: data.p4_uid,
+            roll: data.p4_roll,
+            college: data.p4_college,
+            class: data.p4_class,
+          });
           // Add optional substitute player 5
-          if (data.p5_fullName && data.p5_inGameName) {
+          if (data.p5_fullName?.trim()) {
             players.push({
               role: "substitute",
               fullName: data.p5_fullName,
               inGameName: data.p5_inGameName,
-              class: data.p5_class,
-              section: data.p5_section,
+              uid: data.p5_uid,
               roll: data.p5_roll,
+              college: data.p5_college,
+              class: data.p5_class,
             });
           }
           gamingData = {
             teamName: data.teamName,
-            teamCollege: data.teamCollege,
             players,
           };
         } else if (isEFootball) {
@@ -308,7 +334,7 @@ const Page = ({ params }: { params: { value: string } }) => {
                   I have reviewed all the provided data thoroughly and am fully aware of all the{" "}
                   <a href={`/events/${params.value}#rules`} target="_blank" className="text-primary-300 underline hover:text-primary-200">rules and regulations</a>.
                   {result.paid && " I confirm that I have completed the payment."}
-                  {isTeamEvent && " All team members are from the same college."}
+                  {isTeamEvent && " 2 players are from my college, the other 2 are from a different college."}
                 </span>
               }
             />
@@ -335,7 +361,7 @@ const Page = ({ params }: { params: { value: string } }) => {
             <ul className="list-disc ml-4 space-y-2 text-white/75">
               <li>Make sure you have registered with correct details.</li>
               <li>Each participant can only register once per event.</li>
-              {isTeamEvent && <li className="text-yellow-300">All team members must be from the same college.</li>}
+              {isTeamEvent && <li className="text-yellow-300">Players 1 & 2 must be from the same college (BNMPC or BMARPC). Players 3 & 4 must be from a different college (not BNMPC/BMARPC).</li>}
               {isTeamEvent && <li>Player 5 (Substitute) is optional.</li>}
               {result.paid && <li className="text-pink-300">Payment via bKash only. Double-check Transaction ID.</li>}
               {isChess && <li className="text-slate-300">Make sure your LiChess username is correct.</li>}

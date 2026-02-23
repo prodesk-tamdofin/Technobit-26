@@ -413,7 +413,8 @@ const RegisteredUsersPage = () => {
                 <MdClose size={24} />
               </button>
             </div>
-            <div className="overflow-y-auto flex-1 p-6">
+              <div className="overflow-y-auto flex-1 p-6">
+              <p className="text-white/40 text-xs mb-4">Editing @{editUser.userName} — only filled fields will be updated</p>
               <div className="grid grid-cols-2 gap-4">
                 {([
                   { key: "fullName", label: "Full Name" },
@@ -421,14 +422,12 @@ const RegisteredUsersPage = () => {
                   { key: "phone", label: "Phone" },
                   { key: "whatsapp", label: "WhatsApp" },
                   { key: "roll", label: "Roll Number" },
-                  { key: "college", label: "College" },
-                  { key: "institute", label: "Institute" },
-                  { key: "className", label: "Class" },
+                  { key: "institute", label: "Institute (Full Name)" },
                   { key: "section", label: "Section" },
                   { key: "fb", label: "Facebook" },
                   { key: "refCode", label: "Reference Code" },
                 ] as { key: keyof typeof editForm; label: string }[]).map(({ key, label }) => (
-                  <div key={key} className={key === "fb" ? "col-span-2" : ""}>
+                  <div key={key} className={key === "fb" || key === "institute" ? "col-span-2" : ""}>
                     <label className="block text-sm text-white/50 mb-1">{label}</label>
                     <input
                       type="text"
@@ -438,6 +437,39 @@ const RegisteredUsersPage = () => {
                     />
                   </div>
                 ))}
+
+                {/* College Dropdown */}
+                <div>
+                  <label className="block text-sm text-white/50 mb-1">College</label>
+                  <select
+                    value={(editForm.college as string) || ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const inst = val === "BNMPC" ? "Birshreshtha Noor Mohammad Public College" : val === "BMARPC" ? "Birshreshtha Munshi Abdur Rouf Public College" : "";
+                      setEditForm((prev) => ({ ...prev, college: val, institute: inst || prev.institute }));
+                    }}
+                    className="w-full px-4 py-2 rounded-xl bg-primary-700/50 border border-primary-600/30 text-white focus:outline-none focus:border-primary-400"
+                  >
+                    <option value="">— Select College —</option>
+                    <option value="BNMPC">BNMPC — Birshreshtha Noor Mohammad Public College</option>
+                    <option value="BMARPC">BMARPC — Birshreshtha Munshi Abdur Rouf Public College</option>
+                  </select>
+                </div>
+
+                {/* Class Dropdown */}
+                <div>
+                  <label className="block text-sm text-white/50 mb-1">Class</label>
+                  <select
+                    value={(editForm.className as string) || ""}
+                    onChange={(e) => setEditForm((prev) => ({ ...prev, className: e.target.value }))}
+                    className="w-full px-4 py-2 rounded-xl bg-primary-700/50 border border-primary-600/30 text-white focus:outline-none focus:border-primary-400"
+                  >
+                    <option value="">— Select Class —</option>
+                    {["VI","VII","VIII","IX","X","XI","XII"].map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
             <div className="px-6 py-4 border-t border-primary-600/30 flex items-center justify-end gap-3 shrink-0">

@@ -33,6 +33,8 @@ const {
 	adminUpdateParticipant,
 	getRefCodeStats,
 	adminBackupParticipants,
+	getGroupWhatsApp,
+	adminUpdateGamingData,
 } = require('../controllers/clientsSimple');
 
 // Auth middleware to verify JWT token
@@ -109,6 +111,9 @@ router.delete('/clear-all', clearAllParticipants);
 // Admin: CSV download by group
 router.get('/download-csv/:group', downloadGroupCSV);
 
+// Admin: WhatsApp numbers for a group (JSON)
+router.get('/whatsapp-numbers/:group', getGroupWhatsApp);
+
 // Password reset via OTP email (public routes)
 router.post('/forgot-password', authLimiter, forgotPassword);
 router.post('/reset-password-otp', authLimiter, resetPasswordWithOTP);
@@ -118,6 +123,9 @@ router.get('/event-capacity/:slug', getEventCapacity);
 
 // Admin: update any participant field
 router.patch('/admin/participant/:id', adminUpdateParticipant);
+
+// Admin: update gamingData for a specific event
+router.patch('/admin/gaming-data/:id', adminUpdateGamingData);
 
 // Admin: reference code usage stats
 router.get('/admin/refcode-stats', getRefCodeStats);
