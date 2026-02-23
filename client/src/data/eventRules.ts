@@ -162,6 +162,7 @@ export const eventRules: Record<string, EventRules> = {
       "Any content copied from movies, books, or the internet will lead to disqualification.",
       "AI-generated stories are not allowed. Any detected AI content will result in disqualification.",
       "The story can be written in Bangla or English.",
+      "Word limit: minimum 250 words and maximum 700 words. Stories outside this range will not be accepted.",
       "The story must be submitted within the given time. Late submissions will not be accepted.",
       "Only currently enrolled students of Birshreshtha Noor Mohammad Public College (BNMPC) are eligible to participate.",
     ],
