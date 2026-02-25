@@ -28,6 +28,25 @@ const CSVDownloadPage = () => {
   const [loadingCSV, setLoadingCSV] = useState<string | null>(null);
   const [loadingWA, setLoadingWA] = useState<string | null>(null);
   const [copiedWA, setCopiedWA] = useState<string | null>(null);
+  const [copiedUnreg, setCopiedUnreg] = useState(false);
+  const [loadingUnreg, setLoadingUnreg] = useState(false);
+
+  const copyUnregistered = async () => {
+    setLoadingUnreg(true);
+    try {
+      const res = await fetch(reqs.UNREGISTERED_NUMBERS, { credentials: "include" });
+      const data = await res.json();
+      if (!data.succeed) { toast.error(data.msg || "Failed to fetch"); return; }
+      await navigator.clipboard.writeText(data.numbers.join("\n"));
+      setCopiedUnreg(true);
+      toast.success(`Copied ${data.total} numbers (0-segment participants)`);
+      setTimeout(() => setCopiedUnreg(false), 3000);
+    } catch {
+      toast.error("Could not copy numbers");
+    } finally {
+      setLoadingUnreg(false);
+    }
+  };
 
   const downloadCSV = async (group: string) => {
     setLoadingCSV(group);
@@ -128,6 +147,23 @@ const CSVDownloadPage = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* 0-segment participants */}
+      <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-orange-500/30 bg-orange-500/10 p-5">
+        <div>
+          <p className="font-semibold text-orange-300">Registered but 0 Segments</p>
+          <p className="mt-0.5 text-xs text-white/40">Participants who signed up but haven&apos;t joined any event segment yet</p>
+        </div>
+        <button
+          onClick={copyUnregistered}
+          disabled={loadingUnreg}
+          className={`flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${
+            copiedUnreg ? "bg-green-600 text-white" : "bg-orange-600/80 hover:bg-orange-500 text-white"
+          }`}
+        >
+          {copiedUnreg ? <><BsCheckLg /> Copied!</> : loadingUnreg ? "Fetching…" : <><BsClipboard /> Copy Phone Numbers</>}
+        </button>
       </div>
     </div>
   );

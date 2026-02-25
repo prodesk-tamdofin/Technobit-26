@@ -815,6 +815,23 @@ const getGroupWhatsApp = async (req, res) => {
   }
 };
 
+// Admin: Get phone numbers of participants with 0 registered segments
+const getUnregisteredNumbers = async (req, res) => {
+  try {
+    const participants = await Participant.find({
+      $or: [
+        { registeredEvents: { $exists: false } },
+        { registeredEvents: { $size: 0 } },
+      ],
+    }).select('fullName phone whatsapp -_id');
+    const numbers = participants.map(p => p.whatsapp || p.phone).filter(Boolean);
+    return res.json({ succeed: true, numbers, total: numbers.length });
+  } catch (error) {
+    console.error('getUnregisteredNumbers error:', error);
+    return res.status(500).json({ succeed: false, msg: 'Failed to fetch numbers.' });
+  }
+};
+
 const downloadGroupCSV = async (req, res) => {
   try {
     const group = (req.params.group || '').toLowerCase();
@@ -1094,6 +1111,7 @@ module.exports = {
   getFullSingle,
   downloadGroupCSV,
   getGroupWhatsApp,
+  getUnregisteredNumbers,
   forgotPassword,
   resetPasswordWithOTP,
   getEventCapacity,

@@ -106,6 +106,7 @@ const reqs = {
   CLEAR_ALL_PARTICIPANTS: so + "/api/client/clear-all",
   DOWNLOAD_GROUP_CSV: so + "/api/client/download-csv/",
   GROUP_WHATSAPP: so + "/api/client/whatsapp-numbers/",
+  UNREGISTERED_NUMBERS: so + "/api/client/unregistered-numbers",
 
   // Profile management
   UPDATE_PROFILE: so + "/api/client/update-profile",

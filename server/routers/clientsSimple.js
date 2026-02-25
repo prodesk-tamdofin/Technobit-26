@@ -34,6 +34,7 @@ const {
 	getRefCodeStats,
 	adminBackupParticipants,
 	getGroupWhatsApp,
+	getUnregisteredNumbers,
 	adminUpdateGamingData,
 } = require('../controllers/clientsSimple');
 
@@ -113,6 +114,9 @@ router.get('/download-csv/:group', downloadGroupCSV);
 
 // Admin: WhatsApp numbers for a group (JSON)
 router.get('/whatsapp-numbers/:group', getGroupWhatsApp);
+
+// Admin: phone numbers of participants with 0 segment registrations
+router.get('/unregistered-numbers', getUnregisteredNumbers);
 
 // Password reset via OTP email (public routes)
 router.post('/forgot-password', authLimiter, forgotPassword);
