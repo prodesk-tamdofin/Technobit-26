@@ -47,7 +47,7 @@ const Login = () => {
     },
     onSuccess: async () => {
       if (searchParams.redirect) {
-        Router.back();
+        Router.push(searchParams.redirect);
       } else {
         Router.push("/profile");
         Router.refresh();
