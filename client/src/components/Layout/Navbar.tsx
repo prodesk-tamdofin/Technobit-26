@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { BsSun, BsMoonStarsFill } from "react-icons/bs";
+import { BsSun, BsMoonStarsFill, BsArrowLeft } from "react-icons/bs";
 import { FiPower, FiUser } from "react-icons/fi";
 import { LuLogIn } from "react-icons/lu";
 import { IoHomeOutline, IoCalendarOutline, IoImagesOutline } from "react-icons/io5";
@@ -187,10 +187,81 @@ const Navbar = () => {
       </div>
     );
 
+  const isExamSlugPage = path.startsWith('/exams/') && path !== '/exams';
+
   return (
     <>
       {path !== "/download-admit" ? (
         <nav className="container-c fixed left-1/2 top-0 z-[100] -translate-x-1/2 transition-all">
+
+          {/* ── EXAM SLUG HEADER (centered logo, back btn, profile only) ── */}
+          {isExamSlugPage ? (
+            <div
+              ref={navRef}
+              className="mt-2 flex max-h-24 w-full items-center justify-between rounded-2xl py-3 px-4 transition-all duration-300 relative"
+              style={{ backgroundColor: "transparent", backdropFilter: "none", WebkitBackdropFilter: "none", border: "1px solid transparent", boxShadow: "none" }}
+            >
+              {/* LEFT — back button */}
+              <div className="flex grow basis-0 items-center">
+                <Link
+                  href="/exams"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.08] border border-white/[0.15] text-white/80 hover:bg-white/[0.12] hover:text-white text-sm font-medium transition-all"
+                >
+                  <BsArrowLeft className="text-base" />
+                  <span className="hidden sm:inline">Back to Exams</span>
+                </Link>
+              </div>
+
+              {/* CENTER — logo absolutely centered */}
+              <div className="absolute left-1/2 -translate-x-1/2">
+                <Link href="/">
+                  <img src="/Logo(Plain).png" className="w-36 md:w-44 rounded pt-1" alt="Technobit'26" />
+                </Link>
+              </div>
+
+              {/* RIGHT — login / profile only (no nav links, no register) */}
+              <div className="flex grow basis-0 items-center justify-end gap-2">
+                {user ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => { setUserExpanded(!userExpanded); setExpanded(false); }}
+                      className="rounded-full border border-primary-200 p-1 transition hover:border-primary-400"
+                    >
+                      {reqImgWrapper(user.image) ? (
+                        <img className="z-10 h-[38px] w-[38px] rounded-full object-cover" src={reqImgWrapper(user.image)!} alt={user.fullName || "User"}
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden"); }}
+                        />
+                      ) : null}
+                      <span className={`z-10 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-primary-400 text-white ${reqImgWrapper(user.image) ? "hidden" : ""}`}>
+                        <FaUser className="h-4 w-4" />
+                      </span>
+                    </button>
+                    {userExpanded && (
+                      <div className="absolute right-0 top-12 z-50 w-48 list-none divide-y divide-white/10 rounded-xl shadow-2xl backdrop-blur-xl"
+                        style={{ backgroundColor: "rgba(11,13,18,0.9)", border: "1px solid rgba(255,255,255,0.1)" }}
+                      >
+                        <div className="px-4 py-3">
+                          <span className="block text-sm text-white">{user.fullName}</span>
+                          <span className="block truncate text-xs text-white/50">{user.email}</span>
+                        </div>
+                        <ul className="py-2" onClick={() => setUserExpanded(false)}>
+                          <ProfileLink href="/profile"><FiUser className="-mt-1 mr-2 inline align-middle" />Profile</ProfileLink>
+                          <li><button onClick={async () => { await logOut(); window.location.href = "/login"; }} className="block w-full px-4 py-2 text-start text-sm text-white/80 hover:bg-primary-400 hover:text-white"><FiPower className="-mt-1 mr-2 inline align-middle" />Sign Out</button></li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link href="/login" className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/[0.08] border border-white/[0.15] text-white/80 hover:bg-white/[0.12] hover:text-white text-sm font-medium transition-all">
+                    <LuLogIn className="text-base" />
+                    <span className="hidden sm:inline">Login</span>
+                  </Link>
+                )}
+              </div>
+            </div>
+          ) : (
+
+          /* ── NORMAL HEADER ── */
           <div
             ref={navRef}
             className={`mt-2 flex max-h-24 w-full flex-wrap items-center justify-between rounded-2xl py-3 px-4 transition-all duration-300`}
@@ -268,6 +339,7 @@ const Navbar = () => {
                     "absolute right-0 top-7 z-50 my-4 origin-top-right list-none divide-y divide-white/10 rounded-xl text-base shadow-2xl transition backdrop-blur-xl " +
                     (userExpanded ? "scale-100" : "pointer-events-none scale-0")
                   }
+                  onClick={() => setUserExpanded(false)}
                   style={{
                     backgroundColor: "rgba(11, 13, 18, 0.8)",
                     border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -386,6 +458,8 @@ const Navbar = () => {
               </ul>
             </div>
           </div>
+          )} {/* end normal header */}
+
         </nav>
       ) : null}
     </>

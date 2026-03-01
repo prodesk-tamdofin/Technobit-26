@@ -2,7 +2,8 @@ require('dotenv').config();
 require('express-async-errors');
 const express = require('express');
 const app = express();
-const db = require('./models');
+app.set('trust proxy', 1); // needed for express-rate-limit behind codespace/vercel proxy
+const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const cloudinary = require('cloudinary').v2;
@@ -88,14 +89,10 @@ app.use(errorHandlerMiddleWare);
 
 //ports and start
 const PORT = process.env.PORT || 8001;
-db.sequelize
-  .sync()
-  .then((_) => {
-    console.log(`database connected`);
-    app.listen(PORT, () => {
-      console.log(`server is running on port ${PORT}...`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}...`);
   });
+};
+startServer();
